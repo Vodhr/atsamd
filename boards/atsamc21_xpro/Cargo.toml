@@ -24,10 +24,10 @@ optional = true
 path = "../../pac/atsamc21j"
 
 
-#[dependencies.atsamd-hal]
-#path = "../../hal"
-#version = "0.15"
-#default-features = false
+[dependencies.atsamd-hal]
+path = "../../hal"
+version = "0.15"
+default-features = false
 
 [dev-dependencies]
 cortex-m = "0.7"
@@ -35,11 +35,11 @@ panic-halt = "0.2"
 panic-semihosting = "0.6"
 
 [features]
-#default = ["rt", "atsamd-hal/samc21j", "atsamd-hal/unproven"]
-#rt = ["cortex-m-rt", "atsamd-hal/samc21j-rt"]
+default = ["rt", "atsamd-hal/samc21j", "atsamd-hal/unproven"]
+rt = ["cortex-m-rt", "atsamd-hal/samc21j-rt"]
 #unproven = ["atsamd-hal/unproven"]
-default = ["rt", ]
-rt = ["cortex-m-rt"]
+#default = ["rt", ]
+#rt = ["cortex-m-rt"]
 
 [profile.dev]
 incremental = false
