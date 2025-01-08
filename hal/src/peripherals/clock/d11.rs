@@ -465,6 +465,43 @@ clock_generator!(
     (i2s1, I2S1Clock, I2s1),
 );
 
+// samd21
+#[cfg(feature = "samc21")]
+clock_generator!(
+    (tcc0_tcc1, Tcc0Tcc1Clock, TCC0_TCC1),
+    (tcc2_tc3, Tcc2Tc3Clock, TCC2_TC3),
+    (tc4_tc5, Tc4Tc5Clock, TC4_TC5),
+    (tc6_tc7, Tc6Tc7Clock, TC6_TC7),
+    (sercom0_core, Sercom0CoreClock, SERCOM0_CORE),
+    (sercom1_core, Sercom1CoreClock, SERCOM1_CORE),
+    (sercom2_core, Sercom2CoreClock, SERCOM2_CORE),
+    (sercom3_core, Sercom3CoreClock, SERCOM3_CORE),
+    (sercom4_core, Sercom4CoreClock, SERCOM4_CORE),
+    (sercom5_core, Sercom5CoreClock, SERCOM5_CORE),
+    (usb, UsbClock, USB),
+    (rtc, RtcClock, RTC),
+    (adc, AdcClock, ADC),
+    (wdt, WdtClock, WDT),
+    (eic, EicClock, EIC),
+    (evsys0, Evsys0Clock, EVSYS_0),
+    (evsys1, Evsys1Clock, EVSYS_1),
+    (evsys2, Evsys2Clock, EVSYS_2),
+    (evsys3, Evsys3Clock, EVSYS_3),
+    (evsys4, Evsys4Clock, EVSYS_4),
+    (evsys5, Evsys5Clock, EVSYS_5),
+    (evsys6, Evsys6Clock, EVSYS_6),
+    (evsys7, Evsys7Clock, EVSYS_7),
+    (evsys8, Evsys8Clock, EVSYS_8),
+    (evsys9, Evsys9Clock, EVSYS_9),
+    (evsys10, Evsys10Clock, EVSYS_10),
+    (evsys11, Evsys11Clock, EVSYS_11),
+    (ac_ana, AcAnaClock, AC_ANA),
+    (ac_dig, AcDigClock, AC_DIG),
+    (dac, DacClock, DAC),
+    (i2s0, I2S0Clock, I2S_0),
+    (i2s1, I2S1Clock, I2S_1),
+);
+
 /// The frequency of the 48Mhz source.
 pub const OSC48M_FREQ: Hertz = Hertz::Hz(48_000_000);
 /// The frequency of the 8 Mhz source.
