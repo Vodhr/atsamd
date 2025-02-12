@@ -343,20 +343,19 @@ use seq_macro::seq;
 use typenum::{U0, U1};
 
 use crate::pac;
-use crate::pac::gclk::genctrl::Divselselect;
-use crate::pac::Nvmctrl;
+use crate::pac::gclk::genctrl::DIVSEL_A;
 
-use crate::gpio::{self, AlternateM, AnyPin, Pin, PinId};
-use crate::pac::gclk::genctrl::Srcselect;
-use crate::pac::gclk::Genctrl;
+use crate::gpio::{self, AlternateH, AnyPin, Pin, PinId};
+use crate::pac::gclk::genctrl::SRC_A;
+use crate::pac::gclk::GENCTRL;
 use crate::time::Hertz;
 use crate::typelevel::{Decrement, Increment, PrivateDecrement, PrivateIncrement, Sealed};
 
-use super::dfll::DfllId;
-use super::dpll::{Dpll0Id, Dpll1Id};
-use super::osculp32k::OscUlp32kId;
-use super::xosc::{Xosc0Id, Xosc1Id};
-use super::xosc32k::Xosc32kId;
+// use super::dpll::{Dpll0Id, Dpll1Id};
+// use super::osculp32k::OscUlp32kId;
+use super::xosc::XoscId;
+use super::osc48m::Osc48mId;
+// use super::xosc32k::Xosc32kId;
 use super::{Enabled, Source};
 
 //==============================================================================
@@ -397,12 +396,12 @@ impl<G: GclkId> GclkToken<G> {
 
     /// Provide a reference to the corresponding [`Genctrl`] register
     #[inline]
-    fn genctrl(&self) -> &Genctrl {
+    fn genctrl(&self) -> &GENCTRL {
         // Safety: Each `GclkToken` only has access to a mutually exclusive set
         // of registers for the corresponding `GclkId`, and we use a shared
         // reference to the register block. See the notes on `Token` types and
         // memory safety in the root of the `clock` module for more details.
-        unsafe { (*pac::Gclk::PTR).genctrl(G::NUM) }
+        unsafe { &(*pac::GCLK::PTR).genctrl[G::NUM] }
     }
 
     /// Block until synchronization has completed
@@ -414,8 +413,20 @@ impl<G: GclkId> GclkToken<G> {
         // Safety: We are only reading from the `SYNCBUSY` register, and we are
         // only observing the bit corresponding to this particular `GclkId`, so
         // there is no risk of memory corruption.
-        let syncbusy = unsafe { &(*pac::Gclk::PTR).syncbusy() };
-        while syncbusy.read().genctrl().bits() & Self::MASK != 0 {}
+        let syncbusy = unsafe { &(*pac::GCLK::PTR).syncbusy };
+
+        while match G::NUM {
+            0 => syncbusy.read().genctrl0().bit_is_set(),
+            1 => syncbusy.read().genctrl1().bit_is_set(),
+            2 => syncbusy.read().genctrl2().bit_is_set(),
+            3 => syncbusy.read().genctrl3().bit_is_set(),
+            4 => syncbusy.read().genctrl4().bit_is_set(),
+            5 => syncbusy.read().genctrl5().bit_is_set(),
+            6 => syncbusy.read().genctrl6().bit_is_set(),
+            7 => syncbusy.read().genctrl7().bit_is_set(),
+            8 => syncbusy.read().genctrl8().bit_is_set(),
+            _ => false,
+        } {};
     }
 
     /// Set the clock source for this [`Gclk`]
@@ -508,9 +519,9 @@ impl<G: GclkId> GclkToken<G> {
 // DynGclkId
 //==============================================================================
 
-/// Value-level enum identifying one of 12 possible [`Gclk`]s
+/// Value-level enum identifying one of 9 possible [`Gclk`]s
 ///
-/// The variants of this enum identify one of the 12 possible generic clock
+/// The variants of this enum identify one of the 9 possible generic clock
 /// generators.
 ///
 /// `DynGclkId` is the value-level equivalent of [`GclkId`].
@@ -524,19 +535,16 @@ pub enum DynGclkId {
     Gclk6,
     Gclk7,
     Gclk8,
-    Gclk9,
-    Gclk10,
-    Gclk11,
 }
 
 //==============================================================================
 // GclkId
 //==============================================================================
 
-/// Type-level enum identifying one of 12 possible [`Gclk`]s
+/// Type-level enum identifying one of 9 possible [`Gclk`]s
 ///
 /// The types implementing this trait, i.e. [`Gclk0Id`] - [`Gclk11Id`], are
-/// type-level variants of `GclkId`, and they identify one of the 12 possible
+/// type-level variants of `GclkId`, and they identify one of the 9 possible
 /// generic clock generators.
 ///
 /// `GclkId` is the type-level equivalent of [`DynGclkId`]. See the
@@ -548,7 +556,7 @@ pub enum DynGclkId {
 pub trait GclkId: Sealed {
     /// Corresponding variant of [`DynGclkId`]
     const DYN: DynGclkId;
-    /// Corresponding numeric index (0..12)
+    /// Corresponding numeric index (0..8)
     const NUM: usize;
     /// Corresponding [`GclkDivider`] type
     ///
@@ -587,7 +595,7 @@ impl GclkId for Gclk1Id {
     type Divider = GclkDiv16;
 }
 
-seq!(N in 2..=11 {
+seq!(N in 2..=8 {
     paste! {
         /// Type-level variant of [`GclkId`] representing the identity of
         #[doc = "GCLK" N]
@@ -629,7 +637,7 @@ pub trait GclkDivider: Sealed + Default + Copy {
     /// Returns the actual clock divider value as a `u32`
     fn divider(&self) -> u32;
     /// Return the corresponding `DIVSEL` and and `DIV` register fields
-    fn divsel_div(&self) -> (Divselselect, u16);
+    fn divsel_div(&self) -> (DIVSEL_A, u16);
 }
 
 //==============================================================================
@@ -676,11 +684,11 @@ impl GclkDivider for GclkDiv8 {
     }
 
     #[inline]
-    fn divsel_div(&self) -> (Divselselect, u16) {
+    fn divsel_div(&self) -> (DIVSEL_A, u16) {
         match self {
-            GclkDiv8::Div(div) => (Divselselect::Div1, (*div).into()),
-            GclkDiv8::Div2Pow8 => (Divselselect::Div2, 7),
-            GclkDiv8::Div2Pow9 => (Divselselect::Div2, 8),
+            GclkDiv8::Div(div) => (DIVSEL_A::DIV1, (*div).into()),
+            GclkDiv8::Div2Pow8 => (DIVSEL_A::DIV2, 7),
+            GclkDiv8::Div2Pow9 => (DIVSEL_A::DIV2, 8),
         }
     }
 }
@@ -728,11 +736,11 @@ impl GclkDivider for GclkDiv16 {
     }
 
     #[inline]
-    fn divsel_div(&self) -> (Divselselect, u16) {
+    fn divsel_div(&self) -> (DIVSEL_A, u16) {
         match self {
-            GclkDiv16::Div(div) => (Divselselect::Div1, *div),
-            GclkDiv16::Div2Pow16 => (Divselselect::Div2, 15),
-            GclkDiv16::Div2Pow17 => (Divselselect::Div2, 16),
+            GclkDiv16::Div(div) => (DIVSEL_A::DIV1, *div),
+            GclkDiv16::Div2Pow16 => (DIVSEL_A::DIV2, 15),
+            GclkDiv16::Div2Pow17 => (DIVSEL_A::DIV2, 16),
         }
     }
 }
@@ -754,6 +762,7 @@ pub trait GclkIo: PinId {
 
 // These implementations are much easier to read with `#[rustfmt::skip]`
 #[rustfmt::skip]
+// TODO Check for differences in C21N / E, G, J and C20N / E, G, J
 mod gclkio_impl {
     use atsamd_hal_macros::hal_cfg;
 
@@ -772,7 +781,9 @@ mod gclkio_impl {
     #[hal_cfg("pa17")]
     impl GclkIo for gpio::PA17 { type GclkId = Gclk3Id; }
     #[hal_cfg("pa27")]
-    impl GclkIo for gpio::PA27 { type GclkId = Gclk1Id; }
+    impl GclkIo for gpio::PA27 { type GclkId = Gclk0Id; }
+    #[hal_cfg("pa28")]
+    impl GclkIo for gpio::PA28 { type GclkId = Gclk0Id; }
     #[hal_cfg("pa30")]
     impl GclkIo for gpio::PA30 { type GclkId = Gclk0Id; }
     #[hal_cfg("pb10")]
@@ -819,7 +830,7 @@ pub trait Gclk0Io
 where
     Self: Sized,
     Self: GclkIo<GclkId = Gclk0Id>,
-    Self: GclkSourceId<Resource = Pin<Self, AlternateM>>,
+    Self: GclkSourceId<Resource = Pin<Self, AlternateH>>,
 {
 }
 
@@ -837,30 +848,26 @@ impl<I: GclkIo<GclkId = Gclk0Id>> Gclk0Io for I {}
 /// `DynGclkSourceId` is the value-level equivalent of [`GclkSourceId`].
 #[derive(Copy, Clone, PartialEq, Eq)]
 pub enum DynGclkSourceId {
-    Dfll,
-    Dpll0,
-    Dpll1,
-    Gclk1,
+    Xosc,
     GclkIn,
-    OscUlp32k,
-    Xosc0,
-    Xosc1,
+    GclkGen1,
+    Osc32k,
     Xosc32k,
+    Osc48m,
+    OscUlp32k,
 }
 
-impl From<DynGclkSourceId> for Srcselect {
+impl From<DynGclkSourceId> for SRC_A {
     fn from(source: DynGclkSourceId) -> Self {
         use DynGclkSourceId::*;
         match source {
-            Dfll => Self::Dfll,
-            Dpll0 => Self::Dpll0,
-            Dpll1 => Self::Dpll1,
-            Gclk1 => Self::Gclkgen1,
-            GclkIn => Self::Gclkin,
-            OscUlp32k => Self::Osculp32k,
-            Xosc0 => Self::Xosc0,
-            Xosc1 => Self::Xosc1,
-            Xosc32k => Self::Xosc32k,
+            Xosc => Self::XOSC,
+            GclkIn => Self::GCLKIN,
+            GclkGen1 => Self::GCLKGEN1,
+            Osc32k => Self::OSC32K,
+            Xosc32k => Self::XOSC32K,
+            Osc48m => Self::OSC48M,
+            OscUlp32k => Self::OSCULP32K,
         }
     }
 }
@@ -894,42 +901,30 @@ pub trait GclkSourceId {
     type Resource;
 }
 
-impl GclkSourceId for DfllId {
-    const DYN: DynGclkSourceId = DynGclkSourceId::Dfll;
-    type Resource = ();
-}
-impl GclkSourceId for Dpll0Id {
-    const DYN: DynGclkSourceId = DynGclkSourceId::Dpll0;
-    type Resource = ();
-}
-impl GclkSourceId for Dpll1Id {
-    const DYN: DynGclkSourceId = DynGclkSourceId::Dpll1;
+impl GclkSourceId for Osc48mId {
+    const DYN: DynGclkSourceId = DynGclkSourceId::Osc48m;
     type Resource = ();
 }
 impl GclkSourceId for Gclk1Id {
-    const DYN: DynGclkSourceId = DynGclkSourceId::Gclk1;
+    const DYN: DynGclkSourceId = DynGclkSourceId::GclkGen1;
     type Resource = ();
 }
 impl<I: GclkIo> GclkSourceId for I {
     const DYN: DynGclkSourceId = DynGclkSourceId::GclkIn;
-    type Resource = Pin<I, AlternateM>;
+    type Resource = Pin<I, AlternateH>;
 }
-impl GclkSourceId for OscUlp32kId {
-    const DYN: DynGclkSourceId = DynGclkSourceId::OscUlp32k;
+// impl GclkSourceId for OscUlp32kId {
+//     const DYN: DynGclkSourceId = DynGclkSourceId::OscUlp32k;
+//     type Resource = ();
+// }
+impl GclkSourceId for XoscId {
+    const DYN: DynGclkSourceId = DynGclkSourceId::Xosc;
     type Resource = ();
 }
-impl GclkSourceId for Xosc0Id {
-    const DYN: DynGclkSourceId = DynGclkSourceId::Xosc0;
-    type Resource = ();
-}
-impl GclkSourceId for Xosc1Id {
-    const DYN: DynGclkSourceId = DynGclkSourceId::Xosc1;
-    type Resource = ();
-}
-impl GclkSourceId for Xosc32kId {
-    const DYN: DynGclkSourceId = DynGclkSourceId::Xosc32k;
-    type Resource = ();
-}
+// impl GclkSourceId for Xosc32kId {
+//     const DYN: DynGclkSourceId = DynGclkSourceId::Xosc32k;
+//     type Resource = ();
+// }
 
 //==============================================================================
 // NotGclkIo
@@ -1052,7 +1047,7 @@ pub type Gclk0<I> = Gclk<Gclk0Id, I>;
 /// on [`EnabledGclk0`] to configure the `Gclk` while it is actively running.
 pub type EnabledGclk0<I, N = U1> = EnabledGclk<Gclk0Id, I, N>;
 
-seq!(G in 1..=11 {
+seq!(G in 1..=8 {
     paste! {
         /// Type alias for the corresponding [`Gclk`]
         pub type Gclk~G<I> = Gclk<[<Gclk G Id>], I>;
@@ -1096,7 +1091,7 @@ where
     ///
     /// Freeing a [`Gclk`] returns the corresponding [`GclkToken`] and GPIO
     /// [`Pin`].
-    pub fn free_pin(self) -> (GclkToken<G>, Pin<I, AlternateM>) {
+    pub fn free_pin(self) -> (GclkToken<G>, Pin<I, AlternateH>) {
         (self.token, self.resource)
     }
 }
@@ -1294,7 +1289,7 @@ impl<I: GclkSourceId> EnabledGclk0<I, U1> {
         self,
         pin: P,
         freq: impl Into<Hertz>,
-    ) -> (EnabledGclk0<P::Id, U1>, Pin<I, AlternateM>)
+    ) -> (EnabledGclk0<P::Id, U1>, Pin<I, AlternateH>)
     where
         I: Gclk0Io,
         P: AnyPin,
@@ -1335,7 +1330,7 @@ impl<I: GclkSourceId> EnabledGclk0<I, U1> {
     pub fn swap_pin_for_source<S>(
         self,
         source: S,
-    ) -> (EnabledGclk0<S::Id, U1>, Pin<I, AlternateM>, S::Inc)
+    ) -> (EnabledGclk0<S::Id, U1>, Pin<I, AlternateH>, S::Inc)
     where
         I: Gclk0Io,
         S: Source + Increment,
@@ -1401,7 +1396,7 @@ where
 // Tokens
 //==============================================================================
 
-seq!(N in 1..=11 {
+seq!(N in 1..=8 {
     paste! {
         /// Set of [`GclkToken`]s representing the disabled [`Gclk`]s at
         /// power-on reset
@@ -1421,9 +1416,7 @@ seq!(N in 1..=11 {
             /// All of the invariants required by `GclkToken::new` must be
             /// upheld here as well.
             #[inline]
-            pub(super) unsafe fn new(nvmctrl: &mut Nvmctrl) -> Self {
-                // Use auto wait states
-                nvmctrl.ctrla().modify(|_, w| w.autows().set_bit());
+            pub(super) unsafe fn new() -> Self {
                 GclkTokens {
                     #( gclk~N: GclkToken::new(), )*
                 }
@@ -1444,7 +1437,7 @@ seq!(N in 1..=11 {
 /// See the [module-level documentation](self) for an example of creating a
 /// [`GclkOut`] from an [`EnabledGclk`].
 pub struct GclkOut<I: GclkIo> {
-    pin: Pin<I, AlternateM>,
+    pin: Pin<I, AlternateH>,
     freq: Hertz,
 }
 
@@ -1502,7 +1495,7 @@ where
     pub fn disable_gclk_out<I>(
         mut self,
         gclk_out: GclkOut<I>,
-    ) -> (EnabledGclk<G, S, N::Dec>, Pin<I, AlternateM>)
+    ) -> (EnabledGclk<G, S, N::Dec>, Pin<I, AlternateH>)
     where
         N: Decrement,
         I: GclkIo<GclkId = G>,

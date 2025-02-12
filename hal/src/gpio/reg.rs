@@ -11,7 +11,11 @@ use crate::pac::port::group::{
     Ctrl, Dir, Dirclr, Dirset, Dirtgl, In, Out, Outclr, Outset, Outtgl, Pincfg, Pmux, Wrconfig,
 };
 
+#[hal_cfg("port-d5x")]
 use crate::pac::Port;
+
+#[hal_cfg("port-c2x")]
+use crate::pac::port;
 
 use super::dynpin::*;
 

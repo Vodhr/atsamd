@@ -111,9 +111,9 @@ pub enum DynAlternate {
     E,
     F,
     G,
-    #[hal_cfg(any("port-d21", "port-d5x"))]
+    #[hal_cfg(any("port-d21", "port-d5x", "port-c2x"))]
     H,
-    #[hal_cfg("port-d5x")]
+    #[hal_cfg(any("port-d5x", "port-c2x"))]
     I,
     #[hal_cfg("port-d5x")]
     J,
