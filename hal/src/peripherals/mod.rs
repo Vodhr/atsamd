@@ -15,7 +15,7 @@ pub mod calibration {}
 )]
 pub mod timer {}
 
-#[cfg(feature = "device")]
+#[cfg(all(feature = "device", not(feature = "samc21j")))]
 pub mod eic;
 
 #[cfg(feature = "usb")]
@@ -27,13 +27,14 @@ pub mod usb {}
 
 #[hal_module(
     any("clock-d11", "clock-d21") => "pwm/d11.rs",
-    "clock-d5x" => "pwm/d5x.rs",
+    any("clock-d5x", "clock-c2x") => "pwm/d5x.rs",
 )]
 pub mod pwm {}
 
 #[hal_module(
     any("clock-d11", "clock-d21") => "clock/d11.rs",
     "clock-d5x" => "clock/d5x/mod.rs",
+    "clock-c2x" => "clock/c2x/mod.rs",
 )]
 pub mod clock {}
 

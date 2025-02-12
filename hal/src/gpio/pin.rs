@@ -106,7 +106,11 @@ use core::mem::transmute;
 use crate::ehal::digital::{ErrorType, InputPin, OutputPin, StatefulOutputPin};
 use paste::paste;
 
+#[hal_cfg("port-d5x")]
 use crate::pac::Port;
+
+#[hal_cfg("port-c2x")]
+use crate::pac::port;
 
 use crate::typelevel::{NoneT, Sealed};
 
@@ -343,11 +347,14 @@ macro_rules! alternate {
 
 alternate!(B, C, D, E, F, G);
 
-#[hal_cfg(any("port-d21", "port-d5x"))]
+#[hal_cfg(any("port-d21", "port-d5x", "port-c2x"))]
 alternate!(H);
 
+#[hal_cfg(any("port-d5x", "port-c2x"))]
+alternate!(I);
+
 #[hal_cfg("port-d5x")]
-alternate!(I, J, K, L, M, N);
+alternate!(J, K, L, M, N);
 
 /// Type-level variant of [`PinMode`] for alternate peripheral functions
 ///

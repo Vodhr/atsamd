@@ -205,7 +205,7 @@
 //! Upon creation of the [`Xosc32kCfd`] struct, we register it as a consumer of
 //! the `EnabledOscUlp32k`, which will `Increment` its `Counter` as well. When
 //! creating the safe clock, the `OscUlp32k` can be optionally divided by two,
-//! which is selected with [`SafeClockDiv`].
+//! which is selected with [`CFDPresc`].
 //!
 //! ```no_run
 //! # use atsamd_hal::{
@@ -344,14 +344,15 @@
 use fugit::RateExtU32;
 use typenum::U0;
 
-use crate::pac::osc32kctrl::xosc32k::{Cgmselect, Startupselect};
-use crate::pac::osc32kctrl::{self, status, Cfdctrl};
+use crate::pac::osc32kctrl::xosc32k::{STARTUP_A};
+use crate::pac::osc32kctrl::{self, status, CFDCTRL};
 
 use crate::gpio::{FloatingDisabled, Pin, PA00, PA01};
 use crate::time::Hertz;
 use crate::typelevel::{Decrement, Increment, PrivateDecrement, PrivateIncrement, Sealed};
 
-use super::osculp32k::OscUlp32kId;
+// use super::osculp32k::OscUlp32kId;
+
 use super::{Enabled, Source};
 
 //==============================================================================
@@ -431,7 +432,7 @@ impl Xosc32kBaseToken {
     fn status(&self) -> status::R {
         // Safety: We are only reading from the `STATUS` register, so there is
         // no risk of memory corruption.
-        unsafe { (*crate::pac::Osc32kctrl::PTR).status().read() }
+        unsafe { (*crate::pac::OSC32KCTRL::PTR).status.read() }
     }
 
     /// Check whether the XOSC32K is stable and ready
@@ -441,11 +442,11 @@ impl Xosc32kBaseToken {
     }
 
     #[inline]
-    fn xosc32k(&self) -> &osc32kctrl::Xosc32k {
+    fn xosc32k(&self) -> &osc32kctrl::XOSC32K {
         // Safety: The `Xosc32kBaseToken` has exclusive access to the `XOSC32K`
         // register. See the notes on `Token` types and memory safety in the
         // root of the `clock` module for more details.
-        unsafe { (*crate::pac::Osc32kctrl::PTR).xosc32k() }
+        unsafe { &(*crate::pac::OSC32KCTRL::PTR).xosc32k }
     }
 
     /// Reset the XOSC32K register
@@ -457,9 +458,8 @@ impl Xosc32kBaseToken {
     /// Set most of the fields in the XOSC32K register
     #[inline]
     fn set_xosc32k(&mut self, settings: Settings) {
-        let xtalen = settings.mode == DynMode::CrystalMode;
+        let xtalen = settings.mode == XtalEn::CrystalMode;
         self.xosc32k().modify(|_, w| {
-            w.cgm().variant(settings.cgm.into());
             w.startup().variant(settings.start_up.into());
             w.ondemand().bit(settings.on_demand);
             w.runstdby().bit(settings.run_standby);
@@ -515,32 +515,32 @@ impl Xosc32kCfdToken {
     fn status(&self) -> status::R {
         // Safety: We are only reading from the `STATUS` register, so there is
         // no risk of memory corruption.
-        unsafe { (*crate::pac::Osc32kctrl::PTR).status().read() }
+        unsafe { (*crate::pac::OSC32KCTRL::PTR).status.read() }
     }
 
     /// Check whether the XOSC32K has triggered failure detection
     #[inline]
     fn has_failed(&self) -> bool {
-        self.status().xosc32kfail().bit()
+        self.status().clkfail().bit()
     }
 
     /// Check whether the XOSC32K has been switched to the safe clock
     #[inline]
     fn is_switched(&self) -> bool {
-        self.status().xosc32ksw().bit()
+        self.status().clksw().bit()
     }
 
     #[inline]
-    fn cfdctrl(&self) -> &Cfdctrl {
+    fn cfdctrl(&self) -> &CFDCTRL {
         // Safety: The `Xosc32kCfdToken` has exclusive access to the `Cfdctrl`
         // register. See the notes on `Token` types and memory safety in the
         // root of the `clock` module for more details.
-        unsafe { (*crate::pac::Osc32kctrl::PTR).cfdctrl() }
+        unsafe { &(*crate::pac::OSC32KCTRL::PTR).cfdctrl }
     }
 
     /// Enable clock failure detection and set the safe clock divider
     #[inline]
-    fn enable(&mut self, div: SafeClockDiv) {
+    fn enable(&mut self, div: CFDPresc) {
         self.cfdctrl().modify(|_, w| {
             w.cfdpresc().bit(div.into());
             w.cfden().set_bit()
@@ -574,10 +574,9 @@ impl Xosc32kCfdToken {
 #[derive(Clone, Copy)]
 struct Settings {
     start_up: StartUpDelay,
-    cgm: ControlGainMode,
     on_demand: bool,
     run_standby: bool,
-    mode: DynMode,
+    mode: XtalEn,
 }
 
 //==============================================================================
@@ -603,23 +602,23 @@ pub type XOut32 = Pin<PA01, FloatingDisabled>;
 ///[`OscUlp32k`]: super::osculp32k::OscUlp32k
 #[repr(u8)]
 #[derive(Clone, Copy, Default, PartialEq, Eq)]
-pub enum SafeClockDiv {
+pub enum CFDPresc {
     #[default]
     Div1,
     Div2,
 }
 
-impl From<SafeClockDiv> for bool {
-    fn from(div: SafeClockDiv) -> Self {
+impl From<CFDPresc> for bool {
+    fn from(div: CFDPresc) -> Self {
         match div {
-            SafeClockDiv::Div1 => false,
-            SafeClockDiv::Div2 => true,
+            CFDPresc::Div1 => false,
+            CFDPresc::Div2 => true,
         }
     }
 }
 
 //==============================================================================
-// StartUpDelay
+// STARTUP
 //==============================================================================
 
 /// Start up delay before continuous monitoring takes effect
@@ -635,55 +634,33 @@ impl From<SafeClockDiv> for bool {
 #[derive(Clone, Copy, Default, PartialEq, Eq)]
 pub enum StartUpDelay {
     #[default]
-    Delay63ms,
+    Delay122us,
+    Delay1060us,
+    Delay62600us,
     Delay125ms,
     Delay500ms,
     Delay1s,
     Delay2s,
     Delay4s,
-    Delay8s,
 }
 
-impl From<StartUpDelay> for Startupselect {
+impl From<StartUpDelay> for STARTUP_A {
     fn from(delay: StartUpDelay) -> Self {
         match delay {
-            StartUpDelay::Delay63ms => Startupselect::Cycle2048,
-            StartUpDelay::Delay125ms => Startupselect::Cycle4096,
-            StartUpDelay::Delay500ms => Startupselect::Cycle16384,
-            StartUpDelay::Delay1s => Startupselect::Cycle32768,
-            StartUpDelay::Delay2s => Startupselect::Cycle65536,
-            StartUpDelay::Delay4s => Startupselect::Cycle131072,
-            StartUpDelay::Delay8s => Startupselect::Cycle262144,
+            StartUpDelay::Delay122us => STARTUP_A::CYCLE1,
+            StartUpDelay::Delay1060us => STARTUP_A::CYCLE32,
+            StartUpDelay::Delay62600us => STARTUP_A::CYCLE2048,
+            StartUpDelay::Delay125ms => STARTUP_A::CYCLE4096,
+            StartUpDelay::Delay500ms => STARTUP_A::CYCLE16384,
+            StartUpDelay::Delay1s => STARTUP_A::CYCLE32768,
+            StartUpDelay::Delay2s => STARTUP_A::CYCLE65536,
+            StartUpDelay::Delay4s => STARTUP_A::CYCLE131072,
         }
     }
 }
 
 //==============================================================================
-// ControlGainMode
-//==============================================================================
-
-/// Gain mode for the XOSC32K control loop
-///
-/// The XOSC32K crystal oscillator control loop has a configurable gain to allow
-/// users to trade power for speed and stability.
-#[derive(Copy, Clone, Default, PartialEq, Eq)]
-pub enum ControlGainMode {
-    #[default]
-    Standard,
-    HighSpeed,
-}
-
-impl From<ControlGainMode> for Cgmselect {
-    fn from(cgm: ControlGainMode) -> Self {
-        match cgm {
-            ControlGainMode::Standard => Cgmselect::Xt,
-            ControlGainMode::HighSpeed => Cgmselect::Hs,
-        }
-    }
-}
-
-//==============================================================================
-// DynMode
+// XtalEn
 //==============================================================================
 
 /// Value-level enum identifying one of two possible XOSC32K operating modes
@@ -692,9 +669,9 @@ impl From<ControlGainMode> for Cgmselect {
 /// oscillator. The variants of this enum identify one of these two possible
 /// operating modes.
 ///
-/// `DynMode` is the value-level equivalent of [`Mode`].
+/// `XtalEn` is the value-level equivalent of [`Mode`].
 #[derive(Clone, Copy, Default, PartialEq, Eq)]
-pub enum DynMode {
+pub enum XtalEn {
     #[default]
     ClockMode,
     CrystalMode,
@@ -710,14 +687,14 @@ pub enum DynMode {
 /// oscillator. This type-level `enum` provides two type-level variants,
 /// [`ClockMode`] and [`CrystalMode`], representing these operating modes.
 ///
-/// `Mode` is the type-level equivalent of [`DynMode`]. See the documentation on
+/// `Mode` is the type-level equivalent of [`XtalEn`]. See the documentation on
 /// [type-level programming] and specifically [type-level enums] for more
 /// details.
 ///
 /// [type-level programming]: crate::typelevel
 /// [type-level enums]: crate::typelevel#type-level-enums
 pub trait Mode: Sealed {
-    const DYN: DynMode;
+    const DYN: XtalEn;
     #[doc(hidden)]
     type Pins;
 }
@@ -734,7 +711,7 @@ pub trait Mode: Sealed {
 pub enum ClockMode {}
 impl Sealed for ClockMode {}
 impl Mode for ClockMode {
-    const DYN: DynMode = DynMode::ClockMode;
+    const DYN: XtalEn = XtalEn::ClockMode;
     type Pins = XIn32;
 }
 
@@ -750,7 +727,7 @@ impl Mode for ClockMode {
 pub enum CrystalMode {}
 impl Sealed for CrystalMode {}
 impl Mode for CrystalMode {
-    const DYN: DynMode = DynMode::CrystalMode;
+    const DYN: XtalEn = XtalEn::CrystalMode;
     type Pins = (XIn32, XOut32);
 }
 
@@ -840,21 +817,13 @@ impl Xosc32kBase<CrystalMode> {
         let (xin32, xout32) = self.pins;
         (self.token, xin32, xout32)
     }
-
-    /// Set the crystal oscillator [`ControlGainMode`]
-    #[inline]
-    pub fn control_gain_mode(mut self, cgm: ControlGainMode) -> Self {
-        self.settings.cgm = cgm;
-        self
-    }
 }
 
 impl<M: Mode> Xosc32kBase<M> {
     #[inline]
     fn new(token: Xosc32kBaseToken, pins: M::Pins) -> Self {
         let settings = Settings {
-            start_up: StartUpDelay::Delay63ms,
-            cgm: ControlGainMode::Standard,
+            start_up: StartUpDelay::Delay122us,
             on_demand: true,
             run_standby: false,
             mode: M::DYN,
@@ -1014,7 +983,7 @@ impl Xosc32kCfd {
     pub fn enable<S>(
         mut token: Xosc32kCfdToken,
         osc_ulp_32k: S,
-        div: SafeClockDiv,
+        div: CFDPresc,
     ) -> (Xosc32kCfd, S::Inc)
     where
         S: Source<Id = OscUlp32kId> + Increment,

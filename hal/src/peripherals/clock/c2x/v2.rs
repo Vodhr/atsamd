@@ -860,20 +860,20 @@ use typenum::U0;
 use crate::time::Hertz;
 use crate::typelevel::{PrivateDecrement, PrivateIncrement, Sealed};
 
-pub mod ahb;
-pub mod apb;
-pub mod dfll;
-pub mod dpll;
+// pub mod ahb;
+// pub mod apb;
+// pub mod dpll;
 pub mod gclk;
-pub mod osculp32k;
-pub mod pclk;
-pub mod rtcosc;
+// pub mod osculp32k;
+// pub mod pclk;
+// pub mod rtcosc;
 pub mod types;
 pub mod xosc;
-pub mod xosc32k;
+// pub mod xosc32k;
 
-mod reset;
-pub use reset::*;
+// mod reset;
+mod osc48m;
+//pub use reset::*;
 
 // `Token` types and memory safety
 //
@@ -931,9 +931,7 @@ pub use reset::*;
 /// Marks [`Enabled`] 1:N producer clocks that can act as a clock source
 ///
 /// Implementers of this type act as producer clocks and feed consumer clocks in
-/// the clock tree. All implementors are [`Enabled`], 1:N clocks. The `Id`
-/// associated type maps to the corresponding [`Id` type](self#id-types) of the
-/// implementer.
+/// the clock tree. All implementors are [`Enabled`], 1:N clocks.
 ///
 /// See the documentation on [`Source` clocks](self#acting-as-a-clock-source)
 /// for more details.
