@@ -861,11 +861,11 @@ use crate::time::Hertz;
 use crate::typelevel::{PrivateDecrement, PrivateIncrement, Sealed};
 
 // pub mod ahb;
-// pub mod apb;
+pub mod apb;
 // pub mod dpll;
 pub mod gclk;
 // pub mod osculp32k;
-// pub mod pclk;
+pub mod pclk;
 // pub mod rtcosc;
 pub mod types;
 pub mod xosc;

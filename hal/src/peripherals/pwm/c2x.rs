@@ -2,20 +2,12 @@
 
 use atsamd_hal_macros::hal_cfg;
 
-use crate::clock::{pclk, types};
+use crate::clock::{pclk, apb};
+use crate::clock::pclk::PclkSourceId;
+use crate::clock::types::{Tc0Tc1, Tc2Tc3, Tc4, Tcc0Tcc1, Tcc2};
+use crate::clock::types;
 use crate::gpio::*;
 use crate::gpio::{AlternateE, AnyPin, Pin};
-
-#[hal_cfg("tc0-d5x")]
-use crate::pac::Mclk;
-
-#[hal_cfg("tc0-c2x")]
-use crate::pac::MCLK as Mclk;
-
-#[hal_cfg("tc0-d5x")]
-use crate::pac::{
-    Tc0, Tc1, Tc2, Tc3, Tc4, Tc5, Tc6, Tc7
-};
 
 use crate::time::Hertz;
 use crate::timer_params::TimerParams;
@@ -64,106 +56,218 @@ macro_rules! impl_tc_pinout {
     };
 }
 
+#[cfg(feature = "samc21n")]
 #[hal_cfg("tc0")]
 impl_tc_pinout!(TC0Pinout: [
-    #[hal_cfg("pa05")]
-    (Pa5, PA05),
+    #[hal_cfg("pa08")]
+    (Pa8, PA08),
     #[hal_cfg("pa09")]
     (Pa9, PA09),
+    #[hal_cfg("pb30")]
+    (Pb30, PB30),
     #[hal_cfg("pb31")]
     (Pb31, PB31)
 ]);
 
-#[hal_cfg("tc1")]
-impl_tc_pinout!(TC1Pinout: [
-    #[hal_cfg("pa07")]
-    (Pa7, PA07),
-    #[hal_cfg("pa11")]
-    (Pa11, PA11)
-]);
-
-#[hal_cfg("tc2")]
-impl_tc_pinout!(TC2Pinout: [
-    #[hal_cfg("pa01")]
-    (Pa1, PA01),
-    #[hal_cfg("pa13")]
-    (Pa13, PA13),
-    #[hal_cfg("pa17")]
-    (Pa17, PA17)
-]);
-
-#[hal_cfg("tc3")]
-impl_tc_pinout!(TC3Pinout: [
-    #[hal_cfg("pa15")]
-    (Pa15, PA15),
-    #[hal_cfg("pa19")]
-    (Pa19, PA19)
-]);
-
-#[hal_cfg("tc4")]
-impl_tc_pinout!(TC4Pinout: [
-    #[hal_cfg("pa23")]
-    (Pa23, PA23),
+#[cfg(any(feature = "samc21e", feature = "samc21g", feature = "samc21j"))]
+#[hal_cfg("tc0")]
+impl_tc_pinout!(TC0Pinout: [
+    #[hal_cfg("pb08")]
+    (Pb8, PB08),
     #[hal_cfg("pb09")]
     (Pb9, PB09),
+    #[hal_cfg("pb12")]
+    (Pb12, PB12),
     #[hal_cfg("pb13")]
-    (Pb13, PB13)
+    (Pb13, PB13),
+    #[hal_cfg("pa22")]
+    (Pa22, PA22),
+    #[hal_cfg("pa23")]
+    (Pa23, PA23)
 ]);
 
-#[hal_cfg("tc5")]
-impl_tc_pinout!(TC5Pinout: [
-    #[hal_cfg("pa25")]
-    (Pa25, PA25),
-    #[hal_cfg("pb11")]
-    (Pb11, PB11),
-    #[hal_cfg("pb15")]
-    (Pb15, PB15)
-]);
-
-#[hal_cfg("tc6")]
-impl_tc_pinout!(TC6Pinout: [
-    #[hal_cfg("pb03")]
-    (Pb3, PB03),
-    #[hal_cfg("pb17")]
-    (Pb17, PB17),
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tc1")]
+impl_tc_pinout!(TC1Pinout: [
+    #[hal_cfg("pa10")]
+    (Pa10, PA10),
+    #[hal_cfg("pa11")]
+    (Pa11, PA11),
+    #[hal_cfg("pa30")]
+    (Pa30, PA30),
     #[hal_cfg("pa31")]
     (Pa31, PA31)
 ]);
 
-#[hal_cfg("tc7")]
-impl_tc_pinout!(TC7Pinout: [
+#[cfg(any(feature = "samc21e", feature = "samc21g", feature = "samc21j"))]
+#[hal_cfg("tc1")]
+impl_tc_pinout!(TC1Pinout: [
+    #[hal_cfg("pb10")]
+    (Pb10, PB10),
+    #[hal_cfg("pb11")]
+    (Pb11, PB11),
+    #[hal_cfg("pb14")]
+    (Pb14, PB14),
+    #[hal_cfg("pb15")]
+    (Pb15, PB15),
+    #[hal_cfg("pa24")]
+    (Pa24, PA24),
+    #[hal_cfg("pa25")]
+    (Pa25, PA25)
+]);
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tc2")]
+impl_tc_pinout!(TC2Pinout: [
+    #[hal_cfg("pa00")]
+    (Pa0, PA00),
+    #[hal_cfg("pa01")]
+    (Pa1, PA01),
+    #[hal_cfg("pa12")]
+    (Pa12, PA12),
+    #[hal_cfg("pa13")]
+    (Pa13, PA13),
+    #[hal_cfg("pa16")]
+    (Pa16, PA16),
+    #[hal_cfg("pa17")]
+    (Pa17, PA17)
+]);
+
+#[cfg(any(feature = "samc21e", feature = "samc21g", feature = "samc21j"))]
+#[hal_cfg("tc2")]
+impl_tc_pinout!(TC2Pinout: [
+    #[hal_cfg("pb16")]
+    (Pb16, PB16),
+    #[hal_cfg("pb17")]
+    (Pb17, PB17),
+    #[hal_cfg("pb02")]
+    (Pb2, PB02)
+]);
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tc3")]
+impl_tc_pinout!(TC3Pinout: [
+    #[hal_cfg("pa14")]
+    (Pa14, PA14),
+    #[hal_cfg("pa15")]
+    (Pa15, PA15),
+    #[hal_cfg("pa18")]
+    (Pa18, PA18),
+    #[hal_cfg("pa19")]
+    (Pa19, PA19)
+]);
+
+#[cfg(any(feature = "samc21e", feature = "samc21g", feature = "samc21j"))]
+#[hal_cfg("tc3")]
+impl_tc_pinout!(TC3Pinout: [
+    #[hal_cfg("pa20")]
+    (Pa20, PA20),
     #[hal_cfg("pa21")]
     (Pa21, PA21),
+    #[hal_cfg("pb22")]
+    (Pb22, PB22),
     #[hal_cfg("pb23")]
     (Pb23, PB23),
+    #[hal_cfg("pb00")]
+    (Pb0, PB00),
+    #[hal_cfg("pb01")]
+    (Pb1, PB01)
+]);
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tc4")]
+impl_tc_pinout!(TC4Pinout: [
+    #[hal_cfg("pb12")]
+    (Pb12, PB12),
+    #[hal_cfg("pb13")]
+    (Pb13, PB13),
+    #[hal_cfg("pa22")]
+    (Pa22, PA22),
+    #[hal_cfg("pa23")]
+    (Pa23, PA23)
+]);
+
+#[cfg(any(feature = "samc21e", feature = "samc21g", feature = "samc21j"))]
+#[hal_cfg("tc4")]
+impl_tc_pinout!(TC4Pinout: [
+    #[hal_cfg("pa14")]
+    (Pa14, PA14),
+    #[hal_cfg("pa15")]
+    (Pa15, PA15),
+    #[hal_cfg("pa18")]
+    (Pa18, PA18)
+]);
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tc5")]
+impl_tc_pinout!(TC5Pinout: [
+    #[hal_cfg("pb10")]
+    (Pb10, PB10),
+    #[hal_cfg("pb11")]
+    (Pb11, PB11),
+    #[hal_cfg("pb14")]
+    (Pb14, PB14),
+    #[hal_cfg("pb15")]
+    (Pb15, PB15),
+    #[hal_cfg("pa24")]
+    (Pa24, PA24),
+    #[hal_cfg("pa25")]
+    (Pa25, PA25)
+]);
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tc6")]
+impl_tc_pinout!(TC6Pinout: [
+    #[hal_cfg("pb16")]
+    (Pb16, PB16),
+    #[hal_cfg("pb17")]
+    (Pb17, PB17),
+    #[hal_cfg("pb02")]
+    (Pb2, PB02),
+    #[hal_cfg("pb03")]
+    (Pb3, PB03)
+]);
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tc7")]
+impl_tc_pinout!(TC7Pinout: [
+    #[hal_cfg("pa20")]
+    (Pa20, PA20),
+    #[hal_cfg("pa21")]
+    (Pa21, PA21),
+    #[hal_cfg("pb22")]
+    (Pb22, PB22),
+    #[hal_cfg("pb23")]
+    (Pb23, PB23),
+    #[hal_cfg("pb00")]
+    (Pb0, PB00),
     #[hal_cfg("pb01")]
     (Pb1, PB01)
 ]);
 
 macro_rules! pwm {
-    ($($TYPE:ident: ($TC:ident, $pinout:ident, $clock:ident, $apmask:ident, $apbits:ident, $wrapper:ident)),+) => {
+    ($($TYPE:ident: ($TC:ident, $pinout:ident, $pclk_id:ident, $apb_id:ident, $wrapper:ident)),+) => {
         $(
 
 pub struct $TYPE<I: PinId, S: pclk::PclkSourceId> {
-    /// The frequency of the attached clock, not the period of the pwm.
-    /// Used to calculate the period of the pwm.
-    clock_freq: Hertz,
+    pclk: pclk::Pclk<$pclk_id, S>,
+    apbclk: apb::ApbClk<types::$apb_id>,
     tc: crate::pac::$TC,
     #[allow(dead_code)]
     pinout: $pinout<I>,
 }
 
-impl<I: PinId, S: pclk::PclkSourceId> $TYPE<I> {
+impl<I: PinId, S: pclk::PclkSourceId> $TYPE<I, S> {
     pub fn new(
-        clock: &$clock,
+        pclk: pclk::Pclk<$pclk_id, S>,
+        apbclk: apb::ApbClk<types::$apb_id>,
         freq: Hertz,
-        tc: crate::pac::$TC<S>,
+        tc: crate::pac::$TC,
         pinout: $pinout<I>,
-        mclk: &mut Mclk,
     ) -> Self {
         let count = tc.count16();
-        let params = TimerParams::new(freq.convert(), clock.freq());
-        mclk.$apmask.modify(|_, w| w.$apbits().set_bit());
+        let params = TimerParams::new(freq.convert(), pclk.freq());
+
         count.ctrla.write(|w| w.swrst().set_bit());
         while count.ctrla.read().bits() & 1 != 0 {}
         count.ctrla.modify(|_, w| w.enable().clear_bit());
@@ -190,7 +294,8 @@ impl<I: PinId, S: pclk::PclkSourceId> $TYPE<I> {
         while count.syncbusy.read().enable().bit_is_set() {}
 
         Self {
-            clock_freq: clock.freq(),
+            pclk,
+            apbclk,
             tc,
             pinout,
         }
@@ -200,13 +305,13 @@ impl<I: PinId, S: pclk::PclkSourceId> $TYPE<I> {
         let count = self.tc.count16();
         let divisor = count.ctrla.read().prescaler().bits();
         let top = count.cc[0].read().cc().bits();
-        self.clock_freq / divisor as u32 / (top + 1) as u32
+        self.pclk.freq() / divisor as u32 / (top + 1) as u32
     }
 
     pub fn set_period(&mut self, period: Hertz)
     {
         let period = period.into();
-        let params = TimerParams::new(period, self.clock_freq);
+        let params = TimerParams::new(period, self.pclk.freq());
         let count = self.tc.count16();
         count.ctrla.modify(|_, w| w.enable().clear_bit());
         while count.syncbusy.read().enable().bit_is_set() {}
@@ -230,11 +335,11 @@ impl<I: PinId, S: pclk::PclkSourceId> $TYPE<I> {
     }
 }
 
-impl<I: PinId> $crate::ehal::pwm::ErrorType for$TYPE<I> {
+impl<I: PinId, S: PclkSourceId> $crate::ehal::pwm::ErrorType for$TYPE<I, S> {
     type Error = ::core::convert::Infallible;
 }
 
-impl<I: PinId> $crate::ehal::pwm::SetDutyCycle for $TYPE<I> {
+impl<I: PinId, S: PclkSourceId> $crate::ehal::pwm::SetDutyCycle for $TYPE<I, S> {
     fn max_duty_cycle(&self) -> u16 {
         let count = self.tc.count16();
         let top = count.cc[0].read().cc().bits();
@@ -248,7 +353,7 @@ impl<I: PinId> $crate::ehal::pwm::SetDutyCycle for $TYPE<I> {
     }
 }
 
-impl<I: PinId> $crate::ehal_02::PwmPin for $TYPE<I> {
+impl<I: PinId, S: PclkSourceId> $crate::ehal_02::PwmPin for $TYPE<I, S> {
     type Duty = u16;
 
     fn disable(&mut self) {
@@ -281,41 +386,18 @@ impl<I: PinId> $crate::ehal_02::PwmPin for $TYPE<I> {
     }
 }
 
-
-
 )+}}
 
-#[hal_cfg("tc0-d5x")]
-pwm! { Pwm0: (Tc0, TC0Pinout, Tc0Tc1Clock, apbamask, tc0_, Pwm0Wrapper) }
-#[hal_cfg("tc1-d5x")]
-pwm! { Pwm1: (Tc1, TC1Pinout, Tc0Tc1Clock, apbamask, tc1_, Pwm1Wrapper) }
-#[hal_cfg("tc2-d5x")]
-pwm! { Pwm2: (Tc2, TC2Pinout, Tc2Tc3Clock, apbbmask, tc2_, Pwm2Wrapper) }
-#[hal_cfg("tc3-d5x")]
-pwm! { Pwm3: (Tc3, TC3Pinout, Tc2Tc3Clock, apbbmask, tc3_, Pwm3Wrapper) }
-#[hal_cfg("tc4-d5x")]
-pwm! { Pwm4: (Tc4, TC4Pinout, Tc4Tc5Clock, apbcmask, tc4_, Pwm4Wrapper) }
-#[hal_cfg("tc5-d5x")]
-pwm! { Pwm5: (Tc5, TC5Pinout, Tc4Tc5Clock, apbcmask, tc5_, Pwm5Wrapper) }
-#[hal_cfg("tc6-d5x")]
-pwm! { Pwm6: (Tc6, TC6Pinout, Tc6Tc7Clock, apbdmask, tc6_, Pwm6Wrapper) }
-#[hal_cfg("tc7-d5x")]
-pwm! { Pwm7: (Tc7, TC7Pinout, Tc6Tc7Clock, apbdmask, tc7_, Pwm7Wrapper) }
-
-type xTc0Tc1Clock<C> = pclk::Pclk::<types::Tc0Tc1, C>;
-type Tc2Tc3Clock<C> = pclk::Pclk::<types::Tc2Tc3, C>;
-type Tc4Clock<C> = pclk::Pclk::<types::Tc4, C>;
-
-#[hal_cfg("tc0-c2x")]
-pwm! { Pwm0: (TC0, TC0Pinout, Tc0Tc1Clock, apbcmask, tc0_, Pwm0Wrapper) }
-#[hal_cfg("tc1-c2x")]
-pwm! { Pwm1: (TC1, TC1Pinout, Tc0Tc1Clock, apbcmask, tc1_, Pwm1Wrapper) }
-#[hal_cfg("tc2-c2x")]
-pwm! { Pwm2: (TC2, TC2Pinout, Tc2Tc3Clock, apbcmask, tc2_, Pwm2Wrapper) }
-#[hal_cfg("tc3-c2x")]
-pwm! { Pwm3: (TC3, TC3Pinout, Tc2Tc3Clock, apbcmask, tc3_, Pwm3Wrapper) }
-#[hal_cfg("tc4-c2x")]
-pwm! { Pwm4: (TC4, TC4Pinout, Tc4Clock, apbcmask, tc4_, Pwm4Wrapper) }
+#[hal_cfg("tc0")]
+pwm! { Pwm0: (TC0, TC0Pinout, Tc0Tc1, Tc0, Pwm0Wrapper) }
+#[hal_cfg("tc1")]
+pwm! { Pwm1: (TC1, TC1Pinout, Tc0Tc1, Tc1, Pwm1Wrapper) }
+#[hal_cfg("tc2")]
+pwm! { Pwm2: (TC2, TC2Pinout, Tc2Tc3, Tc2, Pwm2Wrapper) }
+#[hal_cfg("tc3")]
+pwm! { Pwm3: (TC3, TC3Pinout, Tc2Tc3, Tc3, Pwm3Wrapper) }
+#[hal_cfg("tc4")]
+pwm! { Pwm4: (TC4, TC4Pinout, Tc4, Tc4, Pwm4Wrapper) }
 
 // Timer/Counter for Control Applications (TCCx)
 
@@ -373,7 +455,7 @@ macro_rules! impl_tcc_pinout {
     };
 }
 
-// todo
+#[cfg(feature = "samc21n")]
 #[hal_cfg("tcc0")]
 impl_tcc_pinout!(TCC0Pinout: [
     #[hal_cfg("pa08")]
@@ -384,106 +466,53 @@ impl_tcc_pinout!(TCC0Pinout: [
     (Pa10, PA10, AlternateF),
     #[hal_cfg("pa11")]
     (Pa11, PA11, AlternateF),
+    #[hal_cfg("pb11")]
+    (Pb11, PB11, AlternateF),
+    #[hal_cfg("pb12")]
+    (Pb12, PB12, AlternateF),
+    #[hal_cfg("pb13")]
+    (Pb13, PB13, AlternateF),
     #[hal_cfg("pa12")]
     (Pa12, PA12, AlternateF),
     #[hal_cfg("pa13")]
-    (Pa13, PA13, AlternateF),
-    #[hal_cfg("pa16")]
-    (Pa16, PA16, AlternateG),
-    #[hal_cfg("pa17")]
-    (Pa17, PA17, AlternateG),
-    #[hal_cfg("pa18")]
-    (Pa18, PA18, AlternateG),
-    #[hal_cfg("pa19")]
-    (Pa19, PA19, AlternateG),
-    #[hal_cfg("pa20")]
-    (Pa20, PA20, AlternateG),
-    #[hal_cfg("pa21")]
-    (Pa21, PA21, AlternateG),
-    #[hal_cfg("pa22")]
-    (Pa22, PA22, AlternateG),
-    #[hal_cfg("pa23")]
-    (Pa23, PA23, AlternateG),
+    (Pa13, PA13, AlternateF)
+]);
+
+#[cfg(any(feature = "samc21e", feature = "samc21g", feature = "samc21j"))]
+#[hal_cfg("tcc0")]
+impl_tcc_pinout!(TCC0Pinout: [
+    #[hal_cfg("pa04")]
+    (Pa4, PA04, AlternateE),
+    #[hal_cfg("pa05")]
+    (Pa5, PA05, AlternateE),
+    #[hal_cfg("pa08")]
+    (Pa8, PA08, AlternateE),
+    #[hal_cfg("pa09")]
+    (Pa9, PA09, AlternateE),
+    #[hal_cfg("pb30")]
+    (Pb30, PB30, AlternateE),
+    #[hal_cfg("pb31")]
+    (Pb31, PB31, AlternateE),
+    #[hal_cfg("pa10")]
+    (Pa10, PA10, AlternateF),
+    #[hal_cfg("pa11")]
+    (Pa11, PA11, AlternateF),
     #[hal_cfg("pb10")]
     (Pb10, PB10, AlternateF),
     #[hal_cfg("pb11")]
     (Pb11, PB11, AlternateF),
     #[hal_cfg("pb12")]
-    (Pb12, PB12, AlternateG),
+    (Pb12, PB12, AlternateF),
     #[hal_cfg("pb13")]
-    (Pb13, PB13, AlternateG),
-    #[hal_cfg("pb14")]
-    (Pb14, PB14, AlternateG),
-    #[hal_cfg("pb15")]
-    (Pb15, PB15, AlternateG),
-    #[hal_cfg("pb16")]
-    (Pb16, PB16, AlternateG),
-    #[hal_cfg("pb17")]
-    (Pb17, PB17, AlternateG),
-    #[hal_cfg("pb30")]
-    (Pb30, PB30, AlternateG),
-    #[hal_cfg("pb31")]
-    (Pb31, PB31, AlternateG),
-    #[hal_cfg("pc10")]
-    (Pc10, PC10, AlternateF),
-    #[hal_cfg("pc11")]
-    (Pc11, PC11, AlternateF),
-    #[hal_cfg("pc12")]
-    (Pc12, PC12, AlternateF),
-    #[hal_cfg("pc13")]
-    (Pc13, PC13, AlternateF),
-    #[hal_cfg("pc14")]
-    (Pc14, PC14, AlternateF),
-    #[hal_cfg("pc15")]
-    (Pc15, PC15, AlternateF),
-    #[hal_cfg("pc16")]
-    (Pc16, PC16, AlternateF),
-    #[hal_cfg("pc17")]
-    (Pc17, PC17, AlternateF),
-    #[hal_cfg("pc18")]
-    (Pc18, PC18, AlternateF),
-    #[hal_cfg("pc19")]
-    (Pc19, PC19, AlternateF),
-    #[hal_cfg("pc20")]
-    (Pc20, PC20, AlternateF),
-    #[hal_cfg("pc21")]
-    (Pc21, PC21, AlternateF),
-    #[hal_cfg("pc04")]
-    (Pc4, PC04, AlternateF),
-    #[hal_cfg("pc22")]
-    (Pc22, PC22, AlternateF),
-    #[hal_cfg("pc23")]
-    (Pc23, PC23, AlternateF),
-    #[hal_cfg("pd08")]
-    (Pd8, PD08, AlternateF),
-    #[hal_cfg("pd09")]
-    (Pd9, PD09, AlternateF),
-    #[hal_cfg("pd10")]
-    (Pd10, PD10, AlternateF),
-    #[hal_cfg("pd11")]
-    (Pd11, PD11, AlternateF),
-    #[hal_cfg("pd12")]
-    (Pd12, PD12, AlternateF)
-]);
-
-#[hal_cfg("tcc1")]
-impl_tcc_pinout!(TCC1Pinout: [
-    #[hal_cfg("pa08")]
-    (Pa8, PA08, AlternateG),
-    #[hal_cfg("pa09")]
-    (Pa9, PA09, AlternateG),
-    #[hal_cfg("pa10")]
-    (Pa10, PA10, AlternateG),
-    #[hal_cfg("pa11")]
-    (Pa11, PA11, AlternateG),
+    (Pb13, PB13, AlternateF),
     #[hal_cfg("pa12")]
-    (Pa12, PA12, AlternateG),
+    (Pa12, PA12, AlternateF),
     #[hal_cfg("pa13")]
-    (Pa13, PA13, AlternateG),
+    (Pa13, PA13, AlternateF),
     #[hal_cfg("pa14")]
-    (Pa14, PA14, AlternateG),
+    (Pa14, PA14, AlternateF),
     #[hal_cfg("pa15")]
-    (Pa15, PA15, AlternateG),
+    (Pa15, PA15, AlternateF),
     #[hal_cfg("pa16")]
     (Pa16, PA16, AlternateF),
     #[hal_cfg("pa17")]
@@ -492,6 +521,10 @@ impl_tcc_pinout!(TCC1Pinout: [
     (Pa18, PA18, AlternateF),
     #[hal_cfg("pa19")]
     (Pa19, PA19, AlternateF),
+    #[hal_cfg("pb16")]
+    (Pb16, PB13, AlternateF),
+    #[hal_cfg("pb17")]
+    (Pb17, PB17, AlternateF),
     #[hal_cfg("pa20")]
     (Pa20, PA20, AlternateF),
     #[hal_cfg("pa21")]
@@ -499,108 +532,115 @@ impl_tcc_pinout!(TCC1Pinout: [
     #[hal_cfg("pa22")]
     (Pa22, PA22, AlternateF),
     #[hal_cfg("pa23")]
-    (Pa23, PA23, AlternateF),
-    #[hal_cfg("pb10")]
-    (Pb10, PB10, AlternateG),
-    #[hal_cfg("pb11")]
-    (Pb11, PB11, AlternateG),
-    #[hal_cfg("pb18")]
-    (Pb18, PB18, AlternateF),
-    #[hal_cfg("pb19")]
-    (Pb19, PB19, AlternateF),
-    #[hal_cfg("pb20")]
-    (Pb20, PB20, AlternateF),
-    #[hal_cfg("pb21")]
-    (Pb21, PB21, AlternateF),
-    #[hal_cfg("pc10")]
-    (Pc10, PC10, AlternateG),
-    #[hal_cfg("pc11")]
-    (Pc11, PC11, AlternateG),
-    #[hal_cfg("pc12")]
-    (Pc12, PC12, AlternateG),
-    #[hal_cfg("pc13")]
-    (Pc13, PC13, AlternateG),
-    #[hal_cfg("pc14")]
-    (Pc14, PC14, AlternateG),
-    #[hal_cfg("pc15")]
-    (Pc15, PC15, AlternateG),
-    #[hal_cfg("pb26")]
-    (Pb26, PB26, AlternateF),
-    #[hal_cfg("pb27")]
-    (Pb27, PB27, AlternateF),
-    #[hal_cfg("pb28")]
-    (Pb28, PB28, AlternateF),
-    #[hal_cfg("pb29")]
-    (Pb29, PB29, AlternateF),
-    #[hal_cfg("pd20")]
-    (Pd20, PD20, AlternateF),
-    #[hal_cfg("pd21")]
-    (Pd21, PD21, AlternateF)
+    (Pa23, PA23, AlternateF)
 ]);
 
-#[hal_cfg("tcc2")]
-impl_tcc_pinout!(TCC2Pinout: [
-    #[hal_cfg("pa14")]
-    (Pa14, PA14, AlternateF),
-    #[hal_cfg("pa15")]
-    (Pa15, PA15, AlternateF),
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tcc1")]
+impl_tcc_pinout!(TCC1Pinout: [
+    #[hal_cfg("pa16")]
+    (Pa16, PA16, AlternateF),
+    #[hal_cfg("pa17")]
+    (Pa17, PA17, AlternateF),
+    #[hal_cfg("pa18")]
+    (Pa18, PA18, AlternateF),
+    #[hal_cfg("pa19")]
+    (Pa19, PA19, AlternateF),
+    #[hal_cfg("pa22")]
+    (Pa22, PA22, AlternateF),
+    #[hal_cfg("pa23")]
+    (Pa23, PA23, AlternateF),
+    #[hal_cfg("pb22")]
+    (Pa22, PA22, AlternateF),
+    #[hal_cfg("pb23")]
+    (Pa23, PA23, AlternateF)
+]);
+
+#[cfg(any(feature = "samc21e", feature = "samc21g", feature = "samc21j"))]
+#[hal_cfg("tcc1")]
+impl_tcc_pinout!(TCC1Pinout: [
+    #[hal_cfg("pa06")]
+    (Pa6, PA06, AlternateE),
+    #[hal_cfg("pa07")]
+    (Pa7, PA07, AlternateE),
+    #[hal_cfg("pa10")]
+    (Pa10, PA10, AlternateE),
+    #[hal_cfg("pa11")]
+    (Pa11, PA11, AlternateE),
+    #[hal_cfg("pa30")]
+    (Pa30, PA30, AlternateE),
+    #[hal_cfg("pa31")]
+    (Pa31, PA31, AlternateE),
+    #[hal_cfg("pa08")]
+    (Pa8, PA08, AlternateF),
+    #[hal_cfg("pa09")]
+    (Pa9, PA09, AlternateF),
     #[hal_cfg("pa24")]
     (Pa24, PA24, AlternateF),
-    #[hal_cfg("pa30")]
-    (Pa30, PA30, AlternateF),
-    #[hal_cfg("pa31")]
-    (Pa31, PA31, AlternateF),
-    #[hal_cfg("pb02")]
-    (Pb2,  PB02, AlternateF)
-]);
-
-#[hal_cfg("tcc3")]
-impl_tcc_pinout!(TCC3Pinout: [
-    #[hal_cfg("pb12")]
-    (Pb12, PB12, AlternateF),
-    #[hal_cfg("pb13")]
-    (Pb13, PB13, AlternateF),
-    #[hal_cfg("pb16")]
-    (Pb16, PB16, AlternateF),
-    #[hal_cfg("pb17")]
-    (Pb17, PB17, AlternateF)
-]);
-
-#[hal_cfg("tcc4")]
-impl_tcc_pinout!(TCC4Pinout: [
-    #[hal_cfg("pb14")]
-    (Pb14, PB14, AlternateF),
-    #[hal_cfg("pb15")]
-    (Pb15, PB15, AlternateF),
+    #[hal_cfg("pa25")]
+    (Pa25, PA25, AlternateF),
     #[hal_cfg("pb30")]
     (Pb30, PB30, AlternateF),
     #[hal_cfg("pb31")]
     (Pb31, PB31, AlternateF)
 ]);
 
+#[cfg(feature = "samc21n")]
+#[hal_cfg("tcc2")]
+impl_tcc_pinout!(TCC2Pinout: [
+    #[hal_cfg("pc03")]
+    (Pc3, PC03, AlternateF),
+    #[hal_cfg("pc05")]
+    (Pc5, PC05, AlternateF),
+    #[hal_cfg("pa20")]
+    (Pa20, PA20, AlternateF),
+    #[hal_cfg("pa21")]
+    (Pa21, PA21, AlternateF),
+    #[hal_cfg("pa24")]
+    (Pa24, PA24, AlternateF),
+    #[hal_cfg("pa25")]
+    (Pa25, PA25, AlternateF)
+]);
+
+#[cfg(any(feature = "samc21e", feature = "samc21g", feature = "samc21j"))]
+#[hal_cfg("tcc2")]
+impl_tcc_pinout!(TCC2Pinout: [
+    #[hal_cfg("pa00")]
+    (Pa0, PA00, AlternateE),
+    #[hal_cfg("pa01")]
+    (Pa1, PA01, AlternateE),
+    #[hal_cfg("pa12")]
+    (Pa12, PA12, AlternateE),
+    #[hal_cfg("pa13")]
+    (Pa13, PA13, AlternateE),
+    #[hal_cfg("pa16")]
+    (Pa16, PA16, AlternateE),
+    #[hal_cfg("pa17")]
+    (Pa17, PA17, AlternateE)
+]);
+
 macro_rules! pwm_tcc {
-    ($($TYPE:ident: ($TCC:ident, $pinout:ident, $clock:ident, $apmask:ident, $apbits:ident, $wrapper:ident)),+) => {
+    ($($TYPE:ident: ($TCC:ident, $pinout:ident, $pclk_id:ident, $apb_id:ident, $wrapper:ident)),+) => {
         $(
 
-pub struct $TYPE<I: PinId, M: PinMode> {
-    /// The frequency of the attached clock, not the period of the pwm.
-    /// Used to calculate the period of the pwm.
-    clock_freq: Hertz,
+pub struct $TYPE<I: PinId, M: PinMode, S: pclk::PclkSourceId> {
+    pclk: pclk::Pclk<$pclk_id, S>,
+    apbclk: apb::ApbClk<types::$apb_id>,
     tcc: crate::pac::$TCC,
     #[allow(dead_code)]
     pinout: $pinout<I, M>,
 }
 
-impl<I: PinId, M: PinMode> $TYPE<I, M> {
+impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
     pub fn new(
-        clock: &$clock,
+        pclk: pclk::Pclk<$pclk_id, S>,
+        apbclk: apb::ApbClk<types::$apb_id>,
         freq: Hertz,
         tcc: crate::pac::$TCC,
         pinout: $pinout<I, M>,
-        mclk: &mut Mclk,
     ) -> Self {
-        let params = TimerParams::new(freq.convert(), clock.freq());
-        mclk.$apmask.modify(|_, w| w.$apbits().set_bit());
+        let params = TimerParams::new(freq.convert(), pclk.freq());
+
         tcc.ctrla.write(|w| w.swrst().set_bit());
         while tcc.syncbusy.read().swrst().bit_is_set() {}
         tcc.ctrlbclr.write(|w| w.dir().set_bit() );
@@ -628,14 +668,15 @@ impl<I: PinId, M: PinMode> $TYPE<I, M> {
         while tcc.syncbusy.read().enable().bit_is_set() {}
 
         Self {
-            clock_freq: clock.freq(),
+            pclk,
+            apbclk,
             tcc,
             pinout,
         }
     }
 }
 
-impl<I: PinId, M: PinMode> $crate::ehal_02::Pwm for $TYPE<I, M> {
+impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $crate::ehal_02::Pwm for $TYPE<I, M, S> {
     type Channel = Channel;
     type Time = Hertz;
     type Duty = u32;
@@ -653,7 +694,7 @@ impl<I: PinId, M: PinMode> $crate::ehal_02::Pwm for $TYPE<I, M> {
     fn get_period(&self) -> Self::Time {
         let divisor = self.tcc.ctrla.read().prescaler().bits();
         let top = self.tcc.per().read().bits();
-        self.clock_freq / divisor as u32 / (top + 1) as u32
+        self.pclk.freq() / divisor as u32 / (top + 1) as u32
     }
 
     fn get_duty(&self, channel: Self::Channel) -> Self::Duty {
@@ -676,7 +717,7 @@ impl<I: PinId, M: PinMode> $crate::ehal_02::Pwm for $TYPE<I, M> {
     where
         P: Into<Self::Time>,
     {
-        let params = TimerParams::new(period.into().convert(), self.clock_freq);
+        let params = TimerParams::new(period.into().convert(), self.pclk.freq());
         self.tcc.ctrla.modify(|_, w| w.enable().clear_bit());
         while self.tcc.syncbusy.read().enable().bit_is_set() {}
         self.tcc.ctrla.modify(|_, w| {
@@ -703,23 +744,9 @@ impl<I: PinId, M: PinMode> $crate::ehal_02::Pwm for $TYPE<I, M> {
     };
 }
 
-#[hal_cfg("tcc0-d5x")]
-pwm_tcc! { Tcc0Pwm: (Tcc0, TCC0Pinout, Tcc0Tcc1Clock, apbbmask, tcc0_, TccPwm0Wrapper) }
-#[hal_cfg("tcc1-d5x")]
-pwm_tcc! { Tcc1Pwm: (Tcc1, TCC1Pinout, Tcc0Tcc1Clock, apbbmask, tcc1_, TccPwm1Wrapper) }
-#[hal_cfg("tcc2-d5x")]
-pwm_tcc! { Tcc2Pwm: (Tcc2, TCC2Pinout, Tcc2Tcc3Clock, apbcmask, tcc2_, TccPwm2Wrapper) }
-#[hal_cfg("tcc3-d5x")]
-pwm_tcc! { Tcc3Pwm: (Tcc3, TCC3Pinout, Tcc2Tcc3Clock, apbcmask, tcc3_, TccPwm3Wrapper) }
-#[hal_cfg("tcc4-d5x")]
-pwm_tcc! { Tcc4Pwm: (Tcc4, TCC4Pinout, Tcc4Clock,     apbdmask, tcc4_, TccPwm4Wrapper) }
-
-type Tcc0Tcc1Clock<I> = pclk::Pclk::<types::Tcc0Tcc1, I>;
-type Tcc2Clock<I> = pclk::Pclk::<types::Tcc2, I>;
-
-#[hal_cfg("tcc0-c2x")]
-pwm_tcc! { Tcc0Pwm: (TCC0, TCC0Pinout, Tcc0Tcc1Clock, apbcmask, tcc0_, TccPwm0Wrapper) }
-#[hal_cfg("tcc1-c2x")]
-pwm_tcc! { Tcc1Pwm: (TCC1, TCC1Pinout, Tcc0Tcc1Clock, apbcmask, tcc1_, TccPwm1Wrapper) }
-#[hal_cfg("tcc2-c2x")]
-pwm_tcc! { Tcc2Pwm: (TCC2, TCC2Pinout, Tcc2Clock, apbcmask, tcc2_, TccPwm2Wrapper) }
+#[hal_cfg("tcc0")]
+pwm_tcc! { Tcc0Pwm: (TCC0, TCC0Pinout, Tcc0Tcc1, Tcc0, TccPwm0Wrapper) }
+#[hal_cfg("tcc1")]
+pwm_tcc! { Tcc1Pwm: (TCC1, TCC1Pinout, Tcc0Tcc1, Tcc1, TccPwm1Wrapper) }
+#[hal_cfg("tcc2")]
+pwm_tcc! { Tcc2Pwm: (TCC2, TCC2Pinout, Tcc2, Tcc2, TccPwm2Wrapper) }
