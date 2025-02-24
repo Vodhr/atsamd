@@ -63,6 +63,7 @@ macro_rules! create_types {
     };
 }
 
+// todo
 create_types!(Ac);
 create_types!(Adc0, Adc1);
 create_types!(Aes);
@@ -88,6 +89,7 @@ create_types!(Gclk);
 #[hal_cfg("gmac")]
 create_types!(Gmac);
 create_types!(Hpb0, Hpb1, Hpb2, Hpb3);
+create_types!(HMatrixHS);
 create_types!(Icm);
 create_types!(Mclk);
 create_types!(NvmCtrl, NvmCtrlSmeeProm, NvmCtrlCache);
@@ -100,11 +102,13 @@ create_types!(Pcc);
 create_types!(PDec);
 create_types!(Pm);
 create_types!(Port);
+create_types!(Ptc);
 create_types!(Pukcc);
 create_types!(Qspi, Qspi2x);
 create_types!(RamEcc);
 create_types!(RstC);
 create_types!(Rtc);
+create_types!(SdAdc);
 create_types!(Sdhc0);
 #[hal_cfg("sdhc1")]
 create_types!(Sdhc1);
@@ -112,16 +116,13 @@ create_types!(SlowClk);
 create_types!(SupC);
 create_types!(Tc0Tc1, Tc0, Tc1);
 create_types!(Tc2Tc3, Tc2, Tc3);
-#[hal_cfg(all("tc4", "tc5"))]
-create_types!(Tc4Tc5, Tc4, Tc5);
-#[hal_cfg(all("tc6", "tc7"))]
-create_types!(Tc6Tc7, Tc6, Tc7);
+create_types!(Tc4);
+create_types!(Tc5);
+create_types!(Tc6);
+create_types!(Tc7);
 create_types!(Tcc0Tcc1, Tcc0, Tcc1);
-create_types!(Tcc2Tcc3, Tcc2);
-#[hal_cfg("tcc3")]
-create_types!(Tcc3);
-#[hal_cfg("tcc4")]
-create_types!(Tcc4);
+create_types!(Tcc2);
 create_types!(Trng);
+create_types!(TSens);
 create_types!(Usb);
 create_types!(Wdt);

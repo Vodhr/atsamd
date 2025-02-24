@@ -140,3 +140,18 @@ families:
       - i2s: { except: ["samd51g"] }
       - pcc
       - pdec
+
+  c2x:
+    pins:
+      samc21j: ["pins-64"]
+    peripherals:
+      - clock
+      - pac
+      - oscctrl
+#      - osc32kctrl
+      - port
+#      - sercom: {count: 8, only: ["samc21n", "samc20n"]}
+#      - sercom: {count: 6, only: ["samc21j", "samc21g"]}
+#      - sercom: {count: 4, only: ["samc21e", "samc20j", "samc20g", "samc20e"]}
+      - tc: {count: 5}
+      - tcc: {count: 3}

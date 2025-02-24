@@ -121,15 +121,15 @@
 //! [`Clocks`]: super::Clocks
 //! [`Buses`]: super::Buses
 
-use atsamd_hal_macros::hal_macro_helper;
+use atsamd_hal_macros::{hal_macro_helper};
 use core::marker::PhantomData;
 
 use bitflags;
 use paste::paste;
 
-use crate::pac::{self, mclk};
-
 use crate::typelevel::Sealed;
+
+use crate::pac;
 
 use super::types::*;
 
@@ -160,34 +160,36 @@ impl Apb {
     }
 
     #[inline]
-    fn mclk(&self) -> &mclk::RegisterBlock {
+    fn mclk(&self) -> &pac::mclk::RegisterBlock {
         // Safety: The `Apb` type has exclusive access to the `APBXMASK`
         // registers, and it uses a shared reference to the register block. See
         // the notes on `Token` types and memory safety in the root of the
         // `clock` module for more details.
-        unsafe { &*pac::Mclk::PTR }
+        unsafe { &(*pac::MCLK::PTR) }
     }
 
     #[inline]
-    fn apbamask(&mut self) -> &mclk::Apbamask {
-        self.mclk().apbamask()
+    fn apbamask(&mut self) -> &pac::mclk::APBAMASK {
+        &self.mclk().apbamask
     }
 
     #[inline]
-    fn apbbmask(&mut self) -> &mclk::Apbbmask {
-        self.mclk().apbbmask()
+    fn apbbmask(&mut self) -> &pac::mclk::APBBMASK {
+        &self.mclk().apbbmask
     }
 
     #[inline]
-    fn apbcmask(&mut self) -> &mclk::Apbcmask {
-        self.mclk().apbcmask()
+    fn apbcmask(&mut self) -> &pac::mclk::APBCMASK {
+        &self.mclk().apbcmask
     }
 
+    #[cfg(feature = "samc21n")]
     #[inline]
-    fn apbdmask(&mut self) -> &mclk::Apbdmask {
-        self.mclk().apbdmask()
+    fn apbdmask(&mut self) -> &pac::mclk::APBDMASK {
+        &self.mclk().apbdmask
     }
 
+    #[cfg(feature = "samc21n")]
     #[inline]
     fn enable_mask(&mut self, mask: ApbMask) {
         // Safety: The mask bits are derived from a `bitflags` struct, so they
@@ -215,6 +217,30 @@ impl Apb {
     }
 
     #[inline]
+    #[cfg(not(feature = "samc21n"))]
+    fn enable_mask(&mut self, mask: ApbMask) {
+        // Safety: The mask bits are derived from a `bitflags` struct, so they
+        // are guaranteed to be valid.
+        unsafe {
+            match mask {
+                ApbMask::A(mask) => {
+                    self.apbamask()
+                        .modify(|r, w| w.bits(r.bits() | mask.bits()));
+                }
+                ApbMask::B(mask) => {
+                    self.apbbmask()
+                        .modify(|r, w| w.bits(r.bits() | mask.bits()));
+                }
+                ApbMask::C(mask) => {
+                    self.apbcmask()
+                        .modify(|r, w| w.bits(r.bits() | mask.bits()));
+                }
+            }
+        }
+    }
+
+    #[cfg(feature = "samc21n")]
+    #[inline]
     fn disable_mask(&mut self, mask: ApbMask) {
         // Safety: The mask bits are derived from a `bitflags` struct, so they
         // are guaranteed to be valid.
@@ -234,6 +260,29 @@ impl Apb {
                 }
                 ApbMask::D(mask) => {
                     self.apbdmask()
+                        .modify(|r, w| w.bits(r.bits() & !mask.bits()));
+                }
+            }
+        }
+    }
+
+    #[cfg(not(feature = "samc21n"))]
+    #[inline]
+    fn disable_mask(&mut self, mask: ApbMask) {
+        // Safety: The mask bits are derived from a `bitflags` struct, so they
+        // are guaranteed to be valid.
+        unsafe {
+            match mask {
+                ApbMask::A(mask) => {
+                    self.apbamask()
+                        .modify(|r, w| w.bits(r.bits() & !mask.bits()));
+                }
+                ApbMask::B(mask) => {
+                    self.apbbmask()
+                        .modify(|r, w| w.bits(r.bits() & !mask.bits()));
+                }
+                ApbMask::C(mask) => {
+                    self.apbcmask()
                         .modify(|r, w| w.bits(r.bits() & !mask.bits()));
                 }
             }
@@ -274,6 +323,7 @@ enum ApbMask {
     A(ApbAMask),
     B(ApbBMask),
     C(ApbCMask),
+    #[cfg(feature = "samc21n")]
     D(ApbDMask),
 }
 
@@ -367,62 +417,63 @@ define_apb_types!(
         Rtc = 9,
         Eic = 10,
         FreqM = 11,
-        Sercom0 = 12,
-        Sercom1 = 13,
-        Tc0 = 14,
-        Tc1 = 15,
+        TSens = 12,
     }
     B {
-        Usb = 0,
+        Port = 0,
         Dsu = 1,
         NvmCtrl = 2,
-        Port = 4,
-        EvSys = 7,
-        Sercom2 = 9,
-        Sercom3 = 10,
-        Tcc0 = 11,
-        Tcc1 = 12,
-        Tc2 = 13,
-        Tc3 = 14,
-        RamEcc = 16,
+        HMatrixHS = 5,
     }
     C {
-        #[hal_cfg("gmac")]
-        Gmac = 2,
-        Tcc2 = 3,
-        #[hal_cfg("tcc3")]
-        Tcc3 = 4,
+        EvSys = 0,
+        #[hal_cfg("sercom0")]
+        Sercom0 = 1,
+        #[hal_cfg("sercom1")]
+        Sercom1 = 2,
+        #[hal_cfg("sercom2")]
+        Sercom2 = 3,
+        #[hal_cfg("sercom3")]
+        Sercom3 = 4,
+        #[hal_cfg("sercom4")]
+        Sercom4 = 5,
+        #[hal_cfg("sercom5")]
+        Sercom5 = 6,
+        #[hal_cfg("tcc0")]
+        Tcc0 = 9,
+        #[hal_cfg("tcc1")]
+        Tcc1 = 10,
+        #[hal_cfg("tcc2")]
+        Tcc2 = 11,
+        #[hal_cfg("tc0")]
+        Tc0 = 12,
+        #[hal_cfg("tc1")]
+        Tc1 = 13,
+        #[hal_cfg("tc2")]
+        Tc2 = 14,
+        #[hal_cfg("tc3")]
+        Tc3 = 15,
         #[hal_cfg("tc4")]
-        Tc4 = 5,
-        #[hal_cfg("tc5")]
-        Tc5 = 6,
-        PDec = 7,
-        Ac = 8,
-        Aes = 9,
-        Trng = 10,
-        Icm = 11,
-        Qspi = 13,
-        Ccl = 14,
+        Tc4 = 16,
+        Adc0 = 17,
+        Adc1 = 18,
+        SdAdc = 19,
+        Ac = 20,
+        Dac = 21,
+        Ptc = 22,
+        Ccl = 23,
     }
     D {
-        Sercom4 = 0,
-        Sercom5 = 1,
         #[hal_cfg("sercom6")]
-        Sercom6 = 2,
+        Sercom6 = 0,
         #[hal_cfg("sercom7")]
-        Sercom7 = 3,
-        #[hal_cfg("tcc4")]
-        Tcc4 = 4,
+        Sercom6 = 1,
+        #[hal_cfg("tc5")]
+        Tc5 = 2,
         #[hal_cfg("tc6")]
-        Tc6 = 5,
+        Tc6 = 3,
         #[hal_cfg("tc7")]
-        Tc7 = 6,
-        Adc0 = 7,
-        Adc1 = 8,
-        Dac = 9,
-        #[hal_cfg("i2s")]
-        I2S = 10,
-        Pcc = 11,
+        Tc7 = 4,
     }
 );
 
@@ -512,13 +563,16 @@ impl<A: ApbId> ApbClk<A> {
 #[hal_macro_helper]
 pub struct ApbTokens {
     pub freq_m: ApbToken<FreqM>,
+    #[hal_cfg("sercom0")]
     pub sercom0: ApbToken<Sercom0>,
+    #[hal_cfg("sercom1")]
     pub sercom1: ApbToken<Sercom1>,
     pub tc0: ApbToken<Tc0>,
     pub tc1: ApbToken<Tc1>,
-    pub usb: ApbToken<Usb>,
     pub ev_sys: ApbToken<EvSys>,
+    #[hal_cfg("sercom2")]
     pub sercom2: ApbToken<Sercom2>,
+    #[hal_cfg("sercom3")]
     pub sercom3: ApbToken<Sercom3>,
     pub tcc0: ApbToken<Tcc0>,
     pub tcc1: ApbToken<Tcc1>,
@@ -531,13 +585,11 @@ pub struct ApbTokens {
     pub tcc3: ApbToken<Tcc3>,
     #[hal_cfg("tc5")]
     pub tc5: ApbToken<Tc5>,
-    pub p_dec: ApbToken<PDec>,
     pub ac: ApbToken<Ac>,
-    pub aes: ApbToken<Aes>,
-    pub trng: ApbToken<Trng>,
-    pub icm: ApbToken<Icm>,
     pub ccl: ApbToken<Ccl>,
+    #[hal_cfg("sercom4")]
     pub sercom4: ApbToken<Sercom4>,
+    #[hal_cfg("sercom5")]
     pub sercom5: ApbToken<Sercom5>,
     #[hal_cfg("sercom6")]
     pub sercom6: ApbToken<Sercom6>,
@@ -554,7 +606,6 @@ pub struct ApbTokens {
     pub dac: ApbToken<Dac>,
     #[hal_cfg("i2s")]
     pub i2s: ApbToken<I2S>,
-    pub pcc: ApbToken<Pcc>,
 }
 
 impl ApbTokens {
@@ -568,13 +619,16 @@ impl ApbTokens {
     pub(super) unsafe fn new() -> Self {
         Self {
             freq_m: ApbToken::new(),
+            #[hal_cfg("sercom0")]
             sercom0: ApbToken::new(),
+            #[hal_cfg("sercom1")]
             sercom1: ApbToken::new(),
             tc0: ApbToken::new(),
             tc1: ApbToken::new(),
-            usb: ApbToken::new(),
             ev_sys: ApbToken::new(),
+            #[hal_cfg("sercom2")]
             sercom2: ApbToken::new(),
+            #[hal_cfg("sercom3")]
             sercom3: ApbToken::new(),
             tcc0: ApbToken::new(),
             tcc1: ApbToken::new(),
@@ -587,13 +641,11 @@ impl ApbTokens {
             tcc3: ApbToken::new(),
             #[hal_cfg("tc5")]
             tc5: ApbToken::new(),
-            p_dec: ApbToken::new(),
             ac: ApbToken::new(),
-            aes: ApbToken::new(),
-            trng: ApbToken::new(),
-            icm: ApbToken::new(),
             ccl: ApbToken::new(),
+            #[hal_cfg("sercom4")]
             sercom4: ApbToken::new(),
+            #[hal_cfg("sercom5")]
             sercom5: ApbToken::new(),
             #[hal_cfg("sercom6")]
             sercom6: ApbToken::new(),
@@ -610,7 +662,6 @@ impl ApbTokens {
             dac: ApbToken::new(),
             #[hal_cfg("i2s")]
             i2s: ApbToken::new(),
-            pcc: ApbToken::new(),
         }
     }
 }
@@ -636,10 +687,8 @@ pub struct ApbClks {
     pub dsu: ApbClk<Dsu>,
     pub nvm_ctrl: ApbClk<NvmCtrl>,
     pub port: ApbClk<Port>,
-    pub ram_ecc: ApbClk<RamEcc>,
     #[hal_cfg("gmac")]
     pub gmac: ApbClk<Gmac>,
-    pub qspi: ApbClk<Qspi>,
 }
 
 impl ApbClks {
@@ -666,10 +715,8 @@ impl ApbClks {
             dsu: ApbClk::new(ApbToken::new()),
             nvm_ctrl: ApbClk::new(ApbToken::new()),
             port: ApbClk::new(ApbToken::new()),
-            ram_ecc: ApbClk::new(ApbToken::new()),
             #[hal_cfg("gmac")]
             gmac: ApbClk::new(ApbToken::new()),
-            qspi: ApbClk::new(ApbToken::new()),
         }
     }
 }
