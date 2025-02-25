@@ -871,9 +871,9 @@ pub mod types;
 pub mod xosc;
 // pub mod xosc32k;
 
-// mod reset;
-mod osc48m;
-//pub use reset::*;
+mod reset;
+pub mod osc48m;
+pub use reset::*;
 
 // `Token` types and memory safety
 //

@@ -1,6 +1,6 @@
 use typenum::U0;
-// use crate::async_hal::interrupts::InterruptExt;
 use crate::time::Hertz;
+use fugit::RateExtU32;
 use super::{Enabled, Source, Sealed};
 
 pub struct Osc48mToken (());
@@ -145,20 +145,18 @@ pub enum StartUp {
     Delay21333ns,
 }
 
-
-pub struct Osc48m {
-    token: Osc48mToken,
-    settings: Settings,
-    freq: Hertz,
-}
-
 pub enum Osc48mId {}
 
 impl Sealed for Osc48mId {}
 
+pub struct Osc48m {
+    token: Osc48mToken,
+    settings: Settings,
+}
+
 impl Osc48m {
     #[inline]
-    pub fn new(token: Osc48mToken, freq: Hertz) -> Self {
+    pub fn new(token: Osc48mToken) -> Self {
         let settings = Settings {
             start_up: StartUp::Delay21333ns,
             on_demand: true,
@@ -166,12 +164,29 @@ impl Osc48m {
             divider: Divider::Div4000kHz,
         };
 
-        Self { token, settings, freq }
+        Self { token, settings }
     }
 
     #[inline]
     pub fn freq(&self) -> Hertz {
-        self.freq
+        match self.settings.divider {
+            Divider::Div48MHz => { 48.MHz() }
+            Divider::Div24MHz => { 24.MHz() }
+            Divider::Div16MHz => { 16.MHz() }
+            Divider::Div12MHz => { 12.MHz() }
+            Divider::Div9600kHz => { 9_600.kHz() }
+            Divider::Div8000kHz => { 8_000.kHz() }
+            Divider::Div6860kHz => { 6_860.kHz() }
+            Divider::Div6000kHz => { 6_000.kHz() }
+            Divider::Div5330kHz => { 5_330.kHz() }
+            Divider::Div4800kHz => { 4_800.kHz() }
+            Divider::Div4360kHz => { 4_360.kHz() }
+            Divider::Div4000kHz => { 4_000.kHz() }
+            Divider::Div3690kHz => { 3_690.kHz() }
+            Divider::Div3430kHz => { 3_430.kHz() }
+            Divider::Div3200kHz => { 3_200.kHz() }
+            Divider::Div3000kHz => { 3_000.kHz() }
+        }
     }
 
     #[inline]
@@ -214,17 +229,22 @@ impl Osc48m {
 
 pub type EnabledOsc48m<N = U0> = Enabled<Osc48m, N>;
 
-impl EnabledOsc48m {
+impl<N> Enabled<Osc48m, N> {
     #[inline]
     pub fn is_ready(&self) -> bool {
         self.0.token.is_ready()
     }
+
+    // pub fn set_divider(&mut self, divider: Divider) {
+    //     self.0.settings.divider = divider;
+    //     self.0.token.set_registers(self.0.settings);
+    // }
 }
-impl Source for EnabledOsc48m {
+impl<N> Source for Enabled<Osc48m, N> {
     type Id = Osc48mId;
 
     #[inline]
     fn freq(&self) -> Hertz {
-        self.0.freq
+        self.0.freq()
     }
 }

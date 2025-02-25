@@ -203,7 +203,7 @@
 //! [DFLL]: super::dfll
 //! [`Dfll`]: super::dfll::Dfll
 //! [`EnabledDfll`]: super::dfll::EnabledDfll
-
+use core::marker::PhantomData;
 use typenum::U0;
 
 use crate::pac::oscctrl::{self, XOSCCTRL, CFDPRESC};
@@ -233,6 +233,10 @@ pub struct XoscToken {
 }
 
 impl XoscToken {
+    pub(super) unsafe fn new() -> Self {
+        Self { }
+    }
+
     /// Return a reference to the XOSCCTRL register
     #[inline]
     fn xoscctrl(&self) -> &XOSCCTRL {
