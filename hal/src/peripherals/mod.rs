@@ -1,11 +1,16 @@
 use atsamd_hal_macros::{hal_cfg, hal_module};
 
-#[cfg(feature = "device")]
-pub mod adc;
+#[hal_module(
+    any("adc-d11", "adc-d21") => "adc/d11.rs",
+    "adc-d5x" => "adc/d5x.rs",
+    "adc0-c2x" => "adc/c2x.rs",
+)]
+pub mod adc {}
 
 #[hal_module(
     any("nvmctrl-d11", "nvmctrl-d21") => "calibration/d11.rs",
     "nvmctrl-d5x" => "calibration/d5x.rs",
+    "nvmctrl-c2x" => "calibration/c2x.rs",
 )]
 pub mod calibration {}
 
@@ -27,7 +32,8 @@ pub mod usb {}
 
 #[hal_module(
     any("clock-d11", "clock-d21") => "pwm/d11.rs",
-    any("clock-d5x", "clock-c2x") => "pwm/d5x.rs",
+    "clock-d5x" => "pwm/d5x.rs",
+    "clock-c2x" => "pwm/c2x.rs",
 )]
 pub mod pwm {}
 
