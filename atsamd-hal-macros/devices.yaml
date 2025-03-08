@@ -146,6 +146,7 @@ families:
       samc21j: ["pins-64"]
     peripherals:
       - clock
+      - nvmctrl
       - pac
       - oscctrl
 #      - osc32kctrl
@@ -155,3 +156,5 @@ families:
 #      - sercom: {count: 4, only: ["samc21e", "samc20j", "samc20g", "samc20e"]}
       - tc: {count: 5}
       - tcc: {count: 3}
+      - adc: {count: 2, only: ["samc21n", "samc21e", "samc21g", "samc21j"]}
+      - adc: {count: 1, only: ["samc20n", "samc20e", "samc20g", "samc20j"]}
