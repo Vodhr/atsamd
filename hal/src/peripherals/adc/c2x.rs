@@ -145,10 +145,7 @@ impl<S: pclk::PclkSourceId> Adc for $Adc<S> {
 
     #[inline(always)]
     fn start_conversion(&mut self) {
-        // start conversion
         self.adc.swtrig.modify(|_, w| w.start().set_bit());
-        // do it again because the datasheet tells us to
-        // self.adc.swtrig.modify(|_, w| w.start().set_bit());
     }
 
     fn enable_freerunning(&mut self) {
