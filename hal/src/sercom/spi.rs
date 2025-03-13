@@ -453,9 +453,12 @@ use num_traits::AsPrimitive;
 
 use crate::ehal;
 pub use crate::ehal::spi::{Phase, Polarity, MODE_0, MODE_1, MODE_2, MODE_3};
-use crate::sercom::{pad::SomePad, ApbClkCtrl, Sercom};
+use crate::sercom::{pad::SomePad, Sercom};
 use crate::time::Hertz;
 use crate::typelevel::{Is, NoneT, Sealed};
+
+use crate::peripherals::clock::gclk;
+use crate::peripherals::clock::pclk;
 
 mod reg;
 use reg::Registers;
@@ -468,9 +471,11 @@ use reg::Registers;
 use crate::pac::sercom0::spi::ctrla::Modeselect;
 #[hal_cfg("sercom0-d5x")]
 use crate::pac::sercom0::spim::ctrla::Modeselect;
+#[hal_cfg("sercom0-c2x")]
+use crate::pac::sercom0::spim::ctrla::MODE_A as Modeselect;
 
 #[hal_module(
-    any("sercom0-d11", "sercom0-d21") => "spi/pads_thumbv6m.rs",
+    any("sercom0-d11", "sercom0-d21", "sercom0-c2x") => "spi/pads_thumbv6m.rs",
     "sercom0-d5x" => "spi/pads_thumbv7em.rs",
 )]
 pub mod pads {}
@@ -478,7 +483,7 @@ pub mod pads {}
 pub use pads::*;
 
 #[hal_module(
-    any("sercom0-d11", "sercom0-d21") => "spi/char_size.rs",
+    any("sercom0-d11", "sercom0-d21", "sercom0-c2x") => "spi/char_size.rs",
     "sercom0-d5x" => "spi/length.rs",
 )]
 pub mod size {}
@@ -635,17 +640,26 @@ impl Sealed for MasterHWSS {}
 impl Sealed for Slave {}
 
 impl OpMode for Master {
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     const MODE: Modeselect = Modeselect::SpiMaster;
+    #[hal_cfg("sercom0-c2x")]
+    const MODE: Modeselect = Modeselect::SPI_MASTER;
     const MSSEN: bool = false;
 }
 
 impl OpMode for MasterHWSS {
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     const MODE: Modeselect = Modeselect::SpiMaster;
+    #[hal_cfg("sercom0-c2x")]
+    const MODE: Modeselect = Modeselect::SPI_MASTER;
     const MSSEN: bool = true;
 }
 
 impl OpMode for Slave {
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     const MODE: Modeselect = Modeselect::SpiSlave;
+    #[hal_cfg("sercom0-c2x")]
+    const MODE: Modeselect = Modeselect::SPI_SLAVE;
     const MSSEN: bool = false;
 }
 
@@ -663,7 +677,7 @@ impl MasterMode for MasterHWSS {}
 //=============================================================================
 
 /// Type alias for the width of the `DATA` register
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+#[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
 pub type DataWidth = u16;
 
 /// Type alias for the width of the `DATA` register
@@ -673,14 +687,14 @@ pub type DataWidth = u32;
 /// Trait alias whose definition varies by chip
 ///
 /// On SAMD11 and SAMD21 chips, this represents the [`CharSize`].
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+#[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
 pub trait Size: CharSize {}
 
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+#[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
 impl<C: CharSize> Size for C {}
 
 /// Type alias for the default [`Size`] type, which varies by chip
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+#[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
 pub type DefaultSize = EightBit;
 
 /// Trait alias whose definition varies by chip
@@ -704,7 +718,7 @@ pub type DefaultSize = typenum::U1;
 /// read or write of the `DATA` register
 pub trait AtomicSize: Size {}
 
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+#[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
 impl<C: CharSize> AtomicSize for C {}
 
 #[hal_cfg("sercom0-d5x")]
@@ -793,11 +807,12 @@ impl Transmit for Duplex {}
 ///
 /// See the [module-level](super) documentation for more details on declaring
 /// and instantiating `Pads` types.
-pub struct Config<P, M = Master, Z = DefaultSize>
+pub struct Config<P, M = Master, Z = DefaultSize, S = gclk::Gclk0Id>
 where
     P: ValidPads,
     M: OpMode,
     Z: Size,
+    S: pclk::PclkSourceId,
 {
     regs: Registers<P::Sercom>,
     pads: P,
@@ -805,18 +820,26 @@ where
     size: PhantomData<Z>,
     freq: Hertz,
     nop_word: DataWidth,
+    apbclk: <P::Sercom as Sercom>::ApbClk,
+    pclk: <P::Sercom as Sercom>::Pclk<S>,
 }
 
-impl<P: ValidPads> Config<P> {
+impl<P, M, Z, S> Config<P, M, Z, S>
+where
+    P: ValidPads,
+    M: OpMode,
+    Z: Size,
+    S: pclk::PclkSourceId,
+{
     /// Create a new [`Config`] in the default configuration.
     #[inline]
     #[hal_macro_helper]
-    fn default(sercom: P::Sercom, pads: P, freq: impl Into<Hertz>) -> Self {
+    fn default(pclk: <P::Sercom as Sercom>::Pclk<S>, apbclk: <P::Sercom as Sercom>::ApbClk, sercom: P::Sercom, pads: P, freq: impl Into<Hertz>) -> Self {
         let mut regs = Registers { sercom };
         regs.reset();
         regs.set_op_mode(Master::MODE, Master::MSSEN);
         regs.set_dipo_dopo(P::DIPO_DOPO);
-        #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+        #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
         regs.set_char_size(EightBit::BITS);
         #[hal_cfg("sercom0-d5x")]
         regs.set_length(1);
@@ -827,6 +850,8 @@ impl<P: ValidPads> Config<P> {
             size: PhantomData,
             freq: freq.into(),
             nop_word: 0x00.as_(),
+            apbclk,
+            pclk,
         }
     }
 
@@ -864,25 +889,18 @@ impl<P: ValidPads> Config<P> {
     )]
     #[inline]
     pub fn new(
-        apb_clk_ctrl: &ApbClkCtrl,
+        pclk: <P::Sercom as Sercom>::Pclk<S>,
+        apbclk: <P::Sercom as Sercom>::ApbClk,
         mut sercom: P::Sercom,
         pads: P,
         freq: impl Into<Hertz>,
     ) -> Self {
-        sercom.enable_apb_clock(apb_clk_ctrl);
-        Self::default(sercom, pads, freq)
+        Self::default(pclk, apbclk, sercom, pads, freq)
     }
-}
 
-impl<P, M, Z> Config<P, M, Z>
-where
-    P: ValidPads,
-    M: OpMode,
-    Z: Size,
-{
     /// Change the [`OpMode`] or [`Size`]
     #[inline]
-    fn change<M2, Z2>(self) -> Config<P, M2, Z2>
+    fn change<M2, Z2>(self) -> Config<P, M2, Z2, S>
     where
         M2: OpMode,
         Z2: Size,
@@ -894,6 +912,8 @@ where
             size: PhantomData,
             freq: self.freq,
             nop_word: self.nop_word,
+            apbclk: self.apbclk,
+            pclk: self.pclk,
         }
     }
 
@@ -911,16 +931,16 @@ where
     /// Trigger the [`Sercom`]'s SWRST and return a [`Config`] in the
     /// default configuration.
     #[inline]
-    pub fn reset(self) -> Config<P> {
-        Config::default(self.regs.sercom, self.pads, self.freq)
+    pub fn reset(self) -> Config<P, M, Z, S> {
+        Config::default(self.pclk, self.apbclk, self.regs.sercom, self.pads, self.freq)
     }
 
     /// Consume the [`Config`], reset the peripheral, and return the [`Sercom`]
     /// and [`Pads`]
     #[inline]
-    pub fn free(mut self) -> (P::Sercom, P) {
+    pub fn free(mut self) -> (<P::Sercom as Sercom>::Pclk<S>, <P::Sercom as Sercom>::ApbClk, P::Sercom, P) {
         self.regs.reset();
-        (self.regs.sercom, self.pads)
+        (self.pclk, self.apbclk, self.regs.sercom, self.pads)
     }
 
     /// Obtain a pointer to the `DATA` register. Necessary for DMA transfers.
@@ -932,15 +952,15 @@ where
 
     /// Change the [`OpMode`]
     #[inline]
-    pub fn op_mode<M2: OpMode>(mut self) -> Config<P, M2, Z> {
+    pub fn op_mode<M2: OpMode>(mut self) -> Config<P, M2, Z, S> {
         self.regs.set_op_mode(M2::MODE, M2::MSSEN);
         self.change()
     }
 
     /// Change the [`CharSize`] using the builder pattern
-    #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
     #[inline]
-    pub fn char_size<C2: CharSize>(mut self) -> Config<P, M, C2> {
+    pub fn char_size<C2: CharSize>(mut self) -> Config<P, M, C2, S> {
         self.regs.set_char_size(C2::BITS);
         self.change()
     }
@@ -953,7 +973,7 @@ where
     /// [`dyn_length`]: Config::dyn_length
     #[hal_cfg("sercom0-d5x")]
     #[inline]
-    pub fn length<L2: Length>(mut self) -> Config<P, M, L2> {
+    pub fn length<L2: Length>(mut self) -> Config<P, M, L2, S> {
         self.regs.set_length(L2::U8);
         self.change()
     }

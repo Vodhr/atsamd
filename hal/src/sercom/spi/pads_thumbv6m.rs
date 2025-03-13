@@ -7,7 +7,7 @@ use atsamd_hal_macros::hal_cfg;
 
 use core::marker::PhantomData;
 
-#[hal_cfg("sercom0-d21")]
+#[hal_cfg(any("sercom0-d21", "sercom0-c2x"))]
 use crate::gpio::AnyPin;
 use crate::sercom::*;
 use crate::typelevel::{NoneT, Sealed};
@@ -286,7 +286,7 @@ where
     }
 }
 
-#[hal_cfg("sercom0-d21")]
+#[hal_cfg(any("sercom0-d21", "sercom0-c2x"))]
 impl<S, DI, DO, CK, SS> Pads<S, DI, DO, CK, SS>
 where
     S: Sercom,

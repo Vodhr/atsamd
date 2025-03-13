@@ -38,13 +38,13 @@ use paste::paste;
 use seq_macro::seq;
 
 use super::Sercom;
-#[hal_cfg(any("sercom0-d21", "sercom0-d5x"))]
+#[hal_cfg(any("sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
 use crate::gpio::OptionalPinId;
 use crate::gpio::{AnyPin, OptionalPin, Pin, PinId, PinMode};
 use crate::typelevel::{NoneT, Sealed};
 
 #[hal_module(
-    any("sercom0-d11", "sercom0-d21") => "pad/impl_pad_thumbv6m.rs",
+    any("sercom0-d11", "sercom0-d21", "sercom0-c2x") => "pad/impl_pad_thumbv6m.rs",
     "sercom0-d5x" => "pad/impl_pad_thumbv7em.rs",
 )]
 mod impl_pad {}
@@ -190,7 +190,7 @@ where
 /// See the documentation on [type-level functions] for more details.
 ///
 /// [type-level functions]: crate::typelevel#type-level-functions
-#[hal_cfg(any("sercom0-d21", "sercom0-d5x"))]
+#[hal_cfg(any("sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
 pub trait GetPad<S>
 where
     S: Sercom,
@@ -211,7 +211,7 @@ pub type PadMode<S, N, I> = <I as GetPad<S, N>>::PinMode;
 
 /// Type alias using [`GetPad`] to recover the [`PinMode`] for a given SERCOM
 /// pad
-#[hal_cfg(any("sercom0-d21", "sercom0-d5x"))]
+#[hal_cfg(any("sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
 pub type PadMode<S, I> = <I as GetPad<S>>::PinMode;
 
 /// Type alias to recover a [`Pin`] configured as a SERCOM pad in the correct
@@ -221,7 +221,7 @@ pub type Pad<S, N, I> = Pin<I, PadMode<S, N, I>>;
 
 /// Type alias to recover a [`Pin`] configured as a SERCOM pad in the correct
 /// [`PadMode`]
-#[hal_cfg(any("sercom0-d21", "sercom0-d5x"))]
+#[hal_cfg(any("sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
 pub type Pad<S, I> = Pin<I, PadMode<S, I>>;
 
 //==============================================================================
@@ -237,19 +237,19 @@ pub type Pad<S, I> = Pin<I, PadMode<S, I>>;
 /// `Option<Pad>`.
 ///
 /// [type-level functions]: crate::typelevel#type-level-functions
-#[hal_cfg(any("sercom0-d21", "sercom0-d5x"))]
+#[hal_cfg(any("sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
 pub trait GetOptionalPad<S: Sercom>: OptionalPinId {
     type PadNum: OptionalPadNum;
     type Pad: OptionalPad;
 }
 
-#[hal_cfg(any("sercom0-d21", "sercom0-d5x"))]
+#[hal_cfg(any("sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
 impl<S: Sercom> GetOptionalPad<S> for NoneT {
     type PadNum = NoneT;
     type Pad = NoneT;
 }
 
-#[hal_cfg(any("sercom0-d21", "sercom0-d5x"))]
+#[hal_cfg(any("sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
 impl<S, I> GetOptionalPad<S> for I
 where
     S: Sercom,
