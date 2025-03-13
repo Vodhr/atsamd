@@ -1,3 +1,5 @@
+use embedded_hal_02::prelude::_embedded_hal_blocking_spi_Write;
+// use futures::task::Spawn;
 use atsamd_hal_macros::{hal_cfg, hal_macro_helper};
 
 use crate::ehal;
@@ -6,11 +8,15 @@ use crate::ehal;
 use crate::pac::sercom0::Spi;
 #[hal_cfg("sercom0-d5x")]
 use crate::pac::sercom0::Spim;
+#[hal_cfg("sercom0-c2x")]
+use crate::pac::sercom0::SPIM;
 
 #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
 use crate::pac::sercom0::spi::ctrla::Modeselect;
 #[hal_cfg("sercom0-d5x")]
 use crate::pac::sercom0::spim::ctrla::Modeselect;
+#[hal_cfg("sercom0-c2x")]
+use crate::pac::sercom0::spim::ctrla::MODE_A as Modeselect;
 
 use crate::sercom::Sercom;
 use crate::time::Hertz;
@@ -48,18 +54,43 @@ impl<S: Sercom> Registers<S> {
         self.sercom.spim()
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn spi(&self) -> &SPIM {
+        self.sercom.spim()
+    }
+
     /// Reset the SERCOM peripheral
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn reset(&mut self) {
         self.spi().ctrla().write(|w| w.swrst().set_bit());
         while self.spi().syncbusy().read().swrst().bit_is_set() {}
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn reset(&mut self) {
+        self.spi().ctrla.write(|w| w.swrst().set_bit());
+        while self.spi().syncbusy.read().swrst().bit_is_set() {}
+    }
+
     /// Configure the DIPO and DOPO values
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn set_dipo_dopo(&mut self, dipo_dopo: (u8, u8)) {
         let (dipo, dopo) = dipo_dopo;
         self.spi().ctrla().modify(|_, w| unsafe {
+            w.dipo().bits(dipo);
+            w.dopo().bits(dopo)
+        });
+    }
+
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_dipo_dopo(&mut self, dipo_dopo: (u8, u8)) {
+        let (dipo, dopo) = dipo_dopo;
+        self.spi().ctrla.modify(|_, w| unsafe {
             w.dipo().bits(dipo);
             w.dopo().bits(dopo)
         });
@@ -71,6 +102,7 @@ impl<S: Sercom> Registers<S> {
     /// extension mode. The LENGTH counter is used to control the number of byes
     /// in each SPI transaction. Due to a hardware bug, ICSPACE must be at least
     /// one. See the silicon errata for more details.
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     #[hal_macro_helper]
     pub fn set_op_mode(&mut self, mode: Modeselect, mssen: bool) {
@@ -82,6 +114,15 @@ impl<S: Sercom> Registers<S> {
             w.icspace().bits(1)
         });
         while self.spi().syncbusy().read().ctrlb().bit_is_set() {}
+    }
+
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    #[hal_macro_helper]
+    pub fn set_op_mode(&mut self, mode: Modeselect, mssen: bool) {
+        self.spi().ctrla.modify(|_, w| w.mode().variant(mode));
+        self.spi().ctrlb.modify(|_, w| w.mssen().bit(mssen));
+        while self.spi().syncbusy.read().ctrlb().bit_is_set() {}
     }
 
     /// Return the current transaction length
@@ -112,7 +153,16 @@ impl<S: Sercom> Registers<S> {
             .modify(|_, w| unsafe { w.chsize().bits(bits) });
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_char_size(&mut self, bits: u8) {
+        self.spi()
+            .ctrlb
+            .modify(|_, w| unsafe { w.chsize().bits(bits) });
+    }
+
     /// Get the clock polarity
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn get_cpol(&self) -> Polarity {
         let cpol = self.spi().ctrla().read().cpol().bit();
@@ -122,7 +172,18 @@ impl<S: Sercom> Registers<S> {
         }
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn get_cpol(&self) -> Polarity {
+        let cpol = self.spi().ctrla.read().cpol().bit();
+        match cpol {
+            false => Polarity::IdleLow,
+            true => Polarity::IdleHigh,
+        }
+    }
+
     /// Set the clock polarity
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn set_cpol(&mut self, cpol: Polarity) {
         let cpol = match cpol {
@@ -132,7 +193,18 @@ impl<S: Sercom> Registers<S> {
         self.spi().ctrla().modify(|_, w| w.cpol().bit(cpol));
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_cpol(&mut self, cpol: Polarity) {
+        let cpol = match cpol {
+            Polarity::IdleLow => false,
+            Polarity::IdleHigh => true,
+        };
+        self.spi().ctrla.modify(|_, w| w.cpol().bit(cpol));
+    }
+
     /// Get the clock phase
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn get_cpha(&self) -> Phase {
         let cpha = self.spi().ctrla().read().cpha().bit();
@@ -142,7 +214,18 @@ impl<S: Sercom> Registers<S> {
         }
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn get_cpha(&self) -> Phase {
+        let cpha = self.spi().ctrla.read().cpha().bit();
+        match cpha {
+            false => Phase::CaptureOnFirstTransition,
+            true => Phase::CaptureOnSecondTransition,
+        }
+    }
+
     /// Set the clock phase
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn set_cpha(&mut self, cpha: Phase) {
         let cpha = match cpha {
@@ -152,7 +235,18 @@ impl<S: Sercom> Registers<S> {
         self.spi().ctrla().modify(|_, w| w.cpha().bit(cpha));
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_cpha(&mut self, cpha: Phase) {
+        let cpha = match cpha {
+            Phase::CaptureOnFirstTransition => false,
+            Phase::CaptureOnSecondTransition => true,
+        };
+        self.spi().ctrla.modify(|_, w| w.cpha().bit(cpha));
+    }
+
     /// Get the SPI mode (clock polarity & phase)
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn get_spi_mode(&self) -> ehal::spi::Mode {
         let reg = self.spi().ctrla().read();
@@ -169,7 +263,25 @@ impl<S: Sercom> Registers<S> {
         ehal::spi::Mode { polarity, phase }
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn get_spi_mode(&self) -> ehal::spi::Mode {
+        let reg = self.spi().ctrla.read();
+        let cpol = reg.cpol().bit();
+        let cpha = reg.cpha().bit();
+        let polarity = match cpol {
+            false => Polarity::IdleLow,
+            true => Polarity::IdleHigh,
+        };
+        let phase = match cpha {
+            false => Phase::CaptureOnFirstTransition,
+            true => Phase::CaptureOnSecondTransition,
+        };
+        ehal::spi::Mode { polarity, phase }
+    }
+
     /// Set the SPI mode (clock polarity & phase)
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn set_spi_mode(&mut self, mode: ehal::spi::Mode) {
         let cpol = match mode.polarity {
@@ -186,7 +298,25 @@ impl<S: Sercom> Registers<S> {
         });
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_spi_mode(&mut self, mode: ehal::spi::Mode) {
+        let cpol = match mode.polarity {
+            Polarity::IdleLow => false,
+            Polarity::IdleHigh => true,
+        };
+        let cpha = match mode.phase {
+            Phase::CaptureOnFirstTransition => false,
+            Phase::CaptureOnSecondTransition => true,
+        };
+        self.spi().ctrla.modify(|_, w| {
+            w.cpol().bit(cpol);
+            w.cpha().bit(cpha)
+        });
+    }
+
     /// Get the bit order of transmission (MSB/LSB first)
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn get_bit_order(&self) -> BitOrder {
         let order = self.spi().ctrla().read().dord().bit();
@@ -196,7 +326,18 @@ impl<S: Sercom> Registers<S> {
         }
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn get_bit_order(&self) -> BitOrder {
+        let order = self.spi().ctrla.read().dord().bit();
+        match order {
+            false => BitOrder::MsbFirst,
+            true => BitOrder::LsbFirst,
+        }
+    }
+
     /// Set the bit order of transmission (MSB/LSB first)
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn set_bit_order(&mut self, order: BitOrder) {
         let order = match order {
@@ -206,14 +347,33 @@ impl<S: Sercom> Registers<S> {
         self.spi().ctrla().modify(|_, w| w.dord().bit(order));
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_bit_order(&mut self, order: BitOrder) {
+        let order = match order {
+            BitOrder::MsbFirst => false,
+            BitOrder::LsbFirst => true,
+        };
+        self.spi().ctrla.modify(|_, w| w.dord().bit(order));
+    }
+
     /// Get the baud rate
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn get_baud(&mut self, freq: Hertz) -> Hertz {
         let baud = self.spi().baud().read().baud().bits() as u32 + 1;
         freq / 2 / baud
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn get_baud(&mut self, freq: Hertz) -> Hertz {
+        let baud = self.spi().baud.read().baud().bits() as u32 + 1;
+        freq / 2 / baud
+    }
+
     /// Set the baud rate
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn set_baud(&mut self, freq: Hertz, baud: Hertz) {
         let baud = baud.to_Hz().max(1);
@@ -224,31 +384,71 @@ impl<S: Sercom> Registers<S> {
             .modify(|_, w| unsafe { w.baud().bits(bits) });
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_baud(&mut self, freq: Hertz, baud: Hertz) {
+        let baud = baud.to_Hz().max(1);
+        let bits = (freq.to_Hz() / 2 / baud).saturating_sub(1);
+        let bits = bits.try_into().unwrap_or(u8::MAX);
+        self.spi()
+            .baud
+            .modify(|_, w| unsafe { w.baud().bits(bits) });
+    }
+
     /// Get the enable state of the immediate buffer overflow notification
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn get_ibon(&self) -> bool {
         self.spi().ctrla().read().ibon().bit()
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn get_ibon(&self) -> bool {
+        self.spi().ctrla.read().ibon().bit()
+    }
+
     /// Set the enable state of the immediate buffer overflow notification
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn set_ibon(&mut self, enabled: bool) {
         self.spi().ctrla().modify(|_, w| w.ibon().bit(enabled));
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_ibon(&mut self, enabled: bool) {
+        self.spi().ctrla.modify(|_, w| w.ibon().bit(enabled));
+    }
+
     /// Get run in standby mode
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn get_run_in_standby(&self) -> bool {
         self.spi().ctrla().read().runstdby().bit()
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn get_run_in_standby(&self) -> bool {
+        self.spi().ctrla.read().runstdby().bit()
+    }
+
     /// Set run in standby mode
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn set_run_in_standby(&mut self, set: bool) {
         self.spi().ctrla().modify(|_, w| w.runstdby().bit(set));
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn set_run_in_standby(&mut self, set: bool) {
+        self.spi().ctrla.modify(|_, w| w.runstdby().bit(set));
+    }
+
     /// Enable interrupts for the specified flags
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn enable_interrupts(&mut self, flags: Flags) {
         self.spi()
@@ -256,7 +456,16 @@ impl<S: Sercom> Registers<S> {
             .write(|w| unsafe { w.bits(flags.bits()) });
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn enable_interrupts(&mut self, flags: Flags) {
+        self.spi()
+            .intenset
+            .write(|w| unsafe { w.bits(flags.bits()) });
+    }
+
     /// Disable interrupts for the specified flags
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn disable_interrupts(&mut self, flags: Flags) {
         self.spi()
@@ -264,71 +473,156 @@ impl<S: Sercom> Registers<S> {
             .write(|w| unsafe { w.bits(flags.bits()) });
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn disable_interrupts(&mut self, flags: Flags) {
+        self.spi()
+            .intenclr
+            .write(|w| unsafe { w.bits(flags.bits()) });
+    }
+
     /// Enable the receiver
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn rx_enable(&mut self) {
         self.spi().ctrlb().modify(|_, w| w.rxen().set_bit());
         while self.spi().syncbusy().read().ctrlb().bit_is_set() {}
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn rx_enable(&mut self) {
+        self.spi().ctrlb.modify(|_, w| w.rxen().set_bit());
+        while self.spi().syncbusy.read().ctrlb().bit_is_set() {}
+    }
+
     /// Disable the receiver
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn rx_disable(&mut self) {
         self.spi().ctrlb().modify(|_, w| w.rxen().clear_bit());
         while self.spi().syncbusy().read().ctrlb().bit_is_set() {}
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn rx_disable(&mut self) {
+        self.spi().ctrlb.modify(|_, w| w.rxen().clear_bit());
+        while self.spi().syncbusy.read().ctrlb().bit_is_set() {}
+    }
+
     /// Enable the peripheral
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn enable(&mut self) {
         self.spi().ctrla().modify(|_, w| w.enable().set_bit());
         while self.spi().syncbusy().read().enable().bit_is_set() {}
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn enable(&mut self) {
+        self.spi().ctrla.modify(|_, w| w.enable().set_bit());
+        while self.spi().syncbusy.read().enable().bit_is_set() {}
+    }
+
     /// Disable the peripheral
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn disable(&mut self) {
         self.spi().ctrla().modify(|_, w| w.enable().clear_bit());
         while self.spi().syncbusy().read().enable().bit_is_set() {}
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn disable(&mut self) {
+        self.spi().ctrla.modify(|_, w| w.enable().clear_bit());
+        while self.spi().syncbusy.read().enable().bit_is_set() {}
+    }
+
     /// Read from the `DATA` register
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn read_data(&mut self) -> DataWidth {
         self.spi().data().read().data().bits()
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn read_data(&mut self) -> DataWidth {
+        self.spi().data.read().data().bits()
+    }
+
     /// Write to the `DATA` register
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn write_data(&mut self, data: DataWidth) {
         // Safety: All bit patterns are memory safe
         self.spi().data().write(|w| unsafe { w.data().bits(data) })
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn write_data(&mut self, data: DataWidth) {
+        // Safety: All bit patterns are memory safe
+        self.spi().data.write(|w| unsafe { w.data().bits(data) })
+    }
+
     /// Read the interrupt flags
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn read_flags(&self) -> Flags {
         let bits = self.spi().intflag().read().bits();
         Flags::from_bits_truncate(bits)
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn read_flags(&self) -> Flags {
+        let bits = self.spi().intflag.read().bits();
+        Flags::from_bits_truncate(bits)
+    }
+
     /// Clear interrupt flags
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn clear_flags(&mut self, flags: Flags) {
         unsafe { self.spi().intflag().write(|w| w.bits(flags.bits())) };
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn clear_flags(&mut self, flags: Flags) {
+        unsafe { self.spi().intflag.write(|w| w.bits(flags.bits())) };
+    }
+
     /// Read the error status flags
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn read_status(&self) -> Status {
         let bits = self.spi().status().read().bits();
         Status::from_bits_truncate(bits)
     }
 
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn read_status(&self) -> Status {
+        let bits = self.spi().status.read().bits();
+        Status::from_bits_truncate(bits)
+    }
+
     /// Clear error status flags
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     #[inline]
     pub fn clear_status(&mut self, status: Status) {
         unsafe { self.spi().status().write(|w| w.bits(status.bits())) };
+    }
+
+    #[hal_cfg("sercom0-c2x")]
+    #[inline]
+    pub fn clear_status(&mut self, status: Status) {
+        unsafe { self.spi().status.write(|w| w.bits(status.bits())) };
     }
 
     /// Try to read the interrupt flags, but first check the error status flags.

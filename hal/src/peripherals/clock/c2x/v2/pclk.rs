@@ -251,6 +251,14 @@ macro_rules! with_pclk_types_ids {
             (EvSys10 = 16, ev_sys10)
             (EvSys11 = 17, ev_sys11)
 
+            (Sercom0 = 19, sercom0)
+            (Sercom1 = 20, sercom1)
+            (Sercom2 = 21, sercom2)
+            (Sercom3 = 22, sercom3)
+            (Sercom4 = 23, sercom4)
+
+            (Sercom5 = 25, sercom5)
+
             #[hal_cfg("can0")]
             (Can0 = 26, can0)
             #[hal_cfg("can1")]

@@ -39,6 +39,12 @@ use pac::sercom0;
 use pac::Mclk as ApbClkCtrl;
 #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
 use pac::Pm as ApbClkCtrl;
+#[hal_cfg("sercom0-c2x")]
+use crate::peripherals::clock::pclk;
+#[hal_cfg("sercom0-c2x")]
+use crate::peripherals::clock::apb;
+#[hal_cfg("sercom0-c2x")]
+use crate::peripherals::clock::types;
 
 #[cfg(feature = "dma")]
 use crate::dmac::TriggerSource;
@@ -48,10 +54,15 @@ use crate::typelevel::Sealed;
 pub mod pad;
 pub use pad::*;
 
-pub mod i2c;
+// pub mod i2c;
 pub mod spi;
 
-pub mod uart;
+// #[deprecated(
+//     since = "0.19.0",
+//     note = "spi_future is deprecated and will be removed in a later version of atsamd_hal. Consider using the `async` APIs available in the `spi` module as a replacement."
+// )]
+// pub mod spi_future;
+// pub mod uart;
 
 #[cfg(feature = "dma")]
 pub mod dma;
@@ -76,7 +87,14 @@ pub trait Sercom: Sealed + Deref<Target = sercom0::RegisterBlock> {
     #[cfg(feature = "async")]
     type Interrupt: crate::async_hal::interrupts::InterruptSource;
 
+    #[hal_cfg("sercom0-c2x")]
+    type ApbClk;
+
+    #[hal_cfg("sercom0-c2x")]
+    type Pclk<S: pclk::PclkSourceId>;
+
     /// Enable the corresponding APB clock
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
     fn enable_apb_clock(&mut self, ctrl: &ApbClkCtrl);
 
     /// Get a reference to the sercom from a
@@ -103,7 +121,7 @@ macro_rules! sercom {
         paste::paste! {
             // use pac::$pac_type;
             /// Type alias for the corresponding SERCOM instance
-            pub type [< Sercom $N >] = $crate::pac::[< Sercom $N >];
+            pub type [< Sercom $N >] = $crate::pac::[< SERCOM $N >];
             impl Sealed for [< Sercom $N >] {}
             impl Sercom for [< Sercom $N >] {
                 const NUM: usize = $N;
@@ -122,14 +140,28 @@ macro_rules! sercom {
                 #[hal_cfg("sercom0-d5x")]
                 type Interrupt = $crate::async_hal::interrupts::[< SERCOM $N >];
 
+                #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
                 #[inline]
                 fn enable_apb_clock(&mut self, ctrl: &ApbClkCtrl) {
                     ctrl.$apbmask().modify(|_, w| w.[< sercom $N _>]().set_bit());
                 }
 
+                #[hal_cfg("sercom0-c2x")]
+                type ApbClk = apb::ApbClk<types::[< Sercom $N >]>;
+
+                #[hal_cfg("sercom0-c2x")]
+                type Pclk<S: pclk::PclkSourceId> = pclk::Pclk<types::[< Sercom $N >], S>;
+
+                #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
                 #[inline]
                 fn reg_block(peripherals: &mut Peripherals) -> &crate::pac::sercom0::RegisterBlock {
                     &*peripherals.[< sercom $N >]
+                }
+
+                #[hal_cfg("sercom0-c2x")]
+                #[inline]
+                fn reg_block(peripherals: &mut Peripherals) -> &crate::pac::sercom0::RegisterBlock {
+                    &*peripherals.[< SERCOM $N >]
                 }
             }
 
@@ -139,23 +171,29 @@ macro_rules! sercom {
 }
 
 // d11 and d21 families
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+#[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
 sercom!(apbcmask, 0);
 
-#[hal_cfg(any("sercom1-d11", "sercom1-d21"))]
+#[hal_cfg(any("sercom1-d11", "sercom1-d21", "sercom1-c2x"))]
 sercom!(apbcmask, 1);
 
-#[hal_cfg(any("sercom2-d11", "sercom2-d21"))]
+#[hal_cfg(any("sercom2-d11", "sercom2-d21", "sercom2-c2x"))]
 sercom!(apbcmask, 2);
 
-#[hal_cfg("sercom3-d21")]
+#[hal_cfg(any("sercom3-d21", "sercom3-c2x"))]
 sercom!(apbcmask, 3);
 
-#[hal_cfg("sercom4-d21")]
+#[hal_cfg(any("sercom4-d21", "sercom4-c2x"))]
 sercom!(apbcmask, 4);
 
-#[hal_cfg("sercom5-d21")]
+#[hal_cfg(any("sercom5-d21", "sercom5-c2x"))]
 sercom!(apbcmask, 5);
+
+#[hal_cfg("sercom6-c2x")]
+sercom!(apbdmask, 6);
+
+#[hal_cfg("sercom7-c2x")]
+sercom!(apbdmask, 7);
 
 // d5x family
 #[hal_cfg("sercom0-d5x")]

@@ -455,6 +455,7 @@ macro_rules! impl_tcc_pinout {
     };
 }
 
+// todo: add samc20 pins
 #[cfg(feature = "samc21n")]
 #[hal_cfg("tcc0")]
 impl_tcc_pinout!(TCC0Pinout: [
