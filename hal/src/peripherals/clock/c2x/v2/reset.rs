@@ -153,7 +153,13 @@ pub fn clock_system_at_reset(
             gclk,
             mclk,
         };
-        let osc48m = Enabled::<_>::new(osc48m::Osc48m::new(osc48m::Osc48mToken::new()));
+
+        // See Pages 441 and 1107 for NVM Read Wait States depending on voltage and CPU clock frequency
+        nvmctrl.ctrlb.write(|w| {
+            w.rws().dual()
+        });
+
+        let osc48m = osc48m::Osc48m::new(osc48m::Osc48mToken::new()).divider(osc48m::Divider::Div48MHz).enable();
         let (gclk0, osc48m) = gclk::Gclk0::from_source(gclk::GclkToken::new(), osc48m);
         let gclk0 = Enabled::new(gclk0);
         let clocks = Clocks {

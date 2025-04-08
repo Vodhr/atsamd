@@ -2,6 +2,7 @@ use typenum::U0;
 use crate::time::Hertz;
 use fugit::RateExtU32;
 use super::{Enabled, Source, Sealed};
+use crate::calibration;
 
 pub struct Osc48mToken (());
 
@@ -36,8 +37,19 @@ impl Osc48mToken {
         &self.oscctrl().osc48msyncbusy
     }
 
+    #[inline]
+    fn status(&self) -> &crate::pac::oscctrl::STATUS {
+        &self.oscctrl().status
+    }
+
+    #[inline]
+    fn cal48m(&self) -> &crate::pac::oscctrl::CAL48M {
+        &self.oscctrl().cal48m
+    }
+
+    #[inline]
     fn is_ready(&self) -> bool {
-        self.osc48msyncbusy().read().osc48mdiv().bit_is_clear()
+        self.status().read().osc48mrdy().bit_is_set()
     }
 
     #[inline]
@@ -63,9 +75,27 @@ impl Osc48mToken {
 
     #[inline]
     fn set_registers(&mut self, settings: Settings) {
+        // Todo: move to Into
+        self.osc48mstup().modify(|_, w| {
+            match settings.start_up {
+                StartUp::Delay166ns => w.startup().cycle8(),
+                StartUp::Delay333ns => w.startup().cycle16(),
+                StartUp::Delay667ns => w.startup().cycle32(),
+                StartUp::Delay1333ns => w.startup().cycle64(),
+                StartUp::Delay2667ns => w.startup().cycle128(),
+                StartUp::Delay5333ns => w.startup().cycle256(),
+                StartUp::Delay10667ns => w.startup().cycle512(),
+                StartUp::Delay21333ns => w.startup().cycle1024(),
+            }
+        });
+
         self.osc48mctrl().modify(|_, w| {
             w.ondemand().bit(settings.on_demand);
             w.runstdby().bit(settings.run_standby)
+        });
+
+        self.cal48m().write(|w| unsafe {
+            w.bits(calibration::osc48m_5v_cal())
         });
 
         self.osc48mdiv().modify(|_, w| {
@@ -89,19 +119,7 @@ impl Osc48mToken {
             }
         });
 
-        // Todo: move to Into
-        self.osc48mstup().modify(|_, w| {
-            match settings.start_up {
-                StartUp::Delay166ns => w.startup().cycle8(),
-                StartUp::Delay333ns => w.startup().cycle16(),
-                StartUp::Delay667ns => w.startup().cycle32(),
-                StartUp::Delay1333ns => w.startup().cycle64(),
-                StartUp::Delay2667ns => w.startup().cycle128(),
-                StartUp::Delay5333ns => w.startup().cycle256(),
-                StartUp::Delay10667ns => w.startup().cycle512(),
-                StartUp::Delay21333ns => w.startup().cycle1024(),
-            }
-        });
+        self.wait_sync_busy();
     }
 }
 
@@ -159,7 +177,7 @@ impl Osc48m {
     pub fn new(token: Osc48mToken) -> Self {
         let settings = Settings {
             start_up: StartUp::Delay21333ns,
-            on_demand: true,
+            on_demand: false,
             run_standby: false,
             divider: Divider::Div4000kHz,
         };
@@ -234,11 +252,6 @@ impl<N> Enabled<Osc48m, N> {
     pub fn is_ready(&self) -> bool {
         self.0.token.is_ready()
     }
-
-    // pub fn set_divider(&mut self, divider: Divider) {
-    //     self.0.settings.divider = divider;
-    //     self.0.token.set_registers(self.0.settings);
-    // }
 }
 impl<N> Source for Enabled<Osc48m, N> {
     type Id = Osc48mId;
