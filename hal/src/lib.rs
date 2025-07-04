@@ -30,6 +30,14 @@ macro_rules! define_pac {
 }
 
 define_pac!(
+    (atsamc21j, "samc20e"),
+    (atsamc21j, "samc20g"),
+    (atsamc21j, "samc20j"),
+    (atsamc21j, "samc20n"),
+    (atsamc21j, "samc21e"),
+    (atsamc21j, "samc21g"),
+    (atsamc21j, "samc21j"),
+    (atsamc21j, "samc21n"),
     (atsamd11c, "samd11c"),
     (atsamd11d, "samd11d"),
     (atsamd21e, "samd21e"),
@@ -74,7 +82,7 @@ macro_rules! dbgprint {
 #[cfg(feature = "async")]
 pub mod async_hal;
 
-#[cfg(feature = "device")]
+#[cfg(all(feature = "async", not(feature = "samc21j")))]
 pub mod delay;
 #[cfg(feature = "device")]
 pub mod gpio;
@@ -82,7 +90,7 @@ pub mod gpio;
 pub mod interrupt;
 #[cfg(feature = "device")]
 pub mod prelude;
-#[cfg(feature = "device")]
+#[cfg(all(feature = "async", not(feature = "samc21j")))]
 pub mod rtc;
 #[cfg(feature = "device")]
 pub mod sercom;

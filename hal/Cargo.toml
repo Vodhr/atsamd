@@ -81,6 +81,10 @@ rtic-time = {version = "2.0", optional = true}
 # users should specify a corresponding variant (see below). The variant features
 # will select the correct PAC, as well as other configuration features.
 
+atsamc20e = { version = "0.0.1", path = "../pac/atsamc20e", optional = true}
+atsamc20g = { version = "0.0.1", path = "../pac/atsamc20g", optional = true}
+atsamc20j = { version = "0.0.1", path = "../pac/atsamc20j", optional = true}
+atsamc20n = { version = "0.0.1", path = "../pac/atsamc20n", optional = true}
 atsamc21e = { version = "0.0.1", path = "../pac/atsamc21e", optional = true}
 atsamc21g = { version = "0.0.1", path = "../pac/atsamc21g", optional = true}
 atsamc21j = { version = "0.0.1", path = "../pac/atsamc21j", optional = true}

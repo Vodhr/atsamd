@@ -15,7 +15,14 @@ use crate::pac::port::group::{
 use crate::pac::Port;
 
 #[hal_cfg("port-c2x")]
-use crate::pac::port;
+use crate::pac::port::group::{
+    CTRL as Ctrl, DIR as Dir, DIRCLR as Dirclr, DIRSET as Dirset, DIRTGL as Dirtgl, IN as In,
+    OUT as Out, OUTCLR as Outclr, OUTSET as Outset, OUTTGL as Outtgl, PINCFG as Pincfg,
+    PMUX as Pmux, WRCONFIG as Wrconfig,
+};
+
+#[hal_cfg("port-c2x")]
+use crate::pac::PORT as Port;
 
 use super::dynpin::*;
 
@@ -129,11 +136,11 @@ impl From<DynPinMode> for ModeFields {
                     G => {
                         fields.pmux = 6;
                     }
-                    #[hal_cfg(any("port-d21", "port-d5x"))]
+                    #[hal_cfg(any("port-d21", "port-d5x", "port-c2x"))]
                     H => {
                         fields.pmux = 7;
                     }
-                    #[hal_cfg("port-d5x")]
+                    #[hal_cfg(any("port-d5x", "port-c2x"))]
                     I => {
                         fields.pmux = 8;
                     }

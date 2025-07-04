@@ -1,4 +1,6 @@
 //! Analogue-to-Digital Conversion
+
+use seq_macro::seq;
 use atsamd_hal_macros::hal_cfg;
 
 #[rustfmt::skip]
@@ -13,7 +15,7 @@ use crate::clock::types::{Adc0 as Adc0Id, Adc1 as Adc1Id};
 use crate::calibration;
 
 /// Samples per reading
-pub use adc0::avgctrl::SAMPLENUM_A as SampleRate;
+pub use adc0::avgctrl::SAMPLENUM_A as SampleNumber;
 /// Clock frequency relative to the system clock
 pub use adc0::ctrlb::PRESCALER_A as Prescaler;
 /// Reading resolution in bits
@@ -21,8 +23,24 @@ pub use adc0::ctrlc::RESSEL_A as Resolution;
 /// Reference voltage (or its source)
 pub use adc0::refctrl::REFSEL_A as Reference;
 
+seq!(N in 1..=64 {
+    /// sampling time in clock cycles
+    #[repr(u8)]
+    pub enum SampleLength {
+        #(
+            _~N,
+        )*
+    }
+});
+
 /// An ADC where results are accessible via interrupt servicing.
 pub struct InterruptAdc<A: Adc, C: ConversionMode<A>> {
+    adc: A,
+    m: core::marker::PhantomData<C>,
+}
+
+/// An ADC where results are accessible via polling.
+pub struct PolledAdc<A: Adc, C: ConversionMode<A>> {
     adc: A,
     m: core::marker::PhantomData<C>,
 }
@@ -51,6 +69,8 @@ pub trait Adc: Sized {
     fn start_conversion(&mut self);
     fn enable_freerunning(&mut self);
     fn disable_freerunning(&mut self);
+    fn is_result_ready(&self) -> bool;
+    fn get_result(&self) -> u16;
     fn service_interrupt_ready(&mut self) -> Option<u16>;
     fn mux<PIN: Channel<Self, ID=u8>>(&mut self, _pin: &mut PIN);
 }
@@ -69,8 +89,7 @@ impl<S: pclk::PclkSourceId> $Adc<S> {
         adc.ctrlb.modify(|_, w| w.prescaler().div32());
         adc.ctrlc.modify(|_, w| w.ressel()._12bit());
         while adc.syncbusy.read().ctrlc().bit_is_set() {}
-        adc.sampctrl.modify(|_, w| unsafe {w.samplen().bits(5)}); // sample length
-        while adc.syncbusy.read().sampctrl().bit_is_set() {}
+
         adc.inputctrl.modify(|_, w| w.muxneg().gnd()); // No negative input (internal gnd)
         while adc.syncbusy.read().inputctrl().bit_is_set() {}
 
@@ -81,23 +100,31 @@ impl<S: pclk::PclkSourceId> $Adc<S> {
 
         let mut newadc = Self { adc, pclk, apbclk };
 
-        newadc.samples(SampleRate::_1);
+        newadc.samples(SampleNumber::_1);
+        newadc.sample_length(SampleLength::_6);
         newadc.reference(Reference::INTREF);
 
         newadc
     }
 
-    pub fn samples(&mut self, samples: SampleRate) {
+    pub fn sample_length(&mut self, sampleLength: SampleLength) {
+        self.adc.sampctrl.write(|w| unsafe {
+            w.samplen().bits(sampleLength as u8)
+        });
+        while self.adc.syncbusy.read().sampctrl().bit_is_set() {}
+    }
+
+    pub fn samples(&mut self, samples: SampleNumber) {
         self.adc.avgctrl.modify(|_, w| {
             w.samplenum().variant(samples);
             unsafe {
-                // Table 38-2 (38.6.2.10) specifies the adjres
+                // Table 38-3 (38.6.2.11) specifies the adjres
                 // values necessary for each SAMPLENUM value.
                 w.adjres().bits(match samples {
-                    SampleRate::_1 => 0,
-                    SampleRate::_2 => 1,
-                    SampleRate::_4 => 2,
-                    SampleRate::_8 => 3,
+                    SampleNumber::_1 => 0,
+                    SampleNumber::_2 => 1,
+                    SampleNumber::_4 => 2,
+                    SampleNumber::_8 => 3,
                     _ => 4,
                 })
             }
@@ -146,6 +173,7 @@ impl<S: pclk::PclkSourceId> Adc for $Adc<S> {
     #[inline(always)]
     fn start_conversion(&mut self) {
         self.adc.swtrig.modify(|_, w| w.start().set_bit());
+        while self.adc.syncbusy.read().swtrig().bit_is_set() {}
     }
 
     fn enable_freerunning(&mut self) {
@@ -156,6 +184,16 @@ impl<S: pclk::PclkSourceId> Adc for $Adc<S> {
     fn disable_freerunning(&mut self) {
         self.adc.ctrlc.modify(|_, w| w.freerun().set_bit());
         while self.adc.syncbusy.read().ctrlc().bit_is_set() {}
+    }
+
+    #[inline]
+    fn is_result_ready(&self) -> bool {
+        self.adc.intflag.read().resrdy().bit_is_set()
+    }
+
+    #[inline]
+    fn get_result(&self) -> u16 {
+        self.adc.result.read().result().bits()
     }
 
     fn synchronous_convert(&mut self) -> u16 {
@@ -177,13 +215,13 @@ impl<S: pclk::PclkSourceId> Adc for $Adc<S> {
     }
 
     fn service_interrupt_ready(&mut self) -> Option<u16> {
-        if self.adc.intflag.read().resrdy().bit_is_set() {
+        // if self.adc.intflag.read().resrdy().bit_is_set() {
             self.adc.intflag.write(|w| w.resrdy().set_bit());
 
             Some(self.adc.result.read().result().bits())
-        } else {
-            None
-        }
+        // } else {
+        //     None
+        // }
     }
 
     /// Sets the mux to a particular pin. The pin mux is enabled-protected,
@@ -233,6 +271,16 @@ impl<A: Adc> ConversionMode<A> for SingleConversion<A>  {
     }
 }
 
+pub trait Client {
+    fn enable_client_operation(&mut self);
+}
+
+impl<S: pclk::PclkSourceId> Client for Adc1<S> {
+    fn enable_client_operation(&mut self) {
+        self.adc.ctrla.modify(|_, w| w.slaveen().set_bit());
+    }
+}
+
 impl<A: Adc> ConversionMode<A> for FreeRunning<A> {
     fn on_start(adc: &mut A) {
         adc.enable_freerunning();
@@ -245,6 +293,10 @@ impl<A: Adc> ConversionMode<A> for FreeRunning<A> {
         adc.power_down();
         adc.disable_freerunning();
     }
+}
+
+impl<A: Adc, C: ConversionMode<A>> PolledAdc<A, C> {
+
 }
 
 impl<A: Adc, C: ConversionMode<A>> InterruptAdc<A, C> {

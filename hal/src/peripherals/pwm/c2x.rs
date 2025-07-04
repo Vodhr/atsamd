@@ -249,22 +249,23 @@ macro_rules! pwm {
     ($($TYPE:ident: ($TC:ident, $pinout:ident, $pclk_id:ident, $apb_id:ident, $wrapper:ident)),+) => {
         $(
 
-pub struct $TYPE<I: PinId, S: pclk::PclkSourceId> {
-    pclk: pclk::Pclk<$pclk_id, S>,
+pub struct $TYPE<I: PinId> {
+    freq: Hertz,
     apbclk: apb::ApbClk<types::$apb_id>,
     tc: crate::pac::$TC,
     #[allow(dead_code)]
     pinout: $pinout<I>,
 }
 
-impl<I: PinId, S: pclk::PclkSourceId> $TYPE<I, S> {
-    pub fn new(
+impl<I: PinId> $TYPE<I> {
+    #[inline]
+    pub fn new<S: pclk::PclkSourceId>(
         pclk: pclk::Pclk<$pclk_id, S>,
         apbclk: apb::ApbClk<types::$apb_id>,
         freq: Hertz,
         tc: crate::pac::$TC,
         pinout: $pinout<I>,
-    ) -> Self {
+    ) -> (Self, pclk::Pclk<$pclk_id, S>) {
         let count = tc.count16();
         let params = TimerParams::new(freq.convert(), pclk.freq());
 
@@ -293,25 +294,28 @@ impl<I: PinId, S: pclk::PclkSourceId> $TYPE<I, S> {
         count.ctrla.modify(|_, w| w.enable().set_bit());
         while count.syncbusy.read().enable().bit_is_set() {}
 
-        Self {
-            pclk,
-            apbclk,
-            tc,
-            pinout,
-        }
+        (Self {
+            freq: pclk.freq(),
+            apbclk: apbclk,
+            tc: tc,
+            pinout: pinout,
+        },
+        pclk)
     }
 
+    #[inline]
     pub fn get_period(&self) -> Hertz {
         let count = self.tc.count16();
         let divisor = count.ctrla.read().prescaler().bits();
         let top = count.cc[0].read().cc().bits();
-        self.pclk.freq() / divisor as u32 / (top + 1) as u32
+        self.freq / divisor as u32 / (top + 1) as u32
     }
 
+    #[inline]
     pub fn set_period(&mut self, period: Hertz)
     {
         let period = period.into();
-        let params = TimerParams::new(period, self.pclk.freq());
+        let params = TimerParams::new(period, self.freq);
         let count = self.tc.count16();
         count.ctrla.modify(|_, w| w.enable().clear_bit());
         while count.syncbusy.read().enable().bit_is_set() {}
@@ -335,17 +339,19 @@ impl<I: PinId, S: pclk::PclkSourceId> $TYPE<I, S> {
     }
 }
 
-impl<I: PinId, S: PclkSourceId> $crate::ehal::pwm::ErrorType for$TYPE<I, S> {
+impl<I: PinId> $crate::ehal::pwm::ErrorType for$TYPE<I> {
     type Error = ::core::convert::Infallible;
 }
 
-impl<I: PinId, S: PclkSourceId> $crate::ehal::pwm::SetDutyCycle for $TYPE<I, S> {
+impl<I: PinId> $crate::ehal::pwm::SetDutyCycle for $TYPE<I> {
+    #[inline]
     fn max_duty_cycle(&self) -> u16 {
         let count = self.tc.count16();
         let top = count.cc[0].read().cc().bits();
         top
     }
 
+    #[inline]
     fn set_duty_cycle(&mut self, duty: u16) -> Result<(), Self::Error> {
         let count = self.tc.count16();
         unsafe { count.ccbuf[1].write(|w| w.ccbuf().bits(duty)); }
@@ -353,15 +359,17 @@ impl<I: PinId, S: PclkSourceId> $crate::ehal::pwm::SetDutyCycle for $TYPE<I, S> 
     }
 }
 
-impl<I: PinId, S: PclkSourceId> $crate::ehal_02::PwmPin for $TYPE<I, S> {
+impl<I: PinId> $crate::ehal_02::PwmPin for $TYPE<I> {
     type Duty = u16;
 
+    #[inline]
     fn disable(&mut self) {
         let count = self.tc.count16();
         count.ctrla.modify(|_, w| w.enable().clear_bit());
         while count.syncbusy.read().enable().bit_is_set() {}
     }
 
+    #[inline]
     fn enable(&mut self) {
         let count = self.tc.count16();
         count.ctrla.modify(|_, w| w.enable().set_bit());
@@ -369,17 +377,20 @@ impl<I: PinId, S: PclkSourceId> $crate::ehal_02::PwmPin for $TYPE<I, S> {
     }
 
 
+    #[inline]
     fn get_duty(&self) -> Self::Duty {
         let count = self.tc.count16();
         let duty: u16 = count.ccbuf[1].read().ccbuf().bits();
         duty
     }
 
+    #[inline]
     fn get_max_duty(&self) -> Self::Duty {
         use $crate::ehal::pwm::SetDutyCycle;
         self.max_duty_cycle()
     }
 
+    #[inline]
     fn set_duty(&mut self, duty: Self::Duty) {
         use $crate::ehal::pwm::SetDutyCycle;
         let _ignore_infaillible = self.set_duty_cycle(duty);
@@ -633,6 +644,7 @@ pub struct $TYPE<I: PinId, M: PinMode, S: pclk::PclkSourceId> {
 }
 
 impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
+    #[inline]
     pub fn new(
         pclk: pclk::Pclk<$pclk_id, S>,
         apbclk: apb::ApbClk<types::$apb_id>,
@@ -682,38 +694,45 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $crate::ehal_02::Pwm for $TYPE
     type Time = Hertz;
     type Duty = u32;
 
+    #[inline]
     fn disable(&mut self, _channel: Self::Channel) {
         self.tcc.ctrla.modify(|_, w| w.enable().clear_bit());
         while self.tcc.syncbusy.read().enable().bit_is_set() {}
     }
 
+    #[inline]
     fn enable(&mut self, _channel: Self::Channel) {
         self.tcc.ctrla.modify(|_, w| w.enable().set_bit());
         while self.tcc.syncbusy.read().enable().bit_is_set() {}
     }
 
+    #[inline]
     fn get_period(&self) -> Self::Time {
         let divisor = self.tcc.ctrla.read().prescaler().bits();
         let top = self.tcc.per().read().bits();
         self.pclk.freq() / divisor as u32 / (top + 1) as u32
     }
 
+    #[inline]
     fn get_duty(&self, channel: Self::Channel) -> Self::Duty {
         let cc = &self.tcc.cc()[channel as usize];
         let duty = cc.read().cc().bits();
         duty
     }
 
+    #[inline]
     fn get_max_duty(&self) -> Self::Duty {
         let top = self.tcc.per().read().bits();
         top
     }
 
+    #[inline]
     fn set_duty(&mut self, channel: Self::Channel, duty: Self::Duty) {
         let cc = &self.tcc.cc()[channel as usize];
         cc.write(|w| unsafe { w.cc().bits(duty) });
     }
 
+    #[inline]
     fn set_period<P>(&mut self, period: P)
     where
         P: Into<Self::Time>,
@@ -740,7 +759,6 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $crate::ehal_02::Pwm for $TYPE
         while self.tcc.syncbusy.read().per().bit() {}
     }
 }
-
         )+
     };
 }
