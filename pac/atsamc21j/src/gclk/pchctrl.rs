@@ -295,7 +295,7 @@ impl R {
 impl W {
     #[doc = "Bits 0:3 - Generic Clock Generator"]
     #[inline(always)]
-    pub fn gen(&mut self) -> GEN_W {
+    pub fn generator(&mut self) -> GEN_W {
         GEN_W { w: self }
     }
     #[doc = "Bit 6 - Channel Enable"]

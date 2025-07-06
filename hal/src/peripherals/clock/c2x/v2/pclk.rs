@@ -124,7 +124,7 @@ impl<P: PclkId> PclkToken<P> {
     /// Set the [`Pclk`] source
     #[inline]
     fn set_source(&mut self, source: DynPclkSourceId) {
-        self.pchctrl().modify(|_, w| w.gen().variant(source.into()));
+        self.pchctrl().modify(|_, w| w.generator().variant(source.into()));
     }
 
     /// Enable the [`Pclk`]

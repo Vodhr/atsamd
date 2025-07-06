@@ -10,7 +10,7 @@ pub use crate::pac::NVIC_PRIO_BITS;
 /// Logical interrupt priority level.
 ///
 /// P4 is the most urgent, and P1 is the least urgent priority.
-#[hal_cfg(any("nvic-d11", "nvic-d21"))]
+#[hal_cfg(any("nvic-d11", "nvic-d21", "nvic-c2x"))]
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 #[repr(u8)]

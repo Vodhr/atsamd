@@ -145,6 +145,7 @@ families:
     pins:
       samc21j: ["pins-64"]
     peripherals:
+      - nvic
       - clock
       - nvmctrl
       - pac

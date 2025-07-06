@@ -375,7 +375,7 @@ use super::{Enabled, Source};
 /// [`GclkToken`] is generic over the [`GclkId`], where each corresponding token
 /// represents one of the 12 respective [`Gclk`]s.
 pub struct GclkToken<G: GclkId> {
-    gen: PhantomData<G>,
+    generator: PhantomData<G>,
 }
 
 impl<G: GclkId> GclkToken<G> {
@@ -388,7 +388,7 @@ impl<G: GclkId> GclkToken<G> {
     /// memory safety in the root of the `clock` module for more details.
     #[inline]
     pub(super) unsafe fn new() -> Self {
-        GclkToken { gen: PhantomData }
+        GclkToken { generator: PhantomData }
     }
 
     /// SYNCBUSY register mask for the corresponding GCLK
