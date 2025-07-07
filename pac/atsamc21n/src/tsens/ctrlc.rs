@@ -1,264 +1,176 @@
 #[doc = "Register `CTRLC` reader"]
-pub struct R(crate::R<CTRLC_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CTRLC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CTRLC_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CTRLC_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<CtrlcSpec>;
 #[doc = "Register `CTRLC` writer"]
-pub struct W(crate::W<CTRLC_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CTRLC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CTRLC_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CTRLC_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<CtrlcSpec>;
 #[doc = "Window Monitor Mode\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum WINMODE_A {
+pub enum Winmodeselect {
     #[doc = "0: No window mode (default)"]
-    DISABLE = 0,
+    Disable = 0,
     #[doc = "1: VALUE greater than WINLT"]
-    ABOVE = 1,
+    Above = 1,
     #[doc = "2: VALUE less than WINUT"]
-    BELOW = 2,
+    Below = 2,
     #[doc = "3: VALUE greater than WINLT and VALUE less than WINUT"]
-    INSIDE = 3,
+    Inside = 3,
     #[doc = "4: VALUE less than WINLT or VALUE greater than WINUT"]
-    OUTSIDE = 4,
+    Outside = 4,
     #[doc = "5: VALUE greater than WINUT with hysteresis to WINLT"]
-    HYST_ABOVE = 5,
+    HystAbove = 5,
     #[doc = "6: VALUE less than WINLST with hysteresis to WINUT"]
-    HYST_BELOW = 6,
+    HystBelow = 6,
 }
-impl From<WINMODE_A> for u8 {
+impl From<Winmodeselect> for u8 {
     #[inline(always)]
-    fn from(variant: WINMODE_A) -> Self {
+    fn from(variant: Winmodeselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Winmodeselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Winmodeselect {}
 #[doc = "Field `WINMODE` reader - Window Monitor Mode"]
-pub struct WINMODE_R(crate::FieldReader<u8, WINMODE_A>);
-impl WINMODE_R {
+pub type WinmodeR = crate::FieldReader<Winmodeselect>;
+impl WinmodeR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        WINMODE_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<WINMODE_A> {
+    pub const fn variant(&self) -> Option<Winmodeselect> {
         match self.bits {
-            0 => Some(WINMODE_A::DISABLE),
-            1 => Some(WINMODE_A::ABOVE),
-            2 => Some(WINMODE_A::BELOW),
-            3 => Some(WINMODE_A::INSIDE),
-            4 => Some(WINMODE_A::OUTSIDE),
-            5 => Some(WINMODE_A::HYST_ABOVE),
-            6 => Some(WINMODE_A::HYST_BELOW),
+            0 => Some(Winmodeselect::Disable),
+            1 => Some(Winmodeselect::Above),
+            2 => Some(Winmodeselect::Below),
+            3 => Some(Winmodeselect::Inside),
+            4 => Some(Winmodeselect::Outside),
+            5 => Some(Winmodeselect::HystAbove),
+            6 => Some(Winmodeselect::HystBelow),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `DISABLE`"]
-    #[inline(always)]
-    pub fn is_disable(&self) -> bool {
-        **self == WINMODE_A::DISABLE
-    }
-    #[doc = "Checks if the value of the field is `ABOVE`"]
-    #[inline(always)]
-    pub fn is_above(&self) -> bool {
-        **self == WINMODE_A::ABOVE
-    }
-    #[doc = "Checks if the value of the field is `BELOW`"]
-    #[inline(always)]
-    pub fn is_below(&self) -> bool {
-        **self == WINMODE_A::BELOW
-    }
-    #[doc = "Checks if the value of the field is `INSIDE`"]
-    #[inline(always)]
-    pub fn is_inside(&self) -> bool {
-        **self == WINMODE_A::INSIDE
-    }
-    #[doc = "Checks if the value of the field is `OUTSIDE`"]
-    #[inline(always)]
-    pub fn is_outside(&self) -> bool {
-        **self == WINMODE_A::OUTSIDE
-    }
-    #[doc = "Checks if the value of the field is `HYST_ABOVE`"]
-    #[inline(always)]
-    pub fn is_hyst_above(&self) -> bool {
-        **self == WINMODE_A::HYST_ABOVE
-    }
-    #[doc = "Checks if the value of the field is `HYST_BELOW`"]
-    #[inline(always)]
-    pub fn is_hyst_below(&self) -> bool {
-        **self == WINMODE_A::HYST_BELOW
-    }
-}
-impl core::ops::Deref for WINMODE_R {
-    type Target = crate::FieldReader<u8, WINMODE_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `WINMODE` writer - Window Monitor Mode"]
-pub struct WINMODE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> WINMODE_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: WINMODE_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
     #[doc = "No window mode (default)"]
     #[inline(always)]
-    pub fn disable(self) -> &'a mut W {
-        self.variant(WINMODE_A::DISABLE)
+    pub fn is_disable(&self) -> bool {
+        *self == Winmodeselect::Disable
     }
     #[doc = "VALUE greater than WINLT"]
     #[inline(always)]
-    pub fn above(self) -> &'a mut W {
-        self.variant(WINMODE_A::ABOVE)
+    pub fn is_above(&self) -> bool {
+        *self == Winmodeselect::Above
     }
     #[doc = "VALUE less than WINUT"]
     #[inline(always)]
-    pub fn below(self) -> &'a mut W {
-        self.variant(WINMODE_A::BELOW)
+    pub fn is_below(&self) -> bool {
+        *self == Winmodeselect::Below
     }
     #[doc = "VALUE greater than WINLT and VALUE less than WINUT"]
     #[inline(always)]
-    pub fn inside(self) -> &'a mut W {
-        self.variant(WINMODE_A::INSIDE)
+    pub fn is_inside(&self) -> bool {
+        *self == Winmodeselect::Inside
     }
     #[doc = "VALUE less than WINLT or VALUE greater than WINUT"]
     #[inline(always)]
-    pub fn outside(self) -> &'a mut W {
-        self.variant(WINMODE_A::OUTSIDE)
+    pub fn is_outside(&self) -> bool {
+        *self == Winmodeselect::Outside
     }
     #[doc = "VALUE greater than WINUT with hysteresis to WINLT"]
     #[inline(always)]
-    pub fn hyst_above(self) -> &'a mut W {
-        self.variant(WINMODE_A::HYST_ABOVE)
+    pub fn is_hyst_above(&self) -> bool {
+        *self == Winmodeselect::HystAbove
     }
     #[doc = "VALUE less than WINLST with hysteresis to WINUT"]
     #[inline(always)]
-    pub fn hyst_below(self) -> &'a mut W {
-        self.variant(WINMODE_A::HYST_BELOW)
+    pub fn is_hyst_below(&self) -> bool {
+        *self == Winmodeselect::HystBelow
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `WINMODE` writer - Window Monitor Mode"]
+pub type WinmodeW<'a, REG> = crate::FieldWriter<'a, REG, 3, Winmodeselect>;
+impl<'a, REG> WinmodeW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "No window mode (default)"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x07) | (value as u8 & 0x07);
-        self.w
+    pub fn disable(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Disable)
+    }
+    #[doc = "VALUE greater than WINLT"]
+    #[inline(always)]
+    pub fn above(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Above)
+    }
+    #[doc = "VALUE less than WINUT"]
+    #[inline(always)]
+    pub fn below(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Below)
+    }
+    #[doc = "VALUE greater than WINLT and VALUE less than WINUT"]
+    #[inline(always)]
+    pub fn inside(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Inside)
+    }
+    #[doc = "VALUE less than WINLT or VALUE greater than WINUT"]
+    #[inline(always)]
+    pub fn outside(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Outside)
+    }
+    #[doc = "VALUE greater than WINUT with hysteresis to WINLT"]
+    #[inline(always)]
+    pub fn hyst_above(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::HystAbove)
+    }
+    #[doc = "VALUE less than WINLST with hysteresis to WINUT"]
+    #[inline(always)]
+    pub fn hyst_below(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::HystBelow)
     }
 }
 #[doc = "Field `FREERUN` reader - Free Running Measurement"]
-pub struct FREERUN_R(crate::FieldReader<bool, bool>);
-impl FREERUN_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FREERUN_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FREERUN_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type FreerunR = crate::BitReader;
 #[doc = "Field `FREERUN` writer - Free Running Measurement"]
-pub struct FREERUN_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FREERUN_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 4)) | ((value as u8 & 0x01) << 4);
-        self.w
-    }
-}
+pub type FreerunW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bits 0:2 - Window Monitor Mode"]
     #[inline(always)]
-    pub fn winmode(&self) -> WINMODE_R {
-        WINMODE_R::new((self.bits & 0x07) as u8)
+    pub fn winmode(&self) -> WinmodeR {
+        WinmodeR::new(self.bits & 7)
     }
     #[doc = "Bit 4 - Free Running Measurement"]
     #[inline(always)]
-    pub fn freerun(&self) -> FREERUN_R {
-        FREERUN_R::new(((self.bits >> 4) & 0x01) != 0)
+    pub fn freerun(&self) -> FreerunR {
+        FreerunR::new(((self.bits >> 4) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bits 0:2 - Window Monitor Mode"]
     #[inline(always)]
-    pub fn winmode(&mut self) -> WINMODE_W {
-        WINMODE_W { w: self }
+    #[must_use]
+    pub fn winmode(&mut self) -> WinmodeW<CtrlcSpec> {
+        WinmodeW::new(self, 0)
     }
     #[doc = "Bit 4 - Free Running Measurement"]
     #[inline(always)]
-    pub fn freerun(&mut self) -> FREERUN_W {
-        FREERUN_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u8) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn freerun(&mut self) -> FreerunW<CtrlcSpec> {
+        FreerunW::new(self, 4)
     }
 }
-#[doc = "Control C Register\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [ctrlc](index.html) module"]
-pub struct CTRLC_SPEC;
-impl crate::RegisterSpec for CTRLC_SPEC {
+#[doc = "Control C Register\n\nYou can [`read`](crate::Reg::read) this register and get [`ctrlc::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`ctrlc::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct CtrlcSpec;
+impl crate::RegisterSpec for CtrlcSpec {
     type Ux = u8;
 }
-#[doc = "`read()` method returns [ctrlc::R](R) reader structure"]
-impl crate::Readable for CTRLC_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [ctrlc::W](W) writer structure"]
-impl crate::Writable for CTRLC_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`ctrlc::R`](R) reader structure"]
+impl crate::Readable for CtrlcSpec {}
+#[doc = "`write(|w| ..)` method takes [`ctrlc::W`](W) writer structure"]
+impl crate::Writable for CtrlcSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u8 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u8 = 0;
 }
 #[doc = "`reset()` method sets CTRLC to value 0"]
-impl crate::Resettable for CTRLC_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for CtrlcSpec {
+    const RESET_VALUE: u8 = 0;
 }

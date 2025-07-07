@@ -1,135 +1,84 @@
 #[doc = "Register `STATUSA` reader"]
-pub struct R(crate::R<STATUSA_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<STATUSA_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<STATUSA_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<STATUSA_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<StatusaSpec>;
 #[doc = "Field `STATE0` reader - Comparator 0 Current State"]
-pub struct STATE0_R(crate::FieldReader<bool, bool>);
-impl STATE0_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        STATE0_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for STATE0_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type State0R = crate::BitReader;
 #[doc = "Field `STATE1` reader - Comparator 1 Current State"]
-pub struct STATE1_R(crate::FieldReader<bool, bool>);
-impl STATE1_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        STATE1_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for STATE1_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type State1R = crate::BitReader;
 #[doc = "Window 0 Current State\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum WSTATE0_A {
+pub enum Wstate0select {
     #[doc = "0: Signal is above window"]
-    ABOVE = 0,
+    Above = 0,
     #[doc = "1: Signal is inside window"]
-    INSIDE = 1,
+    Inside = 1,
     #[doc = "2: Signal is below window"]
-    BELOW = 2,
+    Below = 2,
 }
-impl From<WSTATE0_A> for u8 {
+impl From<Wstate0select> for u8 {
     #[inline(always)]
-    fn from(variant: WSTATE0_A) -> Self {
+    fn from(variant: Wstate0select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Wstate0select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Wstate0select {}
 #[doc = "Field `WSTATE0` reader - Window 0 Current State"]
-pub struct WSTATE0_R(crate::FieldReader<u8, WSTATE0_A>);
-impl WSTATE0_R {
+pub type Wstate0R = crate::FieldReader<Wstate0select>;
+impl Wstate0R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        WSTATE0_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<WSTATE0_A> {
+    pub const fn variant(&self) -> Option<Wstate0select> {
         match self.bits {
-            0 => Some(WSTATE0_A::ABOVE),
-            1 => Some(WSTATE0_A::INSIDE),
-            2 => Some(WSTATE0_A::BELOW),
+            0 => Some(Wstate0select::Above),
+            1 => Some(Wstate0select::Inside),
+            2 => Some(Wstate0select::Below),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `ABOVE`"]
+    #[doc = "Signal is above window"]
     #[inline(always)]
     pub fn is_above(&self) -> bool {
-        **self == WSTATE0_A::ABOVE
+        *self == Wstate0select::Above
     }
-    #[doc = "Checks if the value of the field is `INSIDE`"]
+    #[doc = "Signal is inside window"]
     #[inline(always)]
     pub fn is_inside(&self) -> bool {
-        **self == WSTATE0_A::INSIDE
+        *self == Wstate0select::Inside
     }
-    #[doc = "Checks if the value of the field is `BELOW`"]
+    #[doc = "Signal is below window"]
     #[inline(always)]
     pub fn is_below(&self) -> bool {
-        **self == WSTATE0_A::BELOW
-    }
-}
-impl core::ops::Deref for WSTATE0_R {
-    type Target = crate::FieldReader<u8, WSTATE0_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Wstate0select::Below
     }
 }
 impl R {
     #[doc = "Bit 0 - Comparator 0 Current State"]
     #[inline(always)]
-    pub fn state0(&self) -> STATE0_R {
-        STATE0_R::new((self.bits & 0x01) != 0)
+    pub fn state0(&self) -> State0R {
+        State0R::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - Comparator 1 Current State"]
     #[inline(always)]
-    pub fn state1(&self) -> STATE1_R {
-        STATE1_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn state1(&self) -> State1R {
+        State1R::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bits 4:5 - Window 0 Current State"]
     #[inline(always)]
-    pub fn wstate0(&self) -> WSTATE0_R {
-        WSTATE0_R::new(((self.bits >> 4) & 0x03) as u8)
+    pub fn wstate0(&self) -> Wstate0R {
+        Wstate0R::new((self.bits >> 4) & 3)
     }
 }
-#[doc = "Status A\n\nThis register you can [`read`](crate::generic::Reg::read). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [statusa](index.html) module"]
-pub struct STATUSA_SPEC;
-impl crate::RegisterSpec for STATUSA_SPEC {
+#[doc = "Status A\n\nYou can [`read`](crate::Reg::read) this register and get [`statusa::R`](R). See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct StatusaSpec;
+impl crate::RegisterSpec for StatusaSpec {
     type Ux = u8;
 }
-#[doc = "`read()` method returns [statusa::R](R) reader structure"]
-impl crate::Readable for STATUSA_SPEC {
-    type Reader = R;
-}
+#[doc = "`read()` method returns [`statusa::R`](R) reader structure"]
+impl crate::Readable for StatusaSpec {}
 #[doc = "`reset()` method sets STATUSA to value 0"]
-impl crate::Resettable for STATUSA_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for StatusaSpec {
+    const RESET_VALUE: u8 = 0;
 }

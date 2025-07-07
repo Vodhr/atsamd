@@ -1,113 +1,40 @@
 #[doc = "Register `INTENCLR` reader"]
-pub struct R(crate::R<INTENCLR_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<INTENCLR_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<INTENCLR_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<INTENCLR_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<IntenclrSpec>;
 #[doc = "Register `INTENCLR` writer"]
-pub struct W(crate::W<INTENCLR_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<INTENCLR_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<INTENCLR_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<INTENCLR_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<IntenclrSpec>;
 #[doc = "Field `CKRDY` reader - Clock Ready Interrupt Enable"]
-pub struct CKRDY_R(crate::FieldReader<bool, bool>);
-impl CKRDY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        CKRDY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CKRDY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CkrdyR = crate::BitReader;
 #[doc = "Field `CKRDY` writer - Clock Ready Interrupt Enable"]
-pub struct CKRDY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CKRDY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x01) | (value as u8 & 0x01);
-        self.w
-    }
-}
+pub type CkrdyW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bit 0 - Clock Ready Interrupt Enable"]
     #[inline(always)]
-    pub fn ckrdy(&self) -> CKRDY_R {
-        CKRDY_R::new((self.bits & 0x01) != 0)
+    pub fn ckrdy(&self) -> CkrdyR {
+        CkrdyR::new((self.bits & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bit 0 - Clock Ready Interrupt Enable"]
     #[inline(always)]
-    pub fn ckrdy(&mut self) -> CKRDY_W {
-        CKRDY_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u8) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn ckrdy(&mut self) -> CkrdyW<IntenclrSpec> {
+        CkrdyW::new(self, 0)
     }
 }
-#[doc = "Interrupt Enable Clear\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [intenclr](index.html) module"]
-pub struct INTENCLR_SPEC;
-impl crate::RegisterSpec for INTENCLR_SPEC {
+#[doc = "Interrupt Enable Clear\n\nYou can [`read`](crate::Reg::read) this register and get [`intenclr::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`intenclr::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct IntenclrSpec;
+impl crate::RegisterSpec for IntenclrSpec {
     type Ux = u8;
 }
-#[doc = "`read()` method returns [intenclr::R](R) reader structure"]
-impl crate::Readable for INTENCLR_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [intenclr::W](W) writer structure"]
-impl crate::Writable for INTENCLR_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`intenclr::R`](R) reader structure"]
+impl crate::Readable for IntenclrSpec {}
+#[doc = "`write(|w| ..)` method takes [`intenclr::W`](W) writer structure"]
+impl crate::Writable for IntenclrSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u8 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u8 = 0;
 }
 #[doc = "`reset()` method sets INTENCLR to value 0"]
-impl crate::Resettable for INTENCLR_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for IntenclrSpec {
+    const RESET_VALUE: u8 = 0;
 }

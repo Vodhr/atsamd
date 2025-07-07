@@ -1,103 +1,40 @@
 #[doc = "Register `WINUT` reader"]
-pub struct R(crate::R<WINUT_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<WINUT_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<WINUT_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<WINUT_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<WinutSpec>;
 #[doc = "Register `WINUT` writer"]
-pub struct W(crate::W<WINUT_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<WINUT_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<WINUT_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<WINUT_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<WinutSpec>;
 #[doc = "Field `WINUT` reader - Window Upper Threshold"]
-pub struct WINUT_R(crate::FieldReader<u16, u16>);
-impl WINUT_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u16) -> Self {
-        WINUT_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for WINUT_R {
-    type Target = crate::FieldReader<u16, u16>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type WinutR = crate::FieldReader<u16>;
 #[doc = "Field `WINUT` writer - Window Upper Threshold"]
-pub struct WINUT_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> WINUT_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u16) -> &'a mut W {
-        self.w.bits = value as u16;
-        self.w
-    }
-}
+pub type WinutW<'a, REG> = crate::FieldWriter<'a, REG, 16, u16>;
 impl R {
     #[doc = "Bits 0:15 - Window Upper Threshold"]
     #[inline(always)]
-    pub fn winut(&self) -> WINUT_R {
-        WINUT_R::new(self.bits as u16)
+    pub fn winut(&self) -> WinutR {
+        WinutR::new(self.bits)
     }
 }
 impl W {
     #[doc = "Bits 0:15 - Window Upper Threshold"]
     #[inline(always)]
-    pub fn winut(&mut self) -> WINUT_W {
-        WINUT_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u16) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn winut(&mut self) -> WinutW<WinutSpec> {
+        WinutW::new(self, 0)
     }
 }
-#[doc = "Window Monitor Upper Threshold\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [winut](index.html) module"]
-pub struct WINUT_SPEC;
-impl crate::RegisterSpec for WINUT_SPEC {
+#[doc = "Window Monitor Upper Threshold\n\nYou can [`read`](crate::Reg::read) this register and get [`winut::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`winut::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct WinutSpec;
+impl crate::RegisterSpec for WinutSpec {
     type Ux = u16;
 }
-#[doc = "`read()` method returns [winut::R](R) reader structure"]
-impl crate::Readable for WINUT_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [winut::W](W) writer structure"]
-impl crate::Writable for WINUT_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`winut::R`](R) reader structure"]
+impl crate::Readable for WinutSpec {}
+#[doc = "`write(|w| ..)` method takes [`winut::W`](W) writer structure"]
+impl crate::Writable for WinutSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
 }
 #[doc = "`reset()` method sets WINUT to value 0"]
-impl crate::Resettable for WINUT_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for WinutSpec {
+    const RESET_VALUE: u16 = 0;
 }

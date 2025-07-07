@@ -1,104 +1,41 @@
 #[doc = "Register `CCBUF[%s]` reader"]
-pub struct R(crate::R<CCBUF_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CCBUF_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CCBUF_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CCBUF_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<CcbufSpec>;
 #[doc = "Register `CCBUF[%s]` writer"]
-pub struct W(crate::W<CCBUF_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CCBUF_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CCBUF_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CCBUF_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<CcbufSpec>;
 #[doc = "Field `CCBUF` reader - Counter/Compare Buffer Value"]
-pub struct CCBUF_R(crate::FieldReader<u32, u32>);
-impl CCBUF_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u32) -> Self {
-        CCBUF_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CCBUF_R {
-    type Target = crate::FieldReader<u32, u32>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CcbufR = crate::FieldReader<u32>;
 #[doc = "Field `CCBUF` writer - Counter/Compare Buffer Value"]
-pub struct CCBUF_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CCBUF_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u32) -> &'a mut W {
-        self.w.bits = value as u32;
-        self.w
-    }
-}
+pub type CcbufW<'a, REG> = crate::FieldWriter<'a, REG, 32, u32>;
 impl R {
     #[doc = "Bits 0:31 - Counter/Compare Buffer Value"]
     #[inline(always)]
-    pub fn ccbuf(&self) -> CCBUF_R {
-        CCBUF_R::new(self.bits as u32)
+    pub fn ccbuf(&self) -> CcbufR {
+        CcbufR::new(self.bits)
     }
 }
 impl W {
     #[doc = "Bits 0:31 - Counter/Compare Buffer Value"]
     #[inline(always)]
-    pub fn ccbuf(&mut self) -> CCBUF_W {
-        CCBUF_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn ccbuf(&mut self) -> CcbufW<CcbufSpec> {
+        CcbufW::new(self, 0)
     }
 }
-#[doc = "COUNT32 Compare and Capture Buffer\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [ccbuf](index.html) module"]
-pub struct CCBUF_SPEC;
-impl crate::RegisterSpec for CCBUF_SPEC {
+#[doc = "COUNT32 Compare and Capture Buffer\n\nYou can [`read`](crate::Reg::read) this register and get [`ccbuf::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`ccbuf::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct CcbufSpec;
+impl crate::RegisterSpec for CcbufSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [ccbuf::R](R) reader structure"]
-impl crate::Readable for CCBUF_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [ccbuf::W](W) writer structure"]
-impl crate::Writable for CCBUF_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`ccbuf::R`](R) reader structure"]
+impl crate::Readable for CcbufSpec {}
+#[doc = "`write(|w| ..)` method takes [`ccbuf::W`](W) writer structure"]
+impl crate::Writable for CcbufSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets CCBUF[%s]
 to value 0"]
-impl crate::Resettable for CCBUF_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for CcbufSpec {
+    const RESET_VALUE: u32 = 0;
 }

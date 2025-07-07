@@ -1,70 +1,15 @@
 #[doc = "Register `PARAM` reader"]
-pub struct R(crate::R<PARAM_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<PARAM_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<PARAM_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<PARAM_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<ParamSpec>;
 #[doc = "Register `PARAM` writer"]
-pub struct W(crate::W<PARAM_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<PARAM_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<PARAM_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<PARAM_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<ParamSpec>;
 #[doc = "Field `NVMP` reader - NVM Pages"]
-pub struct NVMP_R(crate::FieldReader<u16, u16>);
-impl NVMP_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u16) -> Self {
-        NVMP_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for NVMP_R {
-    type Target = crate::FieldReader<u16, u16>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type NvmpR = crate::FieldReader<u16>;
 #[doc = "Field `NVMP` writer - NVM Pages"]
-pub struct NVMP_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> NVMP_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u16) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0xffff) | (value as u32 & 0xffff);
-        self.w
-    }
-}
+pub type NvmpW<'a, REG> = crate::FieldWriter<'a, REG, 16, u16>;
 #[doc = "Page Size\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum PSZ_A {
+pub enum Pszselect {
     #[doc = "0: 8 bytes"]
     _8 = 0,
     #[doc = "1: 16 bytes"]
@@ -82,223 +27,178 @@ pub enum PSZ_A {
     #[doc = "7: 1024 bytes"]
     _1024 = 7,
 }
-impl From<PSZ_A> for u8 {
+impl From<Pszselect> for u8 {
     #[inline(always)]
-    fn from(variant: PSZ_A) -> Self {
+    fn from(variant: Pszselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Pszselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Pszselect {}
 #[doc = "Field `PSZ` reader - Page Size"]
-pub struct PSZ_R(crate::FieldReader<u8, PSZ_A>);
-impl PSZ_R {
+pub type PszR = crate::FieldReader<Pszselect>;
+impl PszR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        PSZ_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> PSZ_A {
+    pub const fn variant(&self) -> Pszselect {
         match self.bits {
-            0 => PSZ_A::_8,
-            1 => PSZ_A::_16,
-            2 => PSZ_A::_32,
-            3 => PSZ_A::_64,
-            4 => PSZ_A::_128,
-            5 => PSZ_A::_256,
-            6 => PSZ_A::_512,
-            7 => PSZ_A::_1024,
+            0 => Pszselect::_8,
+            1 => Pszselect::_16,
+            2 => Pszselect::_32,
+            3 => Pszselect::_64,
+            4 => Pszselect::_128,
+            5 => Pszselect::_256,
+            6 => Pszselect::_512,
+            7 => Pszselect::_1024,
             _ => unreachable!(),
         }
     }
-    #[doc = "Checks if the value of the field is `_8`"]
-    #[inline(always)]
-    pub fn is_8(&self) -> bool {
-        **self == PSZ_A::_8
-    }
-    #[doc = "Checks if the value of the field is `_16`"]
-    #[inline(always)]
-    pub fn is_16(&self) -> bool {
-        **self == PSZ_A::_16
-    }
-    #[doc = "Checks if the value of the field is `_32`"]
-    #[inline(always)]
-    pub fn is_32(&self) -> bool {
-        **self == PSZ_A::_32
-    }
-    #[doc = "Checks if the value of the field is `_64`"]
-    #[inline(always)]
-    pub fn is_64(&self) -> bool {
-        **self == PSZ_A::_64
-    }
-    #[doc = "Checks if the value of the field is `_128`"]
-    #[inline(always)]
-    pub fn is_128(&self) -> bool {
-        **self == PSZ_A::_128
-    }
-    #[doc = "Checks if the value of the field is `_256`"]
-    #[inline(always)]
-    pub fn is_256(&self) -> bool {
-        **self == PSZ_A::_256
-    }
-    #[doc = "Checks if the value of the field is `_512`"]
-    #[inline(always)]
-    pub fn is_512(&self) -> bool {
-        **self == PSZ_A::_512
-    }
-    #[doc = "Checks if the value of the field is `_1024`"]
-    #[inline(always)]
-    pub fn is_1024(&self) -> bool {
-        **self == PSZ_A::_1024
-    }
-}
-impl core::ops::Deref for PSZ_R {
-    type Target = crate::FieldReader<u8, PSZ_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `PSZ` writer - Page Size"]
-pub struct PSZ_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> PSZ_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: PSZ_A) -> &'a mut W {
-        self.bits(variant.into())
-    }
     #[doc = "8 bytes"]
     #[inline(always)]
-    pub fn _8(self) -> &'a mut W {
-        self.variant(PSZ_A::_8)
+    pub fn is_8(&self) -> bool {
+        *self == Pszselect::_8
     }
     #[doc = "16 bytes"]
     #[inline(always)]
-    pub fn _16(self) -> &'a mut W {
-        self.variant(PSZ_A::_16)
+    pub fn is_16(&self) -> bool {
+        *self == Pszselect::_16
     }
     #[doc = "32 bytes"]
     #[inline(always)]
-    pub fn _32(self) -> &'a mut W {
-        self.variant(PSZ_A::_32)
+    pub fn is_32(&self) -> bool {
+        *self == Pszselect::_32
     }
     #[doc = "64 bytes"]
     #[inline(always)]
-    pub fn _64(self) -> &'a mut W {
-        self.variant(PSZ_A::_64)
+    pub fn is_64(&self) -> bool {
+        *self == Pszselect::_64
     }
     #[doc = "128 bytes"]
     #[inline(always)]
-    pub fn _128(self) -> &'a mut W {
-        self.variant(PSZ_A::_128)
+    pub fn is_128(&self) -> bool {
+        *self == Pszselect::_128
     }
     #[doc = "256 bytes"]
     #[inline(always)]
-    pub fn _256(self) -> &'a mut W {
-        self.variant(PSZ_A::_256)
+    pub fn is_256(&self) -> bool {
+        *self == Pszselect::_256
     }
     #[doc = "512 bytes"]
     #[inline(always)]
-    pub fn _512(self) -> &'a mut W {
-        self.variant(PSZ_A::_512)
+    pub fn is_512(&self) -> bool {
+        *self == Pszselect::_512
     }
     #[doc = "1024 bytes"]
     #[inline(always)]
-    pub fn _1024(self) -> &'a mut W {
-        self.variant(PSZ_A::_1024)
+    pub fn is_1024(&self) -> bool {
+        *self == Pszselect::_1024
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `PSZ` writer - Page Size"]
+pub type PszW<'a, REG> = crate::FieldWriter<'a, REG, 3, Pszselect, crate::Safe>;
+impl<'a, REG> PszW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "8 bytes"]
     #[inline(always)]
-    pub fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 16)) | ((value as u32 & 0x07) << 16);
-        self.w
+    pub fn _8(self) -> &'a mut crate::W<REG> {
+        self.variant(Pszselect::_8)
+    }
+    #[doc = "16 bytes"]
+    #[inline(always)]
+    pub fn _16(self) -> &'a mut crate::W<REG> {
+        self.variant(Pszselect::_16)
+    }
+    #[doc = "32 bytes"]
+    #[inline(always)]
+    pub fn _32(self) -> &'a mut crate::W<REG> {
+        self.variant(Pszselect::_32)
+    }
+    #[doc = "64 bytes"]
+    #[inline(always)]
+    pub fn _64(self) -> &'a mut crate::W<REG> {
+        self.variant(Pszselect::_64)
+    }
+    #[doc = "128 bytes"]
+    #[inline(always)]
+    pub fn _128(self) -> &'a mut crate::W<REG> {
+        self.variant(Pszselect::_128)
+    }
+    #[doc = "256 bytes"]
+    #[inline(always)]
+    pub fn _256(self) -> &'a mut crate::W<REG> {
+        self.variant(Pszselect::_256)
+    }
+    #[doc = "512 bytes"]
+    #[inline(always)]
+    pub fn _512(self) -> &'a mut crate::W<REG> {
+        self.variant(Pszselect::_512)
+    }
+    #[doc = "1024 bytes"]
+    #[inline(always)]
+    pub fn _1024(self) -> &'a mut crate::W<REG> {
+        self.variant(Pszselect::_1024)
     }
 }
 #[doc = "Field `RWWEEP` reader - RWW EEPROM Pages"]
-pub struct RWWEEP_R(crate::FieldReader<u16, u16>);
-impl RWWEEP_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u16) -> Self {
-        RWWEEP_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for RWWEEP_R {
-    type Target = crate::FieldReader<u16, u16>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type RwweepR = crate::FieldReader<u16>;
 #[doc = "Field `RWWEEP` writer - RWW EEPROM Pages"]
-pub struct RWWEEP_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> RWWEEP_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u16) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x0fff << 20)) | ((value as u32 & 0x0fff) << 20);
-        self.w
-    }
-}
+pub type RwweepW<'a, REG> = crate::FieldWriter<'a, REG, 12, u16>;
 impl R {
     #[doc = "Bits 0:15 - NVM Pages"]
     #[inline(always)]
-    pub fn nvmp(&self) -> NVMP_R {
-        NVMP_R::new((self.bits & 0xffff) as u16)
+    pub fn nvmp(&self) -> NvmpR {
+        NvmpR::new((self.bits & 0xffff) as u16)
     }
     #[doc = "Bits 16:18 - Page Size"]
     #[inline(always)]
-    pub fn psz(&self) -> PSZ_R {
-        PSZ_R::new(((self.bits >> 16) & 0x07) as u8)
+    pub fn psz(&self) -> PszR {
+        PszR::new(((self.bits >> 16) & 7) as u8)
     }
     #[doc = "Bits 20:31 - RWW EEPROM Pages"]
     #[inline(always)]
-    pub fn rwweep(&self) -> RWWEEP_R {
-        RWWEEP_R::new(((self.bits >> 20) & 0x0fff) as u16)
+    pub fn rwweep(&self) -> RwweepR {
+        RwweepR::new(((self.bits >> 20) & 0x0fff) as u16)
     }
 }
 impl W {
     #[doc = "Bits 0:15 - NVM Pages"]
     #[inline(always)]
-    pub fn nvmp(&mut self) -> NVMP_W {
-        NVMP_W { w: self }
+    #[must_use]
+    pub fn nvmp(&mut self) -> NvmpW<ParamSpec> {
+        NvmpW::new(self, 0)
     }
     #[doc = "Bits 16:18 - Page Size"]
     #[inline(always)]
-    pub fn psz(&mut self) -> PSZ_W {
-        PSZ_W { w: self }
+    #[must_use]
+    pub fn psz(&mut self) -> PszW<ParamSpec> {
+        PszW::new(self, 16)
     }
     #[doc = "Bits 20:31 - RWW EEPROM Pages"]
     #[inline(always)]
-    pub fn rwweep(&mut self) -> RWWEEP_W {
-        RWWEEP_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn rwweep(&mut self) -> RwweepW<ParamSpec> {
+        RwweepW::new(self, 20)
     }
 }
-#[doc = "NVM Parameter\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [param](index.html) module"]
-pub struct PARAM_SPEC;
-impl crate::RegisterSpec for PARAM_SPEC {
+#[doc = "NVM Parameter\n\nYou can [`read`](crate::Reg::read) this register and get [`param::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`param::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct ParamSpec;
+impl crate::RegisterSpec for ParamSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [param::R](R) reader structure"]
-impl crate::Readable for PARAM_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [param::W](W) writer structure"]
-impl crate::Writable for PARAM_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`param::R`](R) reader structure"]
+impl crate::Readable for ParamSpec {}
+#[doc = "`write(|w| ..)` method takes [`param::W`](W) writer structure"]
+impl crate::Writable for ParamSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets PARAM to value 0"]
-impl crate::Resettable for PARAM_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for ParamSpec {
+    const RESET_VALUE: u32 = 0;
 }

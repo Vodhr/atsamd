@@ -1,160 +1,55 @@
 #[doc = "Register `CRCSTATUS` reader"]
-pub struct R(crate::R<CRCSTATUS_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CRCSTATUS_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CRCSTATUS_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CRCSTATUS_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<CrcstatusSpec>;
 #[doc = "Register `CRCSTATUS` writer"]
-pub struct W(crate::W<CRCSTATUS_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CRCSTATUS_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CRCSTATUS_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CRCSTATUS_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<CrcstatusSpec>;
 #[doc = "Field `CRCBUSY` reader - CRC Module Busy"]
-pub struct CRCBUSY_R(crate::FieldReader<bool, bool>);
-impl CRCBUSY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        CRCBUSY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CRCBUSY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CrcbusyR = crate::BitReader;
 #[doc = "Field `CRCBUSY` writer - CRC Module Busy"]
-pub struct CRCBUSY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CRCBUSY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x01) | (value as u8 & 0x01);
-        self.w
-    }
-}
+pub type CrcbusyW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `CRCZERO` reader - CRC Zero"]
-pub struct CRCZERO_R(crate::FieldReader<bool, bool>);
-impl CRCZERO_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        CRCZERO_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CRCZERO_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CrczeroR = crate::BitReader;
 #[doc = "Field `CRCZERO` writer - CRC Zero"]
-pub struct CRCZERO_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CRCZERO_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 1)) | ((value as u8 & 0x01) << 1);
-        self.w
-    }
-}
+pub type CrczeroW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bit 0 - CRC Module Busy"]
     #[inline(always)]
-    pub fn crcbusy(&self) -> CRCBUSY_R {
-        CRCBUSY_R::new((self.bits & 0x01) != 0)
+    pub fn crcbusy(&self) -> CrcbusyR {
+        CrcbusyR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - CRC Zero"]
     #[inline(always)]
-    pub fn crczero(&self) -> CRCZERO_R {
-        CRCZERO_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn crczero(&self) -> CrczeroR {
+        CrczeroR::new(((self.bits >> 1) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bit 0 - CRC Module Busy"]
     #[inline(always)]
-    pub fn crcbusy(&mut self) -> CRCBUSY_W {
-        CRCBUSY_W { w: self }
+    #[must_use]
+    pub fn crcbusy(&mut self) -> CrcbusyW<CrcstatusSpec> {
+        CrcbusyW::new(self, 0)
     }
     #[doc = "Bit 1 - CRC Zero"]
     #[inline(always)]
-    pub fn crczero(&mut self) -> CRCZERO_W {
-        CRCZERO_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u8) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn crczero(&mut self) -> CrczeroW<CrcstatusSpec> {
+        CrczeroW::new(self, 1)
     }
 }
-#[doc = "CRC Status\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [crcstatus](index.html) module"]
-pub struct CRCSTATUS_SPEC;
-impl crate::RegisterSpec for CRCSTATUS_SPEC {
+#[doc = "CRC Status\n\nYou can [`read`](crate::Reg::read) this register and get [`crcstatus::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`crcstatus::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct CrcstatusSpec;
+impl crate::RegisterSpec for CrcstatusSpec {
     type Ux = u8;
 }
-#[doc = "`read()` method returns [crcstatus::R](R) reader structure"]
-impl crate::Readable for CRCSTATUS_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [crcstatus::W](W) writer structure"]
-impl crate::Writable for CRCSTATUS_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`crcstatus::R`](R) reader structure"]
+impl crate::Readable for CrcstatusSpec {}
+#[doc = "`write(|w| ..)` method takes [`crcstatus::W`](W) writer structure"]
+impl crate::Writable for CrcstatusSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u8 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u8 = 0;
 }
 #[doc = "`reset()` method sets CRCSTATUS to value 0"]
-impl crate::Resettable for CRCSTATUS_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for CrcstatusSpec {
+    const RESET_VALUE: u8 = 0;
 }

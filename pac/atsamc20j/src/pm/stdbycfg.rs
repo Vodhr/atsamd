@@ -1,212 +1,124 @@
 #[doc = "Register `STDBYCFG` reader"]
-pub struct R(crate::R<STDBYCFG_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<STDBYCFG_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<STDBYCFG_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<STDBYCFG_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<StdbycfgSpec>;
 #[doc = "Register `STDBYCFG` writer"]
-pub struct W(crate::W<STDBYCFG_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<STDBYCFG_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<STDBYCFG_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<STDBYCFG_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<StdbycfgSpec>;
 #[doc = "Voltage Regulator Standby mode\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum VREGSMOD_A {
+pub enum Vregsmodselect {
     #[doc = "0: Automatic mode"]
-    AUTO = 0,
+    Auto = 0,
     #[doc = "1: Performance oriented"]
-    PERFORMANCE = 1,
+    Performance = 1,
     #[doc = "2: Low Power oriented"]
-    LP = 2,
+    Lp = 2,
 }
-impl From<VREGSMOD_A> for u8 {
+impl From<Vregsmodselect> for u8 {
     #[inline(always)]
-    fn from(variant: VREGSMOD_A) -> Self {
+    fn from(variant: Vregsmodselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Vregsmodselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Vregsmodselect {}
 #[doc = "Field `VREGSMOD` reader - Voltage Regulator Standby mode"]
-pub struct VREGSMOD_R(crate::FieldReader<u8, VREGSMOD_A>);
-impl VREGSMOD_R {
+pub type VregsmodR = crate::FieldReader<Vregsmodselect>;
+impl VregsmodR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        VREGSMOD_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<VREGSMOD_A> {
+    pub const fn variant(&self) -> Option<Vregsmodselect> {
         match self.bits {
-            0 => Some(VREGSMOD_A::AUTO),
-            1 => Some(VREGSMOD_A::PERFORMANCE),
-            2 => Some(VREGSMOD_A::LP),
+            0 => Some(Vregsmodselect::Auto),
+            1 => Some(Vregsmodselect::Performance),
+            2 => Some(Vregsmodselect::Lp),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `AUTO`"]
-    #[inline(always)]
-    pub fn is_auto(&self) -> bool {
-        **self == VREGSMOD_A::AUTO
-    }
-    #[doc = "Checks if the value of the field is `PERFORMANCE`"]
-    #[inline(always)]
-    pub fn is_performance(&self) -> bool {
-        **self == VREGSMOD_A::PERFORMANCE
-    }
-    #[doc = "Checks if the value of the field is `LP`"]
-    #[inline(always)]
-    pub fn is_lp(&self) -> bool {
-        **self == VREGSMOD_A::LP
-    }
-}
-impl core::ops::Deref for VREGSMOD_R {
-    type Target = crate::FieldReader<u8, VREGSMOD_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `VREGSMOD` writer - Voltage Regulator Standby mode"]
-pub struct VREGSMOD_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> VREGSMOD_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: VREGSMOD_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
     #[doc = "Automatic mode"]
     #[inline(always)]
-    pub fn auto(self) -> &'a mut W {
-        self.variant(VREGSMOD_A::AUTO)
+    pub fn is_auto(&self) -> bool {
+        *self == Vregsmodselect::Auto
     }
     #[doc = "Performance oriented"]
     #[inline(always)]
-    pub fn performance(self) -> &'a mut W {
-        self.variant(VREGSMOD_A::PERFORMANCE)
+    pub fn is_performance(&self) -> bool {
+        *self == Vregsmodselect::Performance
     }
     #[doc = "Low Power oriented"]
     #[inline(always)]
-    pub fn lp(self) -> &'a mut W {
-        self.variant(VREGSMOD_A::LP)
+    pub fn is_lp(&self) -> bool {
+        *self == Vregsmodselect::Lp
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `VREGSMOD` writer - Voltage Regulator Standby mode"]
+pub type VregsmodW<'a, REG> = crate::FieldWriter<'a, REG, 2, Vregsmodselect>;
+impl<'a, REG> VregsmodW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "Automatic mode"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 6)) | ((value as u16 & 0x03) << 6);
-        self.w
+    pub fn auto(self) -> &'a mut crate::W<REG> {
+        self.variant(Vregsmodselect::Auto)
+    }
+    #[doc = "Performance oriented"]
+    #[inline(always)]
+    pub fn performance(self) -> &'a mut crate::W<REG> {
+        self.variant(Vregsmodselect::Performance)
+    }
+    #[doc = "Low Power oriented"]
+    #[inline(always)]
+    pub fn lp(self) -> &'a mut crate::W<REG> {
+        self.variant(Vregsmodselect::Lp)
     }
 }
 #[doc = "Field `BBIASHS` reader - Back Bias for HMCRAMCHS"]
-pub struct BBIASHS_R(crate::FieldReader<bool, bool>);
-impl BBIASHS_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        BBIASHS_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for BBIASHS_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type BbiashsR = crate::BitReader;
 #[doc = "Field `BBIASHS` writer - Back Bias for HMCRAMCHS"]
-pub struct BBIASHS_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> BBIASHS_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 10)) | ((value as u16 & 0x01) << 10);
-        self.w
-    }
-}
+pub type BbiashsW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bits 6:7 - Voltage Regulator Standby mode"]
     #[inline(always)]
-    pub fn vregsmod(&self) -> VREGSMOD_R {
-        VREGSMOD_R::new(((self.bits >> 6) & 0x03) as u8)
+    pub fn vregsmod(&self) -> VregsmodR {
+        VregsmodR::new(((self.bits >> 6) & 3) as u8)
     }
     #[doc = "Bit 10 - Back Bias for HMCRAMCHS"]
     #[inline(always)]
-    pub fn bbiashs(&self) -> BBIASHS_R {
-        BBIASHS_R::new(((self.bits >> 10) & 0x01) != 0)
+    pub fn bbiashs(&self) -> BbiashsR {
+        BbiashsR::new(((self.bits >> 10) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bits 6:7 - Voltage Regulator Standby mode"]
     #[inline(always)]
-    pub fn vregsmod(&mut self) -> VREGSMOD_W {
-        VREGSMOD_W { w: self }
+    #[must_use]
+    pub fn vregsmod(&mut self) -> VregsmodW<StdbycfgSpec> {
+        VregsmodW::new(self, 6)
     }
     #[doc = "Bit 10 - Back Bias for HMCRAMCHS"]
     #[inline(always)]
-    pub fn bbiashs(&mut self) -> BBIASHS_W {
-        BBIASHS_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u16) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn bbiashs(&mut self) -> BbiashsW<StdbycfgSpec> {
+        BbiashsW::new(self, 10)
     }
 }
-#[doc = "Standby Configuration\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [stdbycfg](index.html) module"]
-pub struct STDBYCFG_SPEC;
-impl crate::RegisterSpec for STDBYCFG_SPEC {
+#[doc = "Standby Configuration\n\nYou can [`read`](crate::Reg::read) this register and get [`stdbycfg::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`stdbycfg::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct StdbycfgSpec;
+impl crate::RegisterSpec for StdbycfgSpec {
     type Ux = u16;
 }
-#[doc = "`read()` method returns [stdbycfg::R](R) reader structure"]
-impl crate::Readable for STDBYCFG_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [stdbycfg::W](W) writer structure"]
-impl crate::Writable for STDBYCFG_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`stdbycfg::R`](R) reader structure"]
+impl crate::Readable for StdbycfgSpec {}
+#[doc = "`write(|w| ..)` method takes [`stdbycfg::W`](W) writer structure"]
+impl crate::Writable for StdbycfgSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
 }
 #[doc = "`reset()` method sets STDBYCFG to value 0x0400"]
-impl crate::Resettable for STDBYCFG_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0x0400
-    }
+impl crate::Resettable for StdbycfgSpec {
+    const RESET_VALUE: u16 = 0x0400;
 }

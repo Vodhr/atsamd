@@ -1,93 +1,36 @@
 #[doc = "Register `SYNCBUSY` reader"]
-pub struct R(crate::R<SYNCBUSY_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<SYNCBUSY_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<SYNCBUSY_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<SYNCBUSY_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<SyncbusySpec>;
 #[doc = "Field `SWRST` reader - Software Reset Synchronization Busy"]
-pub struct SWRST_R(crate::FieldReader<bool, bool>);
-impl SWRST_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        SWRST_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for SWRST_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type SwrstR = crate::BitReader;
 #[doc = "Field `ENABLE` reader - SERCOM Enable Synchronization Busy"]
-pub struct ENABLE_R(crate::FieldReader<bool, bool>);
-impl ENABLE_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ENABLE_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ENABLE_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type EnableR = crate::BitReader;
 #[doc = "Field `SYSOP` reader - System Operation Synchronization Busy"]
-pub struct SYSOP_R(crate::FieldReader<bool, bool>);
-impl SYSOP_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        SYSOP_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for SYSOP_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type SysopR = crate::BitReader;
 impl R {
     #[doc = "Bit 0 - Software Reset Synchronization Busy"]
     #[inline(always)]
-    pub fn swrst(&self) -> SWRST_R {
-        SWRST_R::new((self.bits & 0x01) != 0)
+    pub fn swrst(&self) -> SwrstR {
+        SwrstR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - SERCOM Enable Synchronization Busy"]
     #[inline(always)]
-    pub fn enable(&self) -> ENABLE_R {
-        ENABLE_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn enable(&self) -> EnableR {
+        EnableR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 2 - System Operation Synchronization Busy"]
     #[inline(always)]
-    pub fn sysop(&self) -> SYSOP_R {
-        SYSOP_R::new(((self.bits >> 2) & 0x01) != 0)
+    pub fn sysop(&self) -> SysopR {
+        SysopR::new(((self.bits >> 2) & 1) != 0)
     }
 }
-#[doc = "I2CM Synchronization Busy\n\nThis register you can [`read`](crate::generic::Reg::read). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [syncbusy](index.html) module"]
-pub struct SYNCBUSY_SPEC;
-impl crate::RegisterSpec for SYNCBUSY_SPEC {
+#[doc = "I2CM Synchronization Busy\n\nYou can [`read`](crate::Reg::read) this register and get [`syncbusy::R`](R). See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct SyncbusySpec;
+impl crate::RegisterSpec for SyncbusySpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [syncbusy::R](R) reader structure"]
-impl crate::Readable for SYNCBUSY_SPEC {
-    type Reader = R;
-}
+#[doc = "`read()` method returns [`syncbusy::R`](R) reader structure"]
+impl crate::Readable for SyncbusySpec {}
 #[doc = "`reset()` method sets SYNCBUSY to value 0"]
-impl crate::Resettable for SYNCBUSY_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for SyncbusySpec {
+    const RESET_VALUE: u32 = 0;
 }

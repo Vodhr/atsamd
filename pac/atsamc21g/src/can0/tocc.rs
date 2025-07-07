@@ -1,262 +1,152 @@
 #[doc = "Register `TOCC` reader"]
-pub struct R(crate::R<TOCC_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<TOCC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<TOCC_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<TOCC_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<ToccSpec>;
 #[doc = "Register `TOCC` writer"]
-pub struct W(crate::W<TOCC_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<TOCC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<TOCC_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<TOCC_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<ToccSpec>;
 #[doc = "Field `ETOC` reader - Enable Timeout Counter"]
-pub struct ETOC_R(crate::FieldReader<bool, bool>);
-impl ETOC_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ETOC_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ETOC_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type EtocR = crate::BitReader;
 #[doc = "Field `ETOC` writer - Enable Timeout Counter"]
-pub struct ETOC_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> ETOC_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x01) | (value as u32 & 0x01);
-        self.w
-    }
-}
+pub type EtocW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Timeout Select\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum TOS_A {
+pub enum Tosselect {
     #[doc = "0: Continuout operation"]
-    CONT = 0,
+    Cont = 0,
     #[doc = "1: Timeout controlled by TX Event FIFO"]
-    TXEF = 1,
+    Txef = 1,
     #[doc = "2: Timeout controlled by Rx FIFO 0"]
-    RXF0 = 2,
+    Rxf0 = 2,
     #[doc = "3: Timeout controlled by Rx FIFO 1"]
-    RXF1 = 3,
+    Rxf1 = 3,
 }
-impl From<TOS_A> for u8 {
+impl From<Tosselect> for u8 {
     #[inline(always)]
-    fn from(variant: TOS_A) -> Self {
+    fn from(variant: Tosselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Tosselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Tosselect {}
 #[doc = "Field `TOS` reader - Timeout Select"]
-pub struct TOS_R(crate::FieldReader<u8, TOS_A>);
-impl TOS_R {
+pub type TosR = crate::FieldReader<Tosselect>;
+impl TosR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        TOS_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> TOS_A {
+    pub const fn variant(&self) -> Tosselect {
         match self.bits {
-            0 => TOS_A::CONT,
-            1 => TOS_A::TXEF,
-            2 => TOS_A::RXF0,
-            3 => TOS_A::RXF1,
+            0 => Tosselect::Cont,
+            1 => Tosselect::Txef,
+            2 => Tosselect::Rxf0,
+            3 => Tosselect::Rxf1,
             _ => unreachable!(),
         }
     }
-    #[doc = "Checks if the value of the field is `CONT`"]
-    #[inline(always)]
-    pub fn is_cont(&self) -> bool {
-        **self == TOS_A::CONT
-    }
-    #[doc = "Checks if the value of the field is `TXEF`"]
-    #[inline(always)]
-    pub fn is_txef(&self) -> bool {
-        **self == TOS_A::TXEF
-    }
-    #[doc = "Checks if the value of the field is `RXF0`"]
-    #[inline(always)]
-    pub fn is_rxf0(&self) -> bool {
-        **self == TOS_A::RXF0
-    }
-    #[doc = "Checks if the value of the field is `RXF1`"]
-    #[inline(always)]
-    pub fn is_rxf1(&self) -> bool {
-        **self == TOS_A::RXF1
-    }
-}
-impl core::ops::Deref for TOS_R {
-    type Target = crate::FieldReader<u8, TOS_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `TOS` writer - Timeout Select"]
-pub struct TOS_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> TOS_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: TOS_A) -> &'a mut W {
-        self.bits(variant.into())
-    }
     #[doc = "Continuout operation"]
     #[inline(always)]
-    pub fn cont(self) -> &'a mut W {
-        self.variant(TOS_A::CONT)
+    pub fn is_cont(&self) -> bool {
+        *self == Tosselect::Cont
     }
     #[doc = "Timeout controlled by TX Event FIFO"]
     #[inline(always)]
-    pub fn txef(self) -> &'a mut W {
-        self.variant(TOS_A::TXEF)
+    pub fn is_txef(&self) -> bool {
+        *self == Tosselect::Txef
     }
     #[doc = "Timeout controlled by Rx FIFO 0"]
     #[inline(always)]
-    pub fn rxf0(self) -> &'a mut W {
-        self.variant(TOS_A::RXF0)
+    pub fn is_rxf0(&self) -> bool {
+        *self == Tosselect::Rxf0
     }
     #[doc = "Timeout controlled by Rx FIFO 1"]
     #[inline(always)]
-    pub fn rxf1(self) -> &'a mut W {
-        self.variant(TOS_A::RXF1)
+    pub fn is_rxf1(&self) -> bool {
+        *self == Tosselect::Rxf1
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `TOS` writer - Timeout Select"]
+pub type TosW<'a, REG> = crate::FieldWriter<'a, REG, 2, Tosselect, crate::Safe>;
+impl<'a, REG> TosW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "Continuout operation"]
     #[inline(always)]
-    pub fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 1)) | ((value as u32 & 0x03) << 1);
-        self.w
+    pub fn cont(self) -> &'a mut crate::W<REG> {
+        self.variant(Tosselect::Cont)
+    }
+    #[doc = "Timeout controlled by TX Event FIFO"]
+    #[inline(always)]
+    pub fn txef(self) -> &'a mut crate::W<REG> {
+        self.variant(Tosselect::Txef)
+    }
+    #[doc = "Timeout controlled by Rx FIFO 0"]
+    #[inline(always)]
+    pub fn rxf0(self) -> &'a mut crate::W<REG> {
+        self.variant(Tosselect::Rxf0)
+    }
+    #[doc = "Timeout controlled by Rx FIFO 1"]
+    #[inline(always)]
+    pub fn rxf1(self) -> &'a mut crate::W<REG> {
+        self.variant(Tosselect::Rxf1)
     }
 }
 #[doc = "Field `TOP` reader - Timeout Period"]
-pub struct TOP_R(crate::FieldReader<u16, u16>);
-impl TOP_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u16) -> Self {
-        TOP_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for TOP_R {
-    type Target = crate::FieldReader<u16, u16>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type TopR = crate::FieldReader<u16>;
 #[doc = "Field `TOP` writer - Timeout Period"]
-pub struct TOP_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> TOP_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u16) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0xffff << 16)) | ((value as u32 & 0xffff) << 16);
-        self.w
-    }
-}
+pub type TopW<'a, REG> = crate::FieldWriter<'a, REG, 16, u16>;
 impl R {
     #[doc = "Bit 0 - Enable Timeout Counter"]
     #[inline(always)]
-    pub fn etoc(&self) -> ETOC_R {
-        ETOC_R::new((self.bits & 0x01) != 0)
+    pub fn etoc(&self) -> EtocR {
+        EtocR::new((self.bits & 1) != 0)
     }
     #[doc = "Bits 1:2 - Timeout Select"]
     #[inline(always)]
-    pub fn tos(&self) -> TOS_R {
-        TOS_R::new(((self.bits >> 1) & 0x03) as u8)
+    pub fn tos(&self) -> TosR {
+        TosR::new(((self.bits >> 1) & 3) as u8)
     }
     #[doc = "Bits 16:31 - Timeout Period"]
     #[inline(always)]
-    pub fn top(&self) -> TOP_R {
-        TOP_R::new(((self.bits >> 16) & 0xffff) as u16)
+    pub fn top(&self) -> TopR {
+        TopR::new(((self.bits >> 16) & 0xffff) as u16)
     }
 }
 impl W {
     #[doc = "Bit 0 - Enable Timeout Counter"]
     #[inline(always)]
-    pub fn etoc(&mut self) -> ETOC_W {
-        ETOC_W { w: self }
+    #[must_use]
+    pub fn etoc(&mut self) -> EtocW<ToccSpec> {
+        EtocW::new(self, 0)
     }
     #[doc = "Bits 1:2 - Timeout Select"]
     #[inline(always)]
-    pub fn tos(&mut self) -> TOS_W {
-        TOS_W { w: self }
+    #[must_use]
+    pub fn tos(&mut self) -> TosW<ToccSpec> {
+        TosW::new(self, 1)
     }
     #[doc = "Bits 16:31 - Timeout Period"]
     #[inline(always)]
-    pub fn top(&mut self) -> TOP_W {
-        TOP_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn top(&mut self) -> TopW<ToccSpec> {
+        TopW::new(self, 16)
     }
 }
-#[doc = "Timeout Counter Configuration\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [tocc](index.html) module"]
-pub struct TOCC_SPEC;
-impl crate::RegisterSpec for TOCC_SPEC {
+#[doc = "Timeout Counter Configuration\n\nYou can [`read`](crate::Reg::read) this register and get [`tocc::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`tocc::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct ToccSpec;
+impl crate::RegisterSpec for ToccSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [tocc::R](R) reader structure"]
-impl crate::Readable for TOCC_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [tocc::W](W) writer structure"]
-impl crate::Writable for TOCC_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`tocc::R`](R) reader structure"]
+impl crate::Readable for ToccSpec {}
+#[doc = "`write(|w| ..)` method takes [`tocc::W`](W) writer structure"]
+impl crate::Writable for ToccSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets TOCC to value 0xffff_0000"]
-impl crate::Resettable for TOCC_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0xffff_0000
-    }
+impl crate::Resettable for ToccSpec {
+    const RESET_VALUE: u32 = 0xffff_0000;
 }

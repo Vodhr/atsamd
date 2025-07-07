@@ -1,395 +1,232 @@
 #[doc = "Register `CSR` reader"]
-pub struct R(crate::R<CSR_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CSR_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CSR_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CSR_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<CsrSpec>;
 #[doc = "Register `CSR` writer"]
-pub struct W(crate::W<CSR_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CSR_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CSR_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CSR_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<CsrSpec>;
 #[doc = "SysTick Counter Enable\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum ENABLE_A {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Enableselect {
     #[doc = "0: Counter disabled"]
-    VALUE_0 = 0,
+    Value0 = 0,
     #[doc = "1: Counter enabled"]
-    VALUE_1 = 1,
+    Value1 = 1,
 }
-impl From<ENABLE_A> for bool {
+impl From<Enableselect> for bool {
     #[inline(always)]
-    fn from(variant: ENABLE_A) -> Self {
+    fn from(variant: Enableselect) -> Self {
         variant as u8 != 0
     }
 }
 #[doc = "Field `ENABLE` reader - SysTick Counter Enable"]
-pub struct ENABLE_R(crate::FieldReader<bool, ENABLE_A>);
-impl ENABLE_R {
+pub type EnableR = crate::BitReader<Enableselect>;
+impl EnableR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ENABLE_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> ENABLE_A {
+    pub const fn variant(&self) -> Enableselect {
         match self.bits {
-            false => ENABLE_A::VALUE_0,
-            true => ENABLE_A::VALUE_1,
+            false => Enableselect::Value0,
+            true => Enableselect::Value1,
         }
-    }
-    #[doc = "Checks if the value of the field is `VALUE_0`"]
-    #[inline(always)]
-    pub fn is_value_0(&self) -> bool {
-        **self == ENABLE_A::VALUE_0
-    }
-    #[doc = "Checks if the value of the field is `VALUE_1`"]
-    #[inline(always)]
-    pub fn is_value_1(&self) -> bool {
-        **self == ENABLE_A::VALUE_1
-    }
-}
-impl core::ops::Deref for ENABLE_R {
-    type Target = crate::FieldReader<bool, ENABLE_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `ENABLE` writer - SysTick Counter Enable"]
-pub struct ENABLE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> ENABLE_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: ENABLE_A) -> &'a mut W {
-        self.bit(variant.into())
     }
     #[doc = "Counter disabled"]
     #[inline(always)]
-    pub fn value_0(self) -> &'a mut W {
-        self.variant(ENABLE_A::VALUE_0)
+    pub fn is_value_0(&self) -> bool {
+        *self == Enableselect::Value0
     }
     #[doc = "Counter enabled"]
     #[inline(always)]
-    pub fn value_1(self) -> &'a mut W {
-        self.variant(ENABLE_A::VALUE_1)
+    pub fn is_value_1(&self) -> bool {
+        *self == Enableselect::Value1
     }
-    #[doc = r"Sets the field bit"]
+}
+#[doc = "Field `ENABLE` writer - SysTick Counter Enable"]
+pub type EnableW<'a, REG> = crate::BitWriter<'a, REG, Enableselect>;
+impl<'a, REG> EnableW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+{
+    #[doc = "Counter disabled"]
     #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
+    pub fn value_0(self) -> &'a mut crate::W<REG> {
+        self.variant(Enableselect::Value0)
     }
-    #[doc = r"Clears the field bit"]
+    #[doc = "Counter enabled"]
     #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x01) | (value as u32 & 0x01);
-        self.w
+    pub fn value_1(self) -> &'a mut crate::W<REG> {
+        self.variant(Enableselect::Value1)
     }
 }
 #[doc = "SysTick Exception Request Enable\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum TICKINT_A {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Tickintselect {
     #[doc = "0: Counting down to 0 does not assert the SysTick exception request"]
-    VALUE_0 = 0,
+    Value0 = 0,
     #[doc = "1: Counting down to 0 asserts the SysTick exception request"]
-    VALUE_1 = 1,
+    Value1 = 1,
 }
-impl From<TICKINT_A> for bool {
+impl From<Tickintselect> for bool {
     #[inline(always)]
-    fn from(variant: TICKINT_A) -> Self {
+    fn from(variant: Tickintselect) -> Self {
         variant as u8 != 0
     }
 }
 #[doc = "Field `TICKINT` reader - SysTick Exception Request Enable"]
-pub struct TICKINT_R(crate::FieldReader<bool, TICKINT_A>);
-impl TICKINT_R {
+pub type TickintR = crate::BitReader<Tickintselect>;
+impl TickintR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        TICKINT_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> TICKINT_A {
+    pub const fn variant(&self) -> Tickintselect {
         match self.bits {
-            false => TICKINT_A::VALUE_0,
-            true => TICKINT_A::VALUE_1,
+            false => Tickintselect::Value0,
+            true => Tickintselect::Value1,
         }
-    }
-    #[doc = "Checks if the value of the field is `VALUE_0`"]
-    #[inline(always)]
-    pub fn is_value_0(&self) -> bool {
-        **self == TICKINT_A::VALUE_0
-    }
-    #[doc = "Checks if the value of the field is `VALUE_1`"]
-    #[inline(always)]
-    pub fn is_value_1(&self) -> bool {
-        **self == TICKINT_A::VALUE_1
-    }
-}
-impl core::ops::Deref for TICKINT_R {
-    type Target = crate::FieldReader<bool, TICKINT_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `TICKINT` writer - SysTick Exception Request Enable"]
-pub struct TICKINT_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> TICKINT_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: TICKINT_A) -> &'a mut W {
-        self.bit(variant.into())
     }
     #[doc = "Counting down to 0 does not assert the SysTick exception request"]
     #[inline(always)]
-    pub fn value_0(self) -> &'a mut W {
-        self.variant(TICKINT_A::VALUE_0)
+    pub fn is_value_0(&self) -> bool {
+        *self == Tickintselect::Value0
     }
     #[doc = "Counting down to 0 asserts the SysTick exception request"]
     #[inline(always)]
-    pub fn value_1(self) -> &'a mut W {
-        self.variant(TICKINT_A::VALUE_1)
+    pub fn is_value_1(&self) -> bool {
+        *self == Tickintselect::Value1
     }
-    #[doc = r"Sets the field bit"]
+}
+#[doc = "Field `TICKINT` writer - SysTick Exception Request Enable"]
+pub type TickintW<'a, REG> = crate::BitWriter<'a, REG, Tickintselect>;
+impl<'a, REG> TickintW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+{
+    #[doc = "Counting down to 0 does not assert the SysTick exception request"]
     #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
+    pub fn value_0(self) -> &'a mut crate::W<REG> {
+        self.variant(Tickintselect::Value0)
     }
-    #[doc = r"Clears the field bit"]
+    #[doc = "Counting down to 0 asserts the SysTick exception request"]
     #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 1)) | ((value as u32 & 0x01) << 1);
-        self.w
+    pub fn value_1(self) -> &'a mut crate::W<REG> {
+        self.variant(Tickintselect::Value1)
     }
 }
 #[doc = "Clock Source 0=external, 1=processor\n\nValue on reset: 1"]
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum CLKSOURCE_A {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Clksourceselect {
     #[doc = "0: External clock"]
-    VALUE_0 = 0,
+    Value0 = 0,
     #[doc = "1: Processor clock"]
-    VALUE_1 = 1,
+    Value1 = 1,
 }
-impl From<CLKSOURCE_A> for bool {
+impl From<Clksourceselect> for bool {
     #[inline(always)]
-    fn from(variant: CLKSOURCE_A) -> Self {
+    fn from(variant: Clksourceselect) -> Self {
         variant as u8 != 0
     }
 }
 #[doc = "Field `CLKSOURCE` reader - Clock Source 0=external, 1=processor"]
-pub struct CLKSOURCE_R(crate::FieldReader<bool, CLKSOURCE_A>);
-impl CLKSOURCE_R {
+pub type ClksourceR = crate::BitReader<Clksourceselect>;
+impl ClksourceR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        CLKSOURCE_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> CLKSOURCE_A {
+    pub const fn variant(&self) -> Clksourceselect {
         match self.bits {
-            false => CLKSOURCE_A::VALUE_0,
-            true => CLKSOURCE_A::VALUE_1,
+            false => Clksourceselect::Value0,
+            true => Clksourceselect::Value1,
         }
-    }
-    #[doc = "Checks if the value of the field is `VALUE_0`"]
-    #[inline(always)]
-    pub fn is_value_0(&self) -> bool {
-        **self == CLKSOURCE_A::VALUE_0
-    }
-    #[doc = "Checks if the value of the field is `VALUE_1`"]
-    #[inline(always)]
-    pub fn is_value_1(&self) -> bool {
-        **self == CLKSOURCE_A::VALUE_1
-    }
-}
-impl core::ops::Deref for CLKSOURCE_R {
-    type Target = crate::FieldReader<bool, CLKSOURCE_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `CLKSOURCE` writer - Clock Source 0=external, 1=processor"]
-pub struct CLKSOURCE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CLKSOURCE_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: CLKSOURCE_A) -> &'a mut W {
-        self.bit(variant.into())
     }
     #[doc = "External clock"]
     #[inline(always)]
-    pub fn value_0(self) -> &'a mut W {
-        self.variant(CLKSOURCE_A::VALUE_0)
+    pub fn is_value_0(&self) -> bool {
+        *self == Clksourceselect::Value0
     }
     #[doc = "Processor clock"]
     #[inline(always)]
-    pub fn value_1(self) -> &'a mut W {
-        self.variant(CLKSOURCE_A::VALUE_1)
+    pub fn is_value_1(&self) -> bool {
+        *self == Clksourceselect::Value1
     }
-    #[doc = r"Sets the field bit"]
+}
+#[doc = "Field `CLKSOURCE` writer - Clock Source 0=external, 1=processor"]
+pub type ClksourceW<'a, REG> = crate::BitWriter<'a, REG, Clksourceselect>;
+impl<'a, REG> ClksourceW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+{
+    #[doc = "External clock"]
     #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
+    pub fn value_0(self) -> &'a mut crate::W<REG> {
+        self.variant(Clksourceselect::Value0)
     }
-    #[doc = r"Clears the field bit"]
+    #[doc = "Processor clock"]
     #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 2)) | ((value as u32 & 0x01) << 2);
-        self.w
+    pub fn value_1(self) -> &'a mut crate::W<REG> {
+        self.variant(Clksourceselect::Value1)
     }
 }
 #[doc = "Field `COUNTFLAG` reader - Timer counted to 0 since last read of register"]
-pub struct COUNTFLAG_R(crate::FieldReader<bool, bool>);
-impl COUNTFLAG_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        COUNTFLAG_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for COUNTFLAG_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CountflagR = crate::BitReader;
 #[doc = "Field `COUNTFLAG` writer - Timer counted to 0 since last read of register"]
-pub struct COUNTFLAG_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> COUNTFLAG_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 16)) | ((value as u32 & 0x01) << 16);
-        self.w
-    }
-}
+pub type CountflagW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bit 0 - SysTick Counter Enable"]
     #[inline(always)]
-    pub fn enable(&self) -> ENABLE_R {
-        ENABLE_R::new((self.bits & 0x01) != 0)
+    pub fn enable(&self) -> EnableR {
+        EnableR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - SysTick Exception Request Enable"]
     #[inline(always)]
-    pub fn tickint(&self) -> TICKINT_R {
-        TICKINT_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn tickint(&self) -> TickintR {
+        TickintR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 2 - Clock Source 0=external, 1=processor"]
     #[inline(always)]
-    pub fn clksource(&self) -> CLKSOURCE_R {
-        CLKSOURCE_R::new(((self.bits >> 2) & 0x01) != 0)
+    pub fn clksource(&self) -> ClksourceR {
+        ClksourceR::new(((self.bits >> 2) & 1) != 0)
     }
     #[doc = "Bit 16 - Timer counted to 0 since last read of register"]
     #[inline(always)]
-    pub fn countflag(&self) -> COUNTFLAG_R {
-        COUNTFLAG_R::new(((self.bits >> 16) & 0x01) != 0)
+    pub fn countflag(&self) -> CountflagR {
+        CountflagR::new(((self.bits >> 16) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bit 0 - SysTick Counter Enable"]
     #[inline(always)]
-    pub fn enable(&mut self) -> ENABLE_W {
-        ENABLE_W { w: self }
+    #[must_use]
+    pub fn enable(&mut self) -> EnableW<CsrSpec> {
+        EnableW::new(self, 0)
     }
     #[doc = "Bit 1 - SysTick Exception Request Enable"]
     #[inline(always)]
-    pub fn tickint(&mut self) -> TICKINT_W {
-        TICKINT_W { w: self }
+    #[must_use]
+    pub fn tickint(&mut self) -> TickintW<CsrSpec> {
+        TickintW::new(self, 1)
     }
     #[doc = "Bit 2 - Clock Source 0=external, 1=processor"]
     #[inline(always)]
-    pub fn clksource(&mut self) -> CLKSOURCE_W {
-        CLKSOURCE_W { w: self }
+    #[must_use]
+    pub fn clksource(&mut self) -> ClksourceW<CsrSpec> {
+        ClksourceW::new(self, 2)
     }
     #[doc = "Bit 16 - Timer counted to 0 since last read of register"]
     #[inline(always)]
-    pub fn countflag(&mut self) -> COUNTFLAG_W {
-        COUNTFLAG_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn countflag(&mut self) -> CountflagW<CsrSpec> {
+        CountflagW::new(self, 16)
     }
 }
-#[doc = "SysTick Control and Status Register\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [csr](index.html) module"]
-pub struct CSR_SPEC;
-impl crate::RegisterSpec for CSR_SPEC {
+#[doc = "SysTick Control and Status Register\n\nYou can [`read`](crate::Reg::read) this register and get [`csr::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`csr::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct CsrSpec;
+impl crate::RegisterSpec for CsrSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [csr::R](R) reader structure"]
-impl crate::Readable for CSR_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [csr::W](W) writer structure"]
-impl crate::Writable for CSR_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`csr::R`](R) reader structure"]
+impl crate::Readable for CsrSpec {}
+#[doc = "`write(|w| ..)` method takes [`csr::W`](W) writer structure"]
+impl crate::Writable for CsrSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets CSR to value 0x04"]
-impl crate::Resettable for CSR_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0x04
-    }
+impl crate::Resettable for CsrSpec {
+    const RESET_VALUE: u32 = 0x04;
 }

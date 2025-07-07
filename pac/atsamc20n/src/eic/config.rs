@@ -1,1547 +1,1130 @@
 #[doc = "Register `CONFIG[%s]` reader"]
-pub struct R(crate::R<CONFIG_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CONFIG_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CONFIG_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CONFIG_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<ConfigSpec>;
 #[doc = "Register `CONFIG[%s]` writer"]
-pub struct W(crate::W<CONFIG_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CONFIG_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CONFIG_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CONFIG_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<ConfigSpec>;
 #[doc = "Input Sense Configuration 0\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SENSE0_A {
+pub enum Sense0select {
     #[doc = "0: No detection"]
-    NONE = 0,
+    None = 0,
     #[doc = "1: Rising edge detection"]
-    RISE = 1,
+    Rise = 1,
     #[doc = "2: Falling edge detection"]
-    FALL = 2,
+    Fall = 2,
     #[doc = "3: Both edges detection"]
-    BOTH = 3,
+    Both = 3,
     #[doc = "4: High level detection"]
-    HIGH = 4,
+    High = 4,
     #[doc = "5: Low level detection"]
-    LOW = 5,
+    Low = 5,
 }
-impl From<SENSE0_A> for u8 {
+impl From<Sense0select> for u8 {
     #[inline(always)]
-    fn from(variant: SENSE0_A) -> Self {
+    fn from(variant: Sense0select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sense0select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sense0select {}
 #[doc = "Field `SENSE0` reader - Input Sense Configuration 0"]
-pub struct SENSE0_R(crate::FieldReader<u8, SENSE0_A>);
-impl SENSE0_R {
+pub type Sense0R = crate::FieldReader<Sense0select>;
+impl Sense0R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SENSE0_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SENSE0_A> {
+    pub const fn variant(&self) -> Option<Sense0select> {
         match self.bits {
-            0 => Some(SENSE0_A::NONE),
-            1 => Some(SENSE0_A::RISE),
-            2 => Some(SENSE0_A::FALL),
-            3 => Some(SENSE0_A::BOTH),
-            4 => Some(SENSE0_A::HIGH),
-            5 => Some(SENSE0_A::LOW),
+            0 => Some(Sense0select::None),
+            1 => Some(Sense0select::Rise),
+            2 => Some(Sense0select::Fall),
+            3 => Some(Sense0select::Both),
+            4 => Some(Sense0select::High),
+            5 => Some(Sense0select::Low),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NONE`"]
+    #[doc = "No detection"]
     #[inline(always)]
     pub fn is_none(&self) -> bool {
-        **self == SENSE0_A::NONE
+        *self == Sense0select::None
     }
-    #[doc = "Checks if the value of the field is `RISE`"]
+    #[doc = "Rising edge detection"]
     #[inline(always)]
     pub fn is_rise(&self) -> bool {
-        **self == SENSE0_A::RISE
+        *self == Sense0select::Rise
     }
-    #[doc = "Checks if the value of the field is `FALL`"]
+    #[doc = "Falling edge detection"]
     #[inline(always)]
     pub fn is_fall(&self) -> bool {
-        **self == SENSE0_A::FALL
+        *self == Sense0select::Fall
     }
-    #[doc = "Checks if the value of the field is `BOTH`"]
+    #[doc = "Both edges detection"]
     #[inline(always)]
     pub fn is_both(&self) -> bool {
-        **self == SENSE0_A::BOTH
+        *self == Sense0select::Both
     }
-    #[doc = "Checks if the value of the field is `HIGH`"]
+    #[doc = "High level detection"]
     #[inline(always)]
     pub fn is_high(&self) -> bool {
-        **self == SENSE0_A::HIGH
+        *self == Sense0select::High
     }
-    #[doc = "Checks if the value of the field is `LOW`"]
+    #[doc = "Low level detection"]
     #[inline(always)]
     pub fn is_low(&self) -> bool {
-        **self == SENSE0_A::LOW
-    }
-}
-impl core::ops::Deref for SENSE0_R {
-    type Target = crate::FieldReader<u8, SENSE0_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Sense0select::Low
     }
 }
 #[doc = "Field `SENSE0` writer - Input Sense Configuration 0"]
-pub struct SENSE0_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SENSE0_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SENSE0_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
+pub type Sense0W<'a, REG> = crate::FieldWriter<'a, REG, 3, Sense0select>;
+impl<'a, REG> Sense0W<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
     #[doc = "No detection"]
     #[inline(always)]
-    pub fn none(self) -> &'a mut W {
-        self.variant(SENSE0_A::NONE)
+    pub fn none(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense0select::None)
     }
     #[doc = "Rising edge detection"]
     #[inline(always)]
-    pub fn rise(self) -> &'a mut W {
-        self.variant(SENSE0_A::RISE)
+    pub fn rise(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense0select::Rise)
     }
     #[doc = "Falling edge detection"]
     #[inline(always)]
-    pub fn fall(self) -> &'a mut W {
-        self.variant(SENSE0_A::FALL)
+    pub fn fall(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense0select::Fall)
     }
     #[doc = "Both edges detection"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(SENSE0_A::BOTH)
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense0select::Both)
     }
     #[doc = "High level detection"]
     #[inline(always)]
-    pub fn high(self) -> &'a mut W {
-        self.variant(SENSE0_A::HIGH)
+    pub fn high(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense0select::High)
     }
     #[doc = "Low level detection"]
     #[inline(always)]
-    pub fn low(self) -> &'a mut W {
-        self.variant(SENSE0_A::LOW)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x07) | (value as u32 & 0x07);
-        self.w
+    pub fn low(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense0select::Low)
     }
 }
 #[doc = "Field `FILTEN0` reader - Filter Enable 0"]
-pub struct FILTEN0_R(crate::FieldReader<bool, bool>);
-impl FILTEN0_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FILTEN0_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FILTEN0_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Filten0R = crate::BitReader;
 #[doc = "Field `FILTEN0` writer - Filter Enable 0"]
-pub struct FILTEN0_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FILTEN0_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 3)) | ((value as u32 & 0x01) << 3);
-        self.w
-    }
-}
+pub type Filten0W<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Input Sense Configuration 1\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SENSE1_A {
+pub enum Sense1select {
     #[doc = "0: No detection"]
-    NONE = 0,
+    None = 0,
     #[doc = "1: Rising edge detection"]
-    RISE = 1,
+    Rise = 1,
     #[doc = "2: Falling edge detection"]
-    FALL = 2,
+    Fall = 2,
     #[doc = "3: Both edges detection"]
-    BOTH = 3,
+    Both = 3,
     #[doc = "4: High level detection"]
-    HIGH = 4,
+    High = 4,
     #[doc = "5: Low level detection"]
-    LOW = 5,
+    Low = 5,
 }
-impl From<SENSE1_A> for u8 {
+impl From<Sense1select> for u8 {
     #[inline(always)]
-    fn from(variant: SENSE1_A) -> Self {
+    fn from(variant: Sense1select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sense1select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sense1select {}
 #[doc = "Field `SENSE1` reader - Input Sense Configuration 1"]
-pub struct SENSE1_R(crate::FieldReader<u8, SENSE1_A>);
-impl SENSE1_R {
+pub type Sense1R = crate::FieldReader<Sense1select>;
+impl Sense1R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SENSE1_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SENSE1_A> {
+    pub const fn variant(&self) -> Option<Sense1select> {
         match self.bits {
-            0 => Some(SENSE1_A::NONE),
-            1 => Some(SENSE1_A::RISE),
-            2 => Some(SENSE1_A::FALL),
-            3 => Some(SENSE1_A::BOTH),
-            4 => Some(SENSE1_A::HIGH),
-            5 => Some(SENSE1_A::LOW),
+            0 => Some(Sense1select::None),
+            1 => Some(Sense1select::Rise),
+            2 => Some(Sense1select::Fall),
+            3 => Some(Sense1select::Both),
+            4 => Some(Sense1select::High),
+            5 => Some(Sense1select::Low),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NONE`"]
+    #[doc = "No detection"]
     #[inline(always)]
     pub fn is_none(&self) -> bool {
-        **self == SENSE1_A::NONE
+        *self == Sense1select::None
     }
-    #[doc = "Checks if the value of the field is `RISE`"]
+    #[doc = "Rising edge detection"]
     #[inline(always)]
     pub fn is_rise(&self) -> bool {
-        **self == SENSE1_A::RISE
+        *self == Sense1select::Rise
     }
-    #[doc = "Checks if the value of the field is `FALL`"]
+    #[doc = "Falling edge detection"]
     #[inline(always)]
     pub fn is_fall(&self) -> bool {
-        **self == SENSE1_A::FALL
+        *self == Sense1select::Fall
     }
-    #[doc = "Checks if the value of the field is `BOTH`"]
+    #[doc = "Both edges detection"]
     #[inline(always)]
     pub fn is_both(&self) -> bool {
-        **self == SENSE1_A::BOTH
+        *self == Sense1select::Both
     }
-    #[doc = "Checks if the value of the field is `HIGH`"]
+    #[doc = "High level detection"]
     #[inline(always)]
     pub fn is_high(&self) -> bool {
-        **self == SENSE1_A::HIGH
+        *self == Sense1select::High
     }
-    #[doc = "Checks if the value of the field is `LOW`"]
+    #[doc = "Low level detection"]
     #[inline(always)]
     pub fn is_low(&self) -> bool {
-        **self == SENSE1_A::LOW
-    }
-}
-impl core::ops::Deref for SENSE1_R {
-    type Target = crate::FieldReader<u8, SENSE1_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Sense1select::Low
     }
 }
 #[doc = "Field `SENSE1` writer - Input Sense Configuration 1"]
-pub struct SENSE1_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SENSE1_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SENSE1_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
+pub type Sense1W<'a, REG> = crate::FieldWriter<'a, REG, 3, Sense1select>;
+impl<'a, REG> Sense1W<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
     #[doc = "No detection"]
     #[inline(always)]
-    pub fn none(self) -> &'a mut W {
-        self.variant(SENSE1_A::NONE)
+    pub fn none(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense1select::None)
     }
     #[doc = "Rising edge detection"]
     #[inline(always)]
-    pub fn rise(self) -> &'a mut W {
-        self.variant(SENSE1_A::RISE)
+    pub fn rise(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense1select::Rise)
     }
     #[doc = "Falling edge detection"]
     #[inline(always)]
-    pub fn fall(self) -> &'a mut W {
-        self.variant(SENSE1_A::FALL)
+    pub fn fall(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense1select::Fall)
     }
     #[doc = "Both edges detection"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(SENSE1_A::BOTH)
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense1select::Both)
     }
     #[doc = "High level detection"]
     #[inline(always)]
-    pub fn high(self) -> &'a mut W {
-        self.variant(SENSE1_A::HIGH)
+    pub fn high(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense1select::High)
     }
     #[doc = "Low level detection"]
     #[inline(always)]
-    pub fn low(self) -> &'a mut W {
-        self.variant(SENSE1_A::LOW)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 4)) | ((value as u32 & 0x07) << 4);
-        self.w
+    pub fn low(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense1select::Low)
     }
 }
 #[doc = "Field `FILTEN1` reader - Filter Enable 1"]
-pub struct FILTEN1_R(crate::FieldReader<bool, bool>);
-impl FILTEN1_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FILTEN1_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FILTEN1_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Filten1R = crate::BitReader;
 #[doc = "Field `FILTEN1` writer - Filter Enable 1"]
-pub struct FILTEN1_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FILTEN1_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 7)) | ((value as u32 & 0x01) << 7);
-        self.w
-    }
-}
+pub type Filten1W<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Input Sense Configuration 2\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SENSE2_A {
+pub enum Sense2select {
     #[doc = "0: No detection"]
-    NONE = 0,
+    None = 0,
     #[doc = "1: Rising edge detection"]
-    RISE = 1,
+    Rise = 1,
     #[doc = "2: Falling edge detection"]
-    FALL = 2,
+    Fall = 2,
     #[doc = "3: Both edges detection"]
-    BOTH = 3,
+    Both = 3,
     #[doc = "4: High level detection"]
-    HIGH = 4,
+    High = 4,
     #[doc = "5: Low level detection"]
-    LOW = 5,
+    Low = 5,
 }
-impl From<SENSE2_A> for u8 {
+impl From<Sense2select> for u8 {
     #[inline(always)]
-    fn from(variant: SENSE2_A) -> Self {
+    fn from(variant: Sense2select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sense2select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sense2select {}
 #[doc = "Field `SENSE2` reader - Input Sense Configuration 2"]
-pub struct SENSE2_R(crate::FieldReader<u8, SENSE2_A>);
-impl SENSE2_R {
+pub type Sense2R = crate::FieldReader<Sense2select>;
+impl Sense2R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SENSE2_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SENSE2_A> {
+    pub const fn variant(&self) -> Option<Sense2select> {
         match self.bits {
-            0 => Some(SENSE2_A::NONE),
-            1 => Some(SENSE2_A::RISE),
-            2 => Some(SENSE2_A::FALL),
-            3 => Some(SENSE2_A::BOTH),
-            4 => Some(SENSE2_A::HIGH),
-            5 => Some(SENSE2_A::LOW),
+            0 => Some(Sense2select::None),
+            1 => Some(Sense2select::Rise),
+            2 => Some(Sense2select::Fall),
+            3 => Some(Sense2select::Both),
+            4 => Some(Sense2select::High),
+            5 => Some(Sense2select::Low),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NONE`"]
+    #[doc = "No detection"]
     #[inline(always)]
     pub fn is_none(&self) -> bool {
-        **self == SENSE2_A::NONE
+        *self == Sense2select::None
     }
-    #[doc = "Checks if the value of the field is `RISE`"]
+    #[doc = "Rising edge detection"]
     #[inline(always)]
     pub fn is_rise(&self) -> bool {
-        **self == SENSE2_A::RISE
+        *self == Sense2select::Rise
     }
-    #[doc = "Checks if the value of the field is `FALL`"]
+    #[doc = "Falling edge detection"]
     #[inline(always)]
     pub fn is_fall(&self) -> bool {
-        **self == SENSE2_A::FALL
+        *self == Sense2select::Fall
     }
-    #[doc = "Checks if the value of the field is `BOTH`"]
+    #[doc = "Both edges detection"]
     #[inline(always)]
     pub fn is_both(&self) -> bool {
-        **self == SENSE2_A::BOTH
+        *self == Sense2select::Both
     }
-    #[doc = "Checks if the value of the field is `HIGH`"]
+    #[doc = "High level detection"]
     #[inline(always)]
     pub fn is_high(&self) -> bool {
-        **self == SENSE2_A::HIGH
+        *self == Sense2select::High
     }
-    #[doc = "Checks if the value of the field is `LOW`"]
+    #[doc = "Low level detection"]
     #[inline(always)]
     pub fn is_low(&self) -> bool {
-        **self == SENSE2_A::LOW
-    }
-}
-impl core::ops::Deref for SENSE2_R {
-    type Target = crate::FieldReader<u8, SENSE2_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Sense2select::Low
     }
 }
 #[doc = "Field `SENSE2` writer - Input Sense Configuration 2"]
-pub struct SENSE2_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SENSE2_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SENSE2_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
+pub type Sense2W<'a, REG> = crate::FieldWriter<'a, REG, 3, Sense2select>;
+impl<'a, REG> Sense2W<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
     #[doc = "No detection"]
     #[inline(always)]
-    pub fn none(self) -> &'a mut W {
-        self.variant(SENSE2_A::NONE)
+    pub fn none(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense2select::None)
     }
     #[doc = "Rising edge detection"]
     #[inline(always)]
-    pub fn rise(self) -> &'a mut W {
-        self.variant(SENSE2_A::RISE)
+    pub fn rise(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense2select::Rise)
     }
     #[doc = "Falling edge detection"]
     #[inline(always)]
-    pub fn fall(self) -> &'a mut W {
-        self.variant(SENSE2_A::FALL)
+    pub fn fall(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense2select::Fall)
     }
     #[doc = "Both edges detection"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(SENSE2_A::BOTH)
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense2select::Both)
     }
     #[doc = "High level detection"]
     #[inline(always)]
-    pub fn high(self) -> &'a mut W {
-        self.variant(SENSE2_A::HIGH)
+    pub fn high(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense2select::High)
     }
     #[doc = "Low level detection"]
     #[inline(always)]
-    pub fn low(self) -> &'a mut W {
-        self.variant(SENSE2_A::LOW)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 8)) | ((value as u32 & 0x07) << 8);
-        self.w
+    pub fn low(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense2select::Low)
     }
 }
 #[doc = "Field `FILTEN2` reader - Filter Enable 2"]
-pub struct FILTEN2_R(crate::FieldReader<bool, bool>);
-impl FILTEN2_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FILTEN2_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FILTEN2_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Filten2R = crate::BitReader;
 #[doc = "Field `FILTEN2` writer - Filter Enable 2"]
-pub struct FILTEN2_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FILTEN2_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 11)) | ((value as u32 & 0x01) << 11);
-        self.w
-    }
-}
+pub type Filten2W<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Input Sense Configuration 3\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SENSE3_A {
+pub enum Sense3select {
     #[doc = "0: No detection"]
-    NONE = 0,
+    None = 0,
     #[doc = "1: Rising edge detection"]
-    RISE = 1,
+    Rise = 1,
     #[doc = "2: Falling edge detection"]
-    FALL = 2,
+    Fall = 2,
     #[doc = "3: Both edges detection"]
-    BOTH = 3,
+    Both = 3,
     #[doc = "4: High level detection"]
-    HIGH = 4,
+    High = 4,
     #[doc = "5: Low level detection"]
-    LOW = 5,
+    Low = 5,
 }
-impl From<SENSE3_A> for u8 {
+impl From<Sense3select> for u8 {
     #[inline(always)]
-    fn from(variant: SENSE3_A) -> Self {
+    fn from(variant: Sense3select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sense3select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sense3select {}
 #[doc = "Field `SENSE3` reader - Input Sense Configuration 3"]
-pub struct SENSE3_R(crate::FieldReader<u8, SENSE3_A>);
-impl SENSE3_R {
+pub type Sense3R = crate::FieldReader<Sense3select>;
+impl Sense3R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SENSE3_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SENSE3_A> {
+    pub const fn variant(&self) -> Option<Sense3select> {
         match self.bits {
-            0 => Some(SENSE3_A::NONE),
-            1 => Some(SENSE3_A::RISE),
-            2 => Some(SENSE3_A::FALL),
-            3 => Some(SENSE3_A::BOTH),
-            4 => Some(SENSE3_A::HIGH),
-            5 => Some(SENSE3_A::LOW),
+            0 => Some(Sense3select::None),
+            1 => Some(Sense3select::Rise),
+            2 => Some(Sense3select::Fall),
+            3 => Some(Sense3select::Both),
+            4 => Some(Sense3select::High),
+            5 => Some(Sense3select::Low),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NONE`"]
+    #[doc = "No detection"]
     #[inline(always)]
     pub fn is_none(&self) -> bool {
-        **self == SENSE3_A::NONE
+        *self == Sense3select::None
     }
-    #[doc = "Checks if the value of the field is `RISE`"]
+    #[doc = "Rising edge detection"]
     #[inline(always)]
     pub fn is_rise(&self) -> bool {
-        **self == SENSE3_A::RISE
+        *self == Sense3select::Rise
     }
-    #[doc = "Checks if the value of the field is `FALL`"]
+    #[doc = "Falling edge detection"]
     #[inline(always)]
     pub fn is_fall(&self) -> bool {
-        **self == SENSE3_A::FALL
+        *self == Sense3select::Fall
     }
-    #[doc = "Checks if the value of the field is `BOTH`"]
+    #[doc = "Both edges detection"]
     #[inline(always)]
     pub fn is_both(&self) -> bool {
-        **self == SENSE3_A::BOTH
+        *self == Sense3select::Both
     }
-    #[doc = "Checks if the value of the field is `HIGH`"]
+    #[doc = "High level detection"]
     #[inline(always)]
     pub fn is_high(&self) -> bool {
-        **self == SENSE3_A::HIGH
+        *self == Sense3select::High
     }
-    #[doc = "Checks if the value of the field is `LOW`"]
+    #[doc = "Low level detection"]
     #[inline(always)]
     pub fn is_low(&self) -> bool {
-        **self == SENSE3_A::LOW
-    }
-}
-impl core::ops::Deref for SENSE3_R {
-    type Target = crate::FieldReader<u8, SENSE3_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Sense3select::Low
     }
 }
 #[doc = "Field `SENSE3` writer - Input Sense Configuration 3"]
-pub struct SENSE3_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SENSE3_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SENSE3_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
+pub type Sense3W<'a, REG> = crate::FieldWriter<'a, REG, 3, Sense3select>;
+impl<'a, REG> Sense3W<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
     #[doc = "No detection"]
     #[inline(always)]
-    pub fn none(self) -> &'a mut W {
-        self.variant(SENSE3_A::NONE)
+    pub fn none(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense3select::None)
     }
     #[doc = "Rising edge detection"]
     #[inline(always)]
-    pub fn rise(self) -> &'a mut W {
-        self.variant(SENSE3_A::RISE)
+    pub fn rise(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense3select::Rise)
     }
     #[doc = "Falling edge detection"]
     #[inline(always)]
-    pub fn fall(self) -> &'a mut W {
-        self.variant(SENSE3_A::FALL)
+    pub fn fall(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense3select::Fall)
     }
     #[doc = "Both edges detection"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(SENSE3_A::BOTH)
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense3select::Both)
     }
     #[doc = "High level detection"]
     #[inline(always)]
-    pub fn high(self) -> &'a mut W {
-        self.variant(SENSE3_A::HIGH)
+    pub fn high(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense3select::High)
     }
     #[doc = "Low level detection"]
     #[inline(always)]
-    pub fn low(self) -> &'a mut W {
-        self.variant(SENSE3_A::LOW)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 12)) | ((value as u32 & 0x07) << 12);
-        self.w
+    pub fn low(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense3select::Low)
     }
 }
 #[doc = "Field `FILTEN3` reader - Filter Enable 3"]
-pub struct FILTEN3_R(crate::FieldReader<bool, bool>);
-impl FILTEN3_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FILTEN3_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FILTEN3_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Filten3R = crate::BitReader;
 #[doc = "Field `FILTEN3` writer - Filter Enable 3"]
-pub struct FILTEN3_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FILTEN3_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 15)) | ((value as u32 & 0x01) << 15);
-        self.w
-    }
-}
+pub type Filten3W<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Input Sense Configuration 4\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SENSE4_A {
+pub enum Sense4select {
     #[doc = "0: No detection"]
-    NONE = 0,
+    None = 0,
     #[doc = "1: Rising edge detection"]
-    RISE = 1,
+    Rise = 1,
     #[doc = "2: Falling edge detection"]
-    FALL = 2,
+    Fall = 2,
     #[doc = "3: Both edges detection"]
-    BOTH = 3,
+    Both = 3,
     #[doc = "4: High level detection"]
-    HIGH = 4,
+    High = 4,
     #[doc = "5: Low level detection"]
-    LOW = 5,
+    Low = 5,
 }
-impl From<SENSE4_A> for u8 {
+impl From<Sense4select> for u8 {
     #[inline(always)]
-    fn from(variant: SENSE4_A) -> Self {
+    fn from(variant: Sense4select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sense4select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sense4select {}
 #[doc = "Field `SENSE4` reader - Input Sense Configuration 4"]
-pub struct SENSE4_R(crate::FieldReader<u8, SENSE4_A>);
-impl SENSE4_R {
+pub type Sense4R = crate::FieldReader<Sense4select>;
+impl Sense4R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SENSE4_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SENSE4_A> {
+    pub const fn variant(&self) -> Option<Sense4select> {
         match self.bits {
-            0 => Some(SENSE4_A::NONE),
-            1 => Some(SENSE4_A::RISE),
-            2 => Some(SENSE4_A::FALL),
-            3 => Some(SENSE4_A::BOTH),
-            4 => Some(SENSE4_A::HIGH),
-            5 => Some(SENSE4_A::LOW),
+            0 => Some(Sense4select::None),
+            1 => Some(Sense4select::Rise),
+            2 => Some(Sense4select::Fall),
+            3 => Some(Sense4select::Both),
+            4 => Some(Sense4select::High),
+            5 => Some(Sense4select::Low),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NONE`"]
+    #[doc = "No detection"]
     #[inline(always)]
     pub fn is_none(&self) -> bool {
-        **self == SENSE4_A::NONE
+        *self == Sense4select::None
     }
-    #[doc = "Checks if the value of the field is `RISE`"]
+    #[doc = "Rising edge detection"]
     #[inline(always)]
     pub fn is_rise(&self) -> bool {
-        **self == SENSE4_A::RISE
+        *self == Sense4select::Rise
     }
-    #[doc = "Checks if the value of the field is `FALL`"]
+    #[doc = "Falling edge detection"]
     #[inline(always)]
     pub fn is_fall(&self) -> bool {
-        **self == SENSE4_A::FALL
+        *self == Sense4select::Fall
     }
-    #[doc = "Checks if the value of the field is `BOTH`"]
+    #[doc = "Both edges detection"]
     #[inline(always)]
     pub fn is_both(&self) -> bool {
-        **self == SENSE4_A::BOTH
+        *self == Sense4select::Both
     }
-    #[doc = "Checks if the value of the field is `HIGH`"]
+    #[doc = "High level detection"]
     #[inline(always)]
     pub fn is_high(&self) -> bool {
-        **self == SENSE4_A::HIGH
+        *self == Sense4select::High
     }
-    #[doc = "Checks if the value of the field is `LOW`"]
+    #[doc = "Low level detection"]
     #[inline(always)]
     pub fn is_low(&self) -> bool {
-        **self == SENSE4_A::LOW
-    }
-}
-impl core::ops::Deref for SENSE4_R {
-    type Target = crate::FieldReader<u8, SENSE4_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Sense4select::Low
     }
 }
 #[doc = "Field `SENSE4` writer - Input Sense Configuration 4"]
-pub struct SENSE4_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SENSE4_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SENSE4_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
+pub type Sense4W<'a, REG> = crate::FieldWriter<'a, REG, 3, Sense4select>;
+impl<'a, REG> Sense4W<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
     #[doc = "No detection"]
     #[inline(always)]
-    pub fn none(self) -> &'a mut W {
-        self.variant(SENSE4_A::NONE)
+    pub fn none(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense4select::None)
     }
     #[doc = "Rising edge detection"]
     #[inline(always)]
-    pub fn rise(self) -> &'a mut W {
-        self.variant(SENSE4_A::RISE)
+    pub fn rise(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense4select::Rise)
     }
     #[doc = "Falling edge detection"]
     #[inline(always)]
-    pub fn fall(self) -> &'a mut W {
-        self.variant(SENSE4_A::FALL)
+    pub fn fall(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense4select::Fall)
     }
     #[doc = "Both edges detection"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(SENSE4_A::BOTH)
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense4select::Both)
     }
     #[doc = "High level detection"]
     #[inline(always)]
-    pub fn high(self) -> &'a mut W {
-        self.variant(SENSE4_A::HIGH)
+    pub fn high(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense4select::High)
     }
     #[doc = "Low level detection"]
     #[inline(always)]
-    pub fn low(self) -> &'a mut W {
-        self.variant(SENSE4_A::LOW)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 16)) | ((value as u32 & 0x07) << 16);
-        self.w
+    pub fn low(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense4select::Low)
     }
 }
 #[doc = "Field `FILTEN4` reader - Filter Enable 4"]
-pub struct FILTEN4_R(crate::FieldReader<bool, bool>);
-impl FILTEN4_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FILTEN4_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FILTEN4_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Filten4R = crate::BitReader;
 #[doc = "Field `FILTEN4` writer - Filter Enable 4"]
-pub struct FILTEN4_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FILTEN4_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 19)) | ((value as u32 & 0x01) << 19);
-        self.w
-    }
-}
+pub type Filten4W<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Input Sense Configuration 5\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SENSE5_A {
+pub enum Sense5select {
     #[doc = "0: No detection"]
-    NONE = 0,
+    None = 0,
     #[doc = "1: Rising edge detection"]
-    RISE = 1,
+    Rise = 1,
     #[doc = "2: Falling edge detection"]
-    FALL = 2,
+    Fall = 2,
     #[doc = "3: Both edges detection"]
-    BOTH = 3,
+    Both = 3,
     #[doc = "4: High level detection"]
-    HIGH = 4,
+    High = 4,
     #[doc = "5: Low level detection"]
-    LOW = 5,
+    Low = 5,
 }
-impl From<SENSE5_A> for u8 {
+impl From<Sense5select> for u8 {
     #[inline(always)]
-    fn from(variant: SENSE5_A) -> Self {
+    fn from(variant: Sense5select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sense5select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sense5select {}
 #[doc = "Field `SENSE5` reader - Input Sense Configuration 5"]
-pub struct SENSE5_R(crate::FieldReader<u8, SENSE5_A>);
-impl SENSE5_R {
+pub type Sense5R = crate::FieldReader<Sense5select>;
+impl Sense5R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SENSE5_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SENSE5_A> {
+    pub const fn variant(&self) -> Option<Sense5select> {
         match self.bits {
-            0 => Some(SENSE5_A::NONE),
-            1 => Some(SENSE5_A::RISE),
-            2 => Some(SENSE5_A::FALL),
-            3 => Some(SENSE5_A::BOTH),
-            4 => Some(SENSE5_A::HIGH),
-            5 => Some(SENSE5_A::LOW),
+            0 => Some(Sense5select::None),
+            1 => Some(Sense5select::Rise),
+            2 => Some(Sense5select::Fall),
+            3 => Some(Sense5select::Both),
+            4 => Some(Sense5select::High),
+            5 => Some(Sense5select::Low),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NONE`"]
+    #[doc = "No detection"]
     #[inline(always)]
     pub fn is_none(&self) -> bool {
-        **self == SENSE5_A::NONE
+        *self == Sense5select::None
     }
-    #[doc = "Checks if the value of the field is `RISE`"]
+    #[doc = "Rising edge detection"]
     #[inline(always)]
     pub fn is_rise(&self) -> bool {
-        **self == SENSE5_A::RISE
+        *self == Sense5select::Rise
     }
-    #[doc = "Checks if the value of the field is `FALL`"]
+    #[doc = "Falling edge detection"]
     #[inline(always)]
     pub fn is_fall(&self) -> bool {
-        **self == SENSE5_A::FALL
+        *self == Sense5select::Fall
     }
-    #[doc = "Checks if the value of the field is `BOTH`"]
+    #[doc = "Both edges detection"]
     #[inline(always)]
     pub fn is_both(&self) -> bool {
-        **self == SENSE5_A::BOTH
+        *self == Sense5select::Both
     }
-    #[doc = "Checks if the value of the field is `HIGH`"]
+    #[doc = "High level detection"]
     #[inline(always)]
     pub fn is_high(&self) -> bool {
-        **self == SENSE5_A::HIGH
+        *self == Sense5select::High
     }
-    #[doc = "Checks if the value of the field is `LOW`"]
+    #[doc = "Low level detection"]
     #[inline(always)]
     pub fn is_low(&self) -> bool {
-        **self == SENSE5_A::LOW
-    }
-}
-impl core::ops::Deref for SENSE5_R {
-    type Target = crate::FieldReader<u8, SENSE5_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Sense5select::Low
     }
 }
 #[doc = "Field `SENSE5` writer - Input Sense Configuration 5"]
-pub struct SENSE5_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SENSE5_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SENSE5_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
+pub type Sense5W<'a, REG> = crate::FieldWriter<'a, REG, 3, Sense5select>;
+impl<'a, REG> Sense5W<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
     #[doc = "No detection"]
     #[inline(always)]
-    pub fn none(self) -> &'a mut W {
-        self.variant(SENSE5_A::NONE)
+    pub fn none(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense5select::None)
     }
     #[doc = "Rising edge detection"]
     #[inline(always)]
-    pub fn rise(self) -> &'a mut W {
-        self.variant(SENSE5_A::RISE)
+    pub fn rise(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense5select::Rise)
     }
     #[doc = "Falling edge detection"]
     #[inline(always)]
-    pub fn fall(self) -> &'a mut W {
-        self.variant(SENSE5_A::FALL)
+    pub fn fall(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense5select::Fall)
     }
     #[doc = "Both edges detection"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(SENSE5_A::BOTH)
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense5select::Both)
     }
     #[doc = "High level detection"]
     #[inline(always)]
-    pub fn high(self) -> &'a mut W {
-        self.variant(SENSE5_A::HIGH)
+    pub fn high(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense5select::High)
     }
     #[doc = "Low level detection"]
     #[inline(always)]
-    pub fn low(self) -> &'a mut W {
-        self.variant(SENSE5_A::LOW)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 20)) | ((value as u32 & 0x07) << 20);
-        self.w
+    pub fn low(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense5select::Low)
     }
 }
 #[doc = "Field `FILTEN5` reader - Filter Enable 5"]
-pub struct FILTEN5_R(crate::FieldReader<bool, bool>);
-impl FILTEN5_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FILTEN5_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FILTEN5_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Filten5R = crate::BitReader;
 #[doc = "Field `FILTEN5` writer - Filter Enable 5"]
-pub struct FILTEN5_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FILTEN5_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 23)) | ((value as u32 & 0x01) << 23);
-        self.w
-    }
-}
+pub type Filten5W<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Input Sense Configuration 6\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SENSE6_A {
+pub enum Sense6select {
     #[doc = "0: No detection"]
-    NONE = 0,
+    None = 0,
     #[doc = "1: Rising edge detection"]
-    RISE = 1,
+    Rise = 1,
     #[doc = "2: Falling edge detection"]
-    FALL = 2,
+    Fall = 2,
     #[doc = "3: Both edges detection"]
-    BOTH = 3,
+    Both = 3,
     #[doc = "4: High level detection"]
-    HIGH = 4,
+    High = 4,
     #[doc = "5: Low level detection"]
-    LOW = 5,
+    Low = 5,
 }
-impl From<SENSE6_A> for u8 {
+impl From<Sense6select> for u8 {
     #[inline(always)]
-    fn from(variant: SENSE6_A) -> Self {
+    fn from(variant: Sense6select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sense6select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sense6select {}
 #[doc = "Field `SENSE6` reader - Input Sense Configuration 6"]
-pub struct SENSE6_R(crate::FieldReader<u8, SENSE6_A>);
-impl SENSE6_R {
+pub type Sense6R = crate::FieldReader<Sense6select>;
+impl Sense6R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SENSE6_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SENSE6_A> {
+    pub const fn variant(&self) -> Option<Sense6select> {
         match self.bits {
-            0 => Some(SENSE6_A::NONE),
-            1 => Some(SENSE6_A::RISE),
-            2 => Some(SENSE6_A::FALL),
-            3 => Some(SENSE6_A::BOTH),
-            4 => Some(SENSE6_A::HIGH),
-            5 => Some(SENSE6_A::LOW),
+            0 => Some(Sense6select::None),
+            1 => Some(Sense6select::Rise),
+            2 => Some(Sense6select::Fall),
+            3 => Some(Sense6select::Both),
+            4 => Some(Sense6select::High),
+            5 => Some(Sense6select::Low),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NONE`"]
+    #[doc = "No detection"]
     #[inline(always)]
     pub fn is_none(&self) -> bool {
-        **self == SENSE6_A::NONE
+        *self == Sense6select::None
     }
-    #[doc = "Checks if the value of the field is `RISE`"]
+    #[doc = "Rising edge detection"]
     #[inline(always)]
     pub fn is_rise(&self) -> bool {
-        **self == SENSE6_A::RISE
+        *self == Sense6select::Rise
     }
-    #[doc = "Checks if the value of the field is `FALL`"]
+    #[doc = "Falling edge detection"]
     #[inline(always)]
     pub fn is_fall(&self) -> bool {
-        **self == SENSE6_A::FALL
+        *self == Sense6select::Fall
     }
-    #[doc = "Checks if the value of the field is `BOTH`"]
+    #[doc = "Both edges detection"]
     #[inline(always)]
     pub fn is_both(&self) -> bool {
-        **self == SENSE6_A::BOTH
+        *self == Sense6select::Both
     }
-    #[doc = "Checks if the value of the field is `HIGH`"]
+    #[doc = "High level detection"]
     #[inline(always)]
     pub fn is_high(&self) -> bool {
-        **self == SENSE6_A::HIGH
+        *self == Sense6select::High
     }
-    #[doc = "Checks if the value of the field is `LOW`"]
+    #[doc = "Low level detection"]
     #[inline(always)]
     pub fn is_low(&self) -> bool {
-        **self == SENSE6_A::LOW
-    }
-}
-impl core::ops::Deref for SENSE6_R {
-    type Target = crate::FieldReader<u8, SENSE6_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Sense6select::Low
     }
 }
 #[doc = "Field `SENSE6` writer - Input Sense Configuration 6"]
-pub struct SENSE6_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SENSE6_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SENSE6_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
+pub type Sense6W<'a, REG> = crate::FieldWriter<'a, REG, 3, Sense6select>;
+impl<'a, REG> Sense6W<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
     #[doc = "No detection"]
     #[inline(always)]
-    pub fn none(self) -> &'a mut W {
-        self.variant(SENSE6_A::NONE)
+    pub fn none(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense6select::None)
     }
     #[doc = "Rising edge detection"]
     #[inline(always)]
-    pub fn rise(self) -> &'a mut W {
-        self.variant(SENSE6_A::RISE)
+    pub fn rise(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense6select::Rise)
     }
     #[doc = "Falling edge detection"]
     #[inline(always)]
-    pub fn fall(self) -> &'a mut W {
-        self.variant(SENSE6_A::FALL)
+    pub fn fall(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense6select::Fall)
     }
     #[doc = "Both edges detection"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(SENSE6_A::BOTH)
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense6select::Both)
     }
     #[doc = "High level detection"]
     #[inline(always)]
-    pub fn high(self) -> &'a mut W {
-        self.variant(SENSE6_A::HIGH)
+    pub fn high(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense6select::High)
     }
     #[doc = "Low level detection"]
     #[inline(always)]
-    pub fn low(self) -> &'a mut W {
-        self.variant(SENSE6_A::LOW)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 24)) | ((value as u32 & 0x07) << 24);
-        self.w
+    pub fn low(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense6select::Low)
     }
 }
 #[doc = "Field `FILTEN6` reader - Filter Enable 6"]
-pub struct FILTEN6_R(crate::FieldReader<bool, bool>);
-impl FILTEN6_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FILTEN6_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FILTEN6_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Filten6R = crate::BitReader;
 #[doc = "Field `FILTEN6` writer - Filter Enable 6"]
-pub struct FILTEN6_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FILTEN6_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 27)) | ((value as u32 & 0x01) << 27);
-        self.w
-    }
-}
+pub type Filten6W<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Input Sense Configuration 7\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SENSE7_A {
+pub enum Sense7select {
     #[doc = "0: No detection"]
-    NONE = 0,
+    None = 0,
     #[doc = "1: Rising edge detection"]
-    RISE = 1,
+    Rise = 1,
     #[doc = "2: Falling edge detection"]
-    FALL = 2,
+    Fall = 2,
     #[doc = "3: Both edges detection"]
-    BOTH = 3,
+    Both = 3,
     #[doc = "4: High level detection"]
-    HIGH = 4,
+    High = 4,
     #[doc = "5: Low level detection"]
-    LOW = 5,
+    Low = 5,
 }
-impl From<SENSE7_A> for u8 {
+impl From<Sense7select> for u8 {
     #[inline(always)]
-    fn from(variant: SENSE7_A) -> Self {
+    fn from(variant: Sense7select) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sense7select {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sense7select {}
 #[doc = "Field `SENSE7` reader - Input Sense Configuration 7"]
-pub struct SENSE7_R(crate::FieldReader<u8, SENSE7_A>);
-impl SENSE7_R {
+pub type Sense7R = crate::FieldReader<Sense7select>;
+impl Sense7R {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SENSE7_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SENSE7_A> {
+    pub const fn variant(&self) -> Option<Sense7select> {
         match self.bits {
-            0 => Some(SENSE7_A::NONE),
-            1 => Some(SENSE7_A::RISE),
-            2 => Some(SENSE7_A::FALL),
-            3 => Some(SENSE7_A::BOTH),
-            4 => Some(SENSE7_A::HIGH),
-            5 => Some(SENSE7_A::LOW),
+            0 => Some(Sense7select::None),
+            1 => Some(Sense7select::Rise),
+            2 => Some(Sense7select::Fall),
+            3 => Some(Sense7select::Both),
+            4 => Some(Sense7select::High),
+            5 => Some(Sense7select::Low),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NONE`"]
-    #[inline(always)]
-    pub fn is_none(&self) -> bool {
-        **self == SENSE7_A::NONE
-    }
-    #[doc = "Checks if the value of the field is `RISE`"]
-    #[inline(always)]
-    pub fn is_rise(&self) -> bool {
-        **self == SENSE7_A::RISE
-    }
-    #[doc = "Checks if the value of the field is `FALL`"]
-    #[inline(always)]
-    pub fn is_fall(&self) -> bool {
-        **self == SENSE7_A::FALL
-    }
-    #[doc = "Checks if the value of the field is `BOTH`"]
-    #[inline(always)]
-    pub fn is_both(&self) -> bool {
-        **self == SENSE7_A::BOTH
-    }
-    #[doc = "Checks if the value of the field is `HIGH`"]
-    #[inline(always)]
-    pub fn is_high(&self) -> bool {
-        **self == SENSE7_A::HIGH
-    }
-    #[doc = "Checks if the value of the field is `LOW`"]
-    #[inline(always)]
-    pub fn is_low(&self) -> bool {
-        **self == SENSE7_A::LOW
-    }
-}
-impl core::ops::Deref for SENSE7_R {
-    type Target = crate::FieldReader<u8, SENSE7_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `SENSE7` writer - Input Sense Configuration 7"]
-pub struct SENSE7_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SENSE7_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SENSE7_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
     #[doc = "No detection"]
     #[inline(always)]
-    pub fn none(self) -> &'a mut W {
-        self.variant(SENSE7_A::NONE)
+    pub fn is_none(&self) -> bool {
+        *self == Sense7select::None
     }
     #[doc = "Rising edge detection"]
     #[inline(always)]
-    pub fn rise(self) -> &'a mut W {
-        self.variant(SENSE7_A::RISE)
+    pub fn is_rise(&self) -> bool {
+        *self == Sense7select::Rise
     }
     #[doc = "Falling edge detection"]
     #[inline(always)]
-    pub fn fall(self) -> &'a mut W {
-        self.variant(SENSE7_A::FALL)
+    pub fn is_fall(&self) -> bool {
+        *self == Sense7select::Fall
     }
     #[doc = "Both edges detection"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(SENSE7_A::BOTH)
+    pub fn is_both(&self) -> bool {
+        *self == Sense7select::Both
     }
     #[doc = "High level detection"]
     #[inline(always)]
-    pub fn high(self) -> &'a mut W {
-        self.variant(SENSE7_A::HIGH)
+    pub fn is_high(&self) -> bool {
+        *self == Sense7select::High
     }
     #[doc = "Low level detection"]
     #[inline(always)]
-    pub fn low(self) -> &'a mut W {
-        self.variant(SENSE7_A::LOW)
+    pub fn is_low(&self) -> bool {
+        *self == Sense7select::Low
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `SENSE7` writer - Input Sense Configuration 7"]
+pub type Sense7W<'a, REG> = crate::FieldWriter<'a, REG, 3, Sense7select>;
+impl<'a, REG> Sense7W<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "No detection"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 28)) | ((value as u32 & 0x07) << 28);
-        self.w
+    pub fn none(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense7select::None)
+    }
+    #[doc = "Rising edge detection"]
+    #[inline(always)]
+    pub fn rise(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense7select::Rise)
+    }
+    #[doc = "Falling edge detection"]
+    #[inline(always)]
+    pub fn fall(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense7select::Fall)
+    }
+    #[doc = "Both edges detection"]
+    #[inline(always)]
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense7select::Both)
+    }
+    #[doc = "High level detection"]
+    #[inline(always)]
+    pub fn high(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense7select::High)
+    }
+    #[doc = "Low level detection"]
+    #[inline(always)]
+    pub fn low(self) -> &'a mut crate::W<REG> {
+        self.variant(Sense7select::Low)
     }
 }
 #[doc = "Field `FILTEN7` reader - Filter Enable 7"]
-pub struct FILTEN7_R(crate::FieldReader<bool, bool>);
-impl FILTEN7_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FILTEN7_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FILTEN7_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Filten7R = crate::BitReader;
 #[doc = "Field `FILTEN7` writer - Filter Enable 7"]
-pub struct FILTEN7_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FILTEN7_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 31)) | ((value as u32 & 0x01) << 31);
-        self.w
-    }
-}
+pub type Filten7W<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bits 0:2 - Input Sense Configuration 0"]
     #[inline(always)]
-    pub fn sense0(&self) -> SENSE0_R {
-        SENSE0_R::new((self.bits & 0x07) as u8)
+    pub fn sense0(&self) -> Sense0R {
+        Sense0R::new((self.bits & 7) as u8)
     }
     #[doc = "Bit 3 - Filter Enable 0"]
     #[inline(always)]
-    pub fn filten0(&self) -> FILTEN0_R {
-        FILTEN0_R::new(((self.bits >> 3) & 0x01) != 0)
+    pub fn filten0(&self) -> Filten0R {
+        Filten0R::new(((self.bits >> 3) & 1) != 0)
     }
     #[doc = "Bits 4:6 - Input Sense Configuration 1"]
     #[inline(always)]
-    pub fn sense1(&self) -> SENSE1_R {
-        SENSE1_R::new(((self.bits >> 4) & 0x07) as u8)
+    pub fn sense1(&self) -> Sense1R {
+        Sense1R::new(((self.bits >> 4) & 7) as u8)
     }
     #[doc = "Bit 7 - Filter Enable 1"]
     #[inline(always)]
-    pub fn filten1(&self) -> FILTEN1_R {
-        FILTEN1_R::new(((self.bits >> 7) & 0x01) != 0)
+    pub fn filten1(&self) -> Filten1R {
+        Filten1R::new(((self.bits >> 7) & 1) != 0)
     }
     #[doc = "Bits 8:10 - Input Sense Configuration 2"]
     #[inline(always)]
-    pub fn sense2(&self) -> SENSE2_R {
-        SENSE2_R::new(((self.bits >> 8) & 0x07) as u8)
+    pub fn sense2(&self) -> Sense2R {
+        Sense2R::new(((self.bits >> 8) & 7) as u8)
     }
     #[doc = "Bit 11 - Filter Enable 2"]
     #[inline(always)]
-    pub fn filten2(&self) -> FILTEN2_R {
-        FILTEN2_R::new(((self.bits >> 11) & 0x01) != 0)
+    pub fn filten2(&self) -> Filten2R {
+        Filten2R::new(((self.bits >> 11) & 1) != 0)
     }
     #[doc = "Bits 12:14 - Input Sense Configuration 3"]
     #[inline(always)]
-    pub fn sense3(&self) -> SENSE3_R {
-        SENSE3_R::new(((self.bits >> 12) & 0x07) as u8)
+    pub fn sense3(&self) -> Sense3R {
+        Sense3R::new(((self.bits >> 12) & 7) as u8)
     }
     #[doc = "Bit 15 - Filter Enable 3"]
     #[inline(always)]
-    pub fn filten3(&self) -> FILTEN3_R {
-        FILTEN3_R::new(((self.bits >> 15) & 0x01) != 0)
+    pub fn filten3(&self) -> Filten3R {
+        Filten3R::new(((self.bits >> 15) & 1) != 0)
     }
     #[doc = "Bits 16:18 - Input Sense Configuration 4"]
     #[inline(always)]
-    pub fn sense4(&self) -> SENSE4_R {
-        SENSE4_R::new(((self.bits >> 16) & 0x07) as u8)
+    pub fn sense4(&self) -> Sense4R {
+        Sense4R::new(((self.bits >> 16) & 7) as u8)
     }
     #[doc = "Bit 19 - Filter Enable 4"]
     #[inline(always)]
-    pub fn filten4(&self) -> FILTEN4_R {
-        FILTEN4_R::new(((self.bits >> 19) & 0x01) != 0)
+    pub fn filten4(&self) -> Filten4R {
+        Filten4R::new(((self.bits >> 19) & 1) != 0)
     }
     #[doc = "Bits 20:22 - Input Sense Configuration 5"]
     #[inline(always)]
-    pub fn sense5(&self) -> SENSE5_R {
-        SENSE5_R::new(((self.bits >> 20) & 0x07) as u8)
+    pub fn sense5(&self) -> Sense5R {
+        Sense5R::new(((self.bits >> 20) & 7) as u8)
     }
     #[doc = "Bit 23 - Filter Enable 5"]
     #[inline(always)]
-    pub fn filten5(&self) -> FILTEN5_R {
-        FILTEN5_R::new(((self.bits >> 23) & 0x01) != 0)
+    pub fn filten5(&self) -> Filten5R {
+        Filten5R::new(((self.bits >> 23) & 1) != 0)
     }
     #[doc = "Bits 24:26 - Input Sense Configuration 6"]
     #[inline(always)]
-    pub fn sense6(&self) -> SENSE6_R {
-        SENSE6_R::new(((self.bits >> 24) & 0x07) as u8)
+    pub fn sense6(&self) -> Sense6R {
+        Sense6R::new(((self.bits >> 24) & 7) as u8)
     }
     #[doc = "Bit 27 - Filter Enable 6"]
     #[inline(always)]
-    pub fn filten6(&self) -> FILTEN6_R {
-        FILTEN6_R::new(((self.bits >> 27) & 0x01) != 0)
+    pub fn filten6(&self) -> Filten6R {
+        Filten6R::new(((self.bits >> 27) & 1) != 0)
     }
     #[doc = "Bits 28:30 - Input Sense Configuration 7"]
     #[inline(always)]
-    pub fn sense7(&self) -> SENSE7_R {
-        SENSE7_R::new(((self.bits >> 28) & 0x07) as u8)
+    pub fn sense7(&self) -> Sense7R {
+        Sense7R::new(((self.bits >> 28) & 7) as u8)
     }
     #[doc = "Bit 31 - Filter Enable 7"]
     #[inline(always)]
-    pub fn filten7(&self) -> FILTEN7_R {
-        FILTEN7_R::new(((self.bits >> 31) & 0x01) != 0)
+    pub fn filten7(&self) -> Filten7R {
+        Filten7R::new(((self.bits >> 31) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bits 0:2 - Input Sense Configuration 0"]
     #[inline(always)]
-    pub fn sense0(&mut self) -> SENSE0_W {
-        SENSE0_W { w: self }
+    #[must_use]
+    pub fn sense0(&mut self) -> Sense0W<ConfigSpec> {
+        Sense0W::new(self, 0)
     }
     #[doc = "Bit 3 - Filter Enable 0"]
     #[inline(always)]
-    pub fn filten0(&mut self) -> FILTEN0_W {
-        FILTEN0_W { w: self }
+    #[must_use]
+    pub fn filten0(&mut self) -> Filten0W<ConfigSpec> {
+        Filten0W::new(self, 3)
     }
     #[doc = "Bits 4:6 - Input Sense Configuration 1"]
     #[inline(always)]
-    pub fn sense1(&mut self) -> SENSE1_W {
-        SENSE1_W { w: self }
+    #[must_use]
+    pub fn sense1(&mut self) -> Sense1W<ConfigSpec> {
+        Sense1W::new(self, 4)
     }
     #[doc = "Bit 7 - Filter Enable 1"]
     #[inline(always)]
-    pub fn filten1(&mut self) -> FILTEN1_W {
-        FILTEN1_W { w: self }
+    #[must_use]
+    pub fn filten1(&mut self) -> Filten1W<ConfigSpec> {
+        Filten1W::new(self, 7)
     }
     #[doc = "Bits 8:10 - Input Sense Configuration 2"]
     #[inline(always)]
-    pub fn sense2(&mut self) -> SENSE2_W {
-        SENSE2_W { w: self }
+    #[must_use]
+    pub fn sense2(&mut self) -> Sense2W<ConfigSpec> {
+        Sense2W::new(self, 8)
     }
     #[doc = "Bit 11 - Filter Enable 2"]
     #[inline(always)]
-    pub fn filten2(&mut self) -> FILTEN2_W {
-        FILTEN2_W { w: self }
+    #[must_use]
+    pub fn filten2(&mut self) -> Filten2W<ConfigSpec> {
+        Filten2W::new(self, 11)
     }
     #[doc = "Bits 12:14 - Input Sense Configuration 3"]
     #[inline(always)]
-    pub fn sense3(&mut self) -> SENSE3_W {
-        SENSE3_W { w: self }
+    #[must_use]
+    pub fn sense3(&mut self) -> Sense3W<ConfigSpec> {
+        Sense3W::new(self, 12)
     }
     #[doc = "Bit 15 - Filter Enable 3"]
     #[inline(always)]
-    pub fn filten3(&mut self) -> FILTEN3_W {
-        FILTEN3_W { w: self }
+    #[must_use]
+    pub fn filten3(&mut self) -> Filten3W<ConfigSpec> {
+        Filten3W::new(self, 15)
     }
     #[doc = "Bits 16:18 - Input Sense Configuration 4"]
     #[inline(always)]
-    pub fn sense4(&mut self) -> SENSE4_W {
-        SENSE4_W { w: self }
+    #[must_use]
+    pub fn sense4(&mut self) -> Sense4W<ConfigSpec> {
+        Sense4W::new(self, 16)
     }
     #[doc = "Bit 19 - Filter Enable 4"]
     #[inline(always)]
-    pub fn filten4(&mut self) -> FILTEN4_W {
-        FILTEN4_W { w: self }
+    #[must_use]
+    pub fn filten4(&mut self) -> Filten4W<ConfigSpec> {
+        Filten4W::new(self, 19)
     }
     #[doc = "Bits 20:22 - Input Sense Configuration 5"]
     #[inline(always)]
-    pub fn sense5(&mut self) -> SENSE5_W {
-        SENSE5_W { w: self }
+    #[must_use]
+    pub fn sense5(&mut self) -> Sense5W<ConfigSpec> {
+        Sense5W::new(self, 20)
     }
     #[doc = "Bit 23 - Filter Enable 5"]
     #[inline(always)]
-    pub fn filten5(&mut self) -> FILTEN5_W {
-        FILTEN5_W { w: self }
+    #[must_use]
+    pub fn filten5(&mut self) -> Filten5W<ConfigSpec> {
+        Filten5W::new(self, 23)
     }
     #[doc = "Bits 24:26 - Input Sense Configuration 6"]
     #[inline(always)]
-    pub fn sense6(&mut self) -> SENSE6_W {
-        SENSE6_W { w: self }
+    #[must_use]
+    pub fn sense6(&mut self) -> Sense6W<ConfigSpec> {
+        Sense6W::new(self, 24)
     }
     #[doc = "Bit 27 - Filter Enable 6"]
     #[inline(always)]
-    pub fn filten6(&mut self) -> FILTEN6_W {
-        FILTEN6_W { w: self }
+    #[must_use]
+    pub fn filten6(&mut self) -> Filten6W<ConfigSpec> {
+        Filten6W::new(self, 27)
     }
     #[doc = "Bits 28:30 - Input Sense Configuration 7"]
     #[inline(always)]
-    pub fn sense7(&mut self) -> SENSE7_W {
-        SENSE7_W { w: self }
+    #[must_use]
+    pub fn sense7(&mut self) -> Sense7W<ConfigSpec> {
+        Sense7W::new(self, 28)
     }
     #[doc = "Bit 31 - Filter Enable 7"]
     #[inline(always)]
-    pub fn filten7(&mut self) -> FILTEN7_W {
-        FILTEN7_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn filten7(&mut self) -> Filten7W<ConfigSpec> {
+        Filten7W::new(self, 31)
     }
 }
-#[doc = "External Interrupt Sense Configuration\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [config](index.html) module"]
-pub struct CONFIG_SPEC;
-impl crate::RegisterSpec for CONFIG_SPEC {
+#[doc = "External Interrupt Sense Configuration\n\nYou can [`read`](crate::Reg::read) this register and get [`config::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`config::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct ConfigSpec;
+impl crate::RegisterSpec for ConfigSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [config::R](R) reader structure"]
-impl crate::Readable for CONFIG_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [config::W](W) writer structure"]
-impl crate::Writable for CONFIG_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`config::R`](R) reader structure"]
+impl crate::Readable for ConfigSpec {}
+#[doc = "`write(|w| ..)` method takes [`config::W`](W) writer structure"]
+impl crate::Writable for ConfigSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets CONFIG[%s]
 to value 0"]
-impl crate::Resettable for CONFIG_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for ConfigSpec {
+    const RESET_VALUE: u32 = 0;
 }

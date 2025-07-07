@@ -1,31 +1,18 @@
 #[doc = "Register `ENTRY1` reader"]
-pub struct R(crate::R<ENTRY1_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<ENTRY1_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+pub type R = crate::R<Entry1Spec>;
+impl core::fmt::Debug for R {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        write!(f, "{}", self.bits())
     }
 }
-impl From<crate::R<ENTRY1_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<ENTRY1_SPEC>) -> Self {
-        R(reader)
-    }
-}
-#[doc = "CoreSight ROM Table Entry 1\n\nThis register you can [`read`](crate::generic::Reg::read). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [entry1](index.html) module"]
-pub struct ENTRY1_SPEC;
-impl crate::RegisterSpec for ENTRY1_SPEC {
+#[doc = "CoreSight ROM Table Entry 1\n\nYou can [`read`](crate::Reg::read) this register and get [`entry1::R`](R). See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct Entry1Spec;
+impl crate::RegisterSpec for Entry1Spec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [entry1::R](R) reader structure"]
-impl crate::Readable for ENTRY1_SPEC {
-    type Reader = R;
-}
+#[doc = "`read()` method returns [`entry1::R`](R) reader structure"]
+impl crate::Readable for Entry1Spec {}
 #[doc = "`reset()` method sets ENTRY1 to value 0x5002"]
-impl crate::Resettable for ENTRY1_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0x5002
-    }
+impl crate::Resettable for Entry1Spec {
+    const RESET_VALUE: u32 = 0x5002;
 }

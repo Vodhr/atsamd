@@ -1,31 +1,18 @@
 #[doc = "Register `LOCKSTATUS` reader"]
-pub struct R(crate::R<LOCKSTATUS_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<LOCKSTATUS_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+pub type R = crate::R<LockstatusSpec>;
+impl core::fmt::Debug for R {
+    fn fmt(&self, f: &mut core::fmt::Formatter) -> core::fmt::Result {
+        write!(f, "{}", self.bits())
     }
 }
-impl From<crate::R<LOCKSTATUS_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<LOCKSTATUS_SPEC>) -> Self {
-        R(reader)
-    }
-}
-#[doc = "MTB Lock Status\n\nThis register you can [`read`](crate::generic::Reg::read). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [lockstatus](index.html) module"]
-pub struct LOCKSTATUS_SPEC;
-impl crate::RegisterSpec for LOCKSTATUS_SPEC {
+#[doc = "MTB Lock Status\n\nYou can [`read`](crate::Reg::read) this register and get [`lockstatus::R`](R). See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct LockstatusSpec;
+impl crate::RegisterSpec for LockstatusSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [lockstatus::R](R) reader structure"]
-impl crate::Readable for LOCKSTATUS_SPEC {
-    type Reader = R;
-}
+#[doc = "`read()` method returns [`lockstatus::R`](R) reader structure"]
+impl crate::Readable for LockstatusSpec {}
 #[doc = "`reset()` method sets LOCKSTATUS to value 0"]
-impl crate::Resettable for LOCKSTATUS_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for LockstatusSpec {
+    const RESET_VALUE: u32 = 0;
 }

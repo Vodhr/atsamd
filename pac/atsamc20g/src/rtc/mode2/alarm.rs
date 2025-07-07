@@ -1,337 +1,171 @@
 #[doc = "Register `ALARM` reader"]
-pub struct R(crate::R<ALARM_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<ALARM_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<ALARM_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<ALARM_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<AlarmSpec>;
 #[doc = "Register `ALARM` writer"]
-pub struct W(crate::W<ALARM_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<ALARM_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<ALARM_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<ALARM_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<AlarmSpec>;
 #[doc = "Field `SECOND` reader - Second"]
-pub struct SECOND_R(crate::FieldReader<u8, u8>);
-impl SECOND_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SECOND_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for SECOND_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type SecondR = crate::FieldReader;
 #[doc = "Field `SECOND` writer - Second"]
-pub struct SECOND_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SECOND_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x3f) | (value as u32 & 0x3f);
-        self.w
-    }
-}
+pub type SecondW<'a, REG> = crate::FieldWriter<'a, REG, 6>;
 #[doc = "Field `MINUTE` reader - Minute"]
-pub struct MINUTE_R(crate::FieldReader<u8, u8>);
-impl MINUTE_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        MINUTE_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for MINUTE_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type MinuteR = crate::FieldReader;
 #[doc = "Field `MINUTE` writer - Minute"]
-pub struct MINUTE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> MINUTE_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x3f << 6)) | ((value as u32 & 0x3f) << 6);
-        self.w
-    }
-}
+pub type MinuteW<'a, REG> = crate::FieldWriter<'a, REG, 6>;
 #[doc = "Hour\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum HOUR_A {
+pub enum Hourselect {
     #[doc = "0: Morning hour"]
-    AM = 0,
+    Am = 0,
     #[doc = "16: Afternoon hour"]
-    PM = 16,
+    Pm = 16,
 }
-impl From<HOUR_A> for u8 {
+impl From<Hourselect> for u8 {
     #[inline(always)]
-    fn from(variant: HOUR_A) -> Self {
+    fn from(variant: Hourselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Hourselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Hourselect {}
 #[doc = "Field `HOUR` reader - Hour"]
-pub struct HOUR_R(crate::FieldReader<u8, HOUR_A>);
-impl HOUR_R {
+pub type HourR = crate::FieldReader<Hourselect>;
+impl HourR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        HOUR_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<HOUR_A> {
+    pub const fn variant(&self) -> Option<Hourselect> {
         match self.bits {
-            0 => Some(HOUR_A::AM),
-            16 => Some(HOUR_A::PM),
+            0 => Some(Hourselect::Am),
+            16 => Some(Hourselect::Pm),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `AM`"]
-    #[inline(always)]
-    pub fn is_am(&self) -> bool {
-        **self == HOUR_A::AM
-    }
-    #[doc = "Checks if the value of the field is `PM`"]
-    #[inline(always)]
-    pub fn is_pm(&self) -> bool {
-        **self == HOUR_A::PM
-    }
-}
-impl core::ops::Deref for HOUR_R {
-    type Target = crate::FieldReader<u8, HOUR_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `HOUR` writer - Hour"]
-pub struct HOUR_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> HOUR_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: HOUR_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
     #[doc = "Morning hour"]
     #[inline(always)]
-    pub fn am(self) -> &'a mut W {
-        self.variant(HOUR_A::AM)
+    pub fn is_am(&self) -> bool {
+        *self == Hourselect::Am
     }
     #[doc = "Afternoon hour"]
     #[inline(always)]
-    pub fn pm(self) -> &'a mut W {
-        self.variant(HOUR_A::PM)
+    pub fn is_pm(&self) -> bool {
+        *self == Hourselect::Pm
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `HOUR` writer - Hour"]
+pub type HourW<'a, REG> = crate::FieldWriter<'a, REG, 5, Hourselect>;
+impl<'a, REG> HourW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "Morning hour"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x1f << 12)) | ((value as u32 & 0x1f) << 12);
-        self.w
+    pub fn am(self) -> &'a mut crate::W<REG> {
+        self.variant(Hourselect::Am)
+    }
+    #[doc = "Afternoon hour"]
+    #[inline(always)]
+    pub fn pm(self) -> &'a mut crate::W<REG> {
+        self.variant(Hourselect::Pm)
     }
 }
 #[doc = "Field `DAY` reader - Day"]
-pub struct DAY_R(crate::FieldReader<u8, u8>);
-impl DAY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        DAY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for DAY_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type DayR = crate::FieldReader;
 #[doc = "Field `DAY` writer - Day"]
-pub struct DAY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> DAY_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x1f << 17)) | ((value as u32 & 0x1f) << 17);
-        self.w
-    }
-}
+pub type DayW<'a, REG> = crate::FieldWriter<'a, REG, 5>;
 #[doc = "Field `MONTH` reader - Month"]
-pub struct MONTH_R(crate::FieldReader<u8, u8>);
-impl MONTH_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        MONTH_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for MONTH_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type MonthR = crate::FieldReader;
 #[doc = "Field `MONTH` writer - Month"]
-pub struct MONTH_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> MONTH_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x0f << 22)) | ((value as u32 & 0x0f) << 22);
-        self.w
-    }
-}
+pub type MonthW<'a, REG> = crate::FieldWriter<'a, REG, 4>;
 #[doc = "Field `YEAR` reader - Year"]
-pub struct YEAR_R(crate::FieldReader<u8, u8>);
-impl YEAR_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        YEAR_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for YEAR_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type YearR = crate::FieldReader;
 #[doc = "Field `YEAR` writer - Year"]
-pub struct YEAR_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> YEAR_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x3f << 26)) | ((value as u32 & 0x3f) << 26);
-        self.w
-    }
-}
+pub type YearW<'a, REG> = crate::FieldWriter<'a, REG, 6>;
 impl R {
     #[doc = "Bits 0:5 - Second"]
     #[inline(always)]
-    pub fn second(&self) -> SECOND_R {
-        SECOND_R::new((self.bits & 0x3f) as u8)
+    pub fn second(&self) -> SecondR {
+        SecondR::new((self.bits & 0x3f) as u8)
     }
     #[doc = "Bits 6:11 - Minute"]
     #[inline(always)]
-    pub fn minute(&self) -> MINUTE_R {
-        MINUTE_R::new(((self.bits >> 6) & 0x3f) as u8)
+    pub fn minute(&self) -> MinuteR {
+        MinuteR::new(((self.bits >> 6) & 0x3f) as u8)
     }
     #[doc = "Bits 12:16 - Hour"]
     #[inline(always)]
-    pub fn hour(&self) -> HOUR_R {
-        HOUR_R::new(((self.bits >> 12) & 0x1f) as u8)
+    pub fn hour(&self) -> HourR {
+        HourR::new(((self.bits >> 12) & 0x1f) as u8)
     }
     #[doc = "Bits 17:21 - Day"]
     #[inline(always)]
-    pub fn day(&self) -> DAY_R {
-        DAY_R::new(((self.bits >> 17) & 0x1f) as u8)
+    pub fn day(&self) -> DayR {
+        DayR::new(((self.bits >> 17) & 0x1f) as u8)
     }
     #[doc = "Bits 22:25 - Month"]
     #[inline(always)]
-    pub fn month(&self) -> MONTH_R {
-        MONTH_R::new(((self.bits >> 22) & 0x0f) as u8)
+    pub fn month(&self) -> MonthR {
+        MonthR::new(((self.bits >> 22) & 0x0f) as u8)
     }
     #[doc = "Bits 26:31 - Year"]
     #[inline(always)]
-    pub fn year(&self) -> YEAR_R {
-        YEAR_R::new(((self.bits >> 26) & 0x3f) as u8)
+    pub fn year(&self) -> YearR {
+        YearR::new(((self.bits >> 26) & 0x3f) as u8)
     }
 }
 impl W {
     #[doc = "Bits 0:5 - Second"]
     #[inline(always)]
-    pub fn second(&mut self) -> SECOND_W {
-        SECOND_W { w: self }
+    #[must_use]
+    pub fn second(&mut self) -> SecondW<AlarmSpec> {
+        SecondW::new(self, 0)
     }
     #[doc = "Bits 6:11 - Minute"]
     #[inline(always)]
-    pub fn minute(&mut self) -> MINUTE_W {
-        MINUTE_W { w: self }
+    #[must_use]
+    pub fn minute(&mut self) -> MinuteW<AlarmSpec> {
+        MinuteW::new(self, 6)
     }
     #[doc = "Bits 12:16 - Hour"]
     #[inline(always)]
-    pub fn hour(&mut self) -> HOUR_W {
-        HOUR_W { w: self }
+    #[must_use]
+    pub fn hour(&mut self) -> HourW<AlarmSpec> {
+        HourW::new(self, 12)
     }
     #[doc = "Bits 17:21 - Day"]
     #[inline(always)]
-    pub fn day(&mut self) -> DAY_W {
-        DAY_W { w: self }
+    #[must_use]
+    pub fn day(&mut self) -> DayW<AlarmSpec> {
+        DayW::new(self, 17)
     }
     #[doc = "Bits 22:25 - Month"]
     #[inline(always)]
-    pub fn month(&mut self) -> MONTH_W {
-        MONTH_W { w: self }
+    #[must_use]
+    pub fn month(&mut self) -> MonthW<AlarmSpec> {
+        MonthW::new(self, 22)
     }
     #[doc = "Bits 26:31 - Year"]
     #[inline(always)]
-    pub fn year(&mut self) -> YEAR_W {
-        YEAR_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn year(&mut self) -> YearW<AlarmSpec> {
+        YearW::new(self, 26)
     }
 }
-#[doc = "MODE2_ALARM Alarm n Value\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [alarm](index.html) module"]
-pub struct ALARM_SPEC;
-impl crate::RegisterSpec for ALARM_SPEC {
+#[doc = "MODE2_ALARM Alarm n Value\n\nYou can [`read`](crate::Reg::read) this register and get [`alarm::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`alarm::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct AlarmSpec;
+impl crate::RegisterSpec for AlarmSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [alarm::R](R) reader structure"]
-impl crate::Readable for ALARM_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [alarm::W](W) writer structure"]
-impl crate::Writable for ALARM_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`alarm::R`](R) reader structure"]
+impl crate::Readable for AlarmSpec {}
+#[doc = "`write(|w| ..)` method takes [`alarm::W`](W) writer structure"]
+impl crate::Writable for AlarmSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets ALARM to value 0"]
-impl crate::Resettable for ALARM_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for AlarmSpec {
+    const RESET_VALUE: u32 = 0;
 }

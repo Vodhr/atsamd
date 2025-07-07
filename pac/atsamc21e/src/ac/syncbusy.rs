@@ -1,173 +1,64 @@
 #[doc = "Register `SYNCBUSY` reader"]
-pub struct R(crate::R<SYNCBUSY_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<SYNCBUSY_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<SYNCBUSY_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<SYNCBUSY_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<SyncbusySpec>;
 #[doc = "Field `SWRST` reader - Software Reset Synchronization Busy"]
-pub struct SWRST_R(crate::FieldReader<bool, bool>);
-impl SWRST_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        SWRST_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for SWRST_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type SwrstR = crate::BitReader;
 #[doc = "Field `ENABLE` reader - Enable Synchronization Busy"]
-pub struct ENABLE_R(crate::FieldReader<bool, bool>);
-impl ENABLE_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ENABLE_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ENABLE_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type EnableR = crate::BitReader;
 #[doc = "Field `WINCTRL` reader - WINCTRL Synchronization Busy"]
-pub struct WINCTRL_R(crate::FieldReader<bool, bool>);
-impl WINCTRL_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        WINCTRL_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for WINCTRL_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type WinctrlR = crate::BitReader;
 #[doc = "Field `COMPCTRL0` reader - COMPCTRL 0 Synchronization Busy"]
-pub struct COMPCTRL0_R(crate::FieldReader<bool, bool>);
-impl COMPCTRL0_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        COMPCTRL0_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for COMPCTRL0_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Compctrl0R = crate::BitReader;
 #[doc = "Field `COMPCTRL1` reader - COMPCTRL 1 Synchronization Busy"]
-pub struct COMPCTRL1_R(crate::FieldReader<bool, bool>);
-impl COMPCTRL1_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        COMPCTRL1_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for COMPCTRL1_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Compctrl1R = crate::BitReader;
 #[doc = "Field `COMPCTRL2` reader - COMPCTRL 2 Synchronization Busy"]
-pub struct COMPCTRL2_R(crate::FieldReader<bool, bool>);
-impl COMPCTRL2_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        COMPCTRL2_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for COMPCTRL2_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Compctrl2R = crate::BitReader;
 #[doc = "Field `COMPCTRL3` reader - COMPCTRL 3 Synchronization Busy"]
-pub struct COMPCTRL3_R(crate::FieldReader<bool, bool>);
-impl COMPCTRL3_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        COMPCTRL3_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for COMPCTRL3_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Compctrl3R = crate::BitReader;
 impl R {
     #[doc = "Bit 0 - Software Reset Synchronization Busy"]
     #[inline(always)]
-    pub fn swrst(&self) -> SWRST_R {
-        SWRST_R::new((self.bits & 0x01) != 0)
+    pub fn swrst(&self) -> SwrstR {
+        SwrstR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - Enable Synchronization Busy"]
     #[inline(always)]
-    pub fn enable(&self) -> ENABLE_R {
-        ENABLE_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn enable(&self) -> EnableR {
+        EnableR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 2 - WINCTRL Synchronization Busy"]
     #[inline(always)]
-    pub fn winctrl(&self) -> WINCTRL_R {
-        WINCTRL_R::new(((self.bits >> 2) & 0x01) != 0)
+    pub fn winctrl(&self) -> WinctrlR {
+        WinctrlR::new(((self.bits >> 2) & 1) != 0)
     }
     #[doc = "Bit 3 - COMPCTRL 0 Synchronization Busy"]
     #[inline(always)]
-    pub fn compctrl0(&self) -> COMPCTRL0_R {
-        COMPCTRL0_R::new(((self.bits >> 3) & 0x01) != 0)
+    pub fn compctrl0(&self) -> Compctrl0R {
+        Compctrl0R::new(((self.bits >> 3) & 1) != 0)
     }
     #[doc = "Bit 4 - COMPCTRL 1 Synchronization Busy"]
     #[inline(always)]
-    pub fn compctrl1(&self) -> COMPCTRL1_R {
-        COMPCTRL1_R::new(((self.bits >> 4) & 0x01) != 0)
+    pub fn compctrl1(&self) -> Compctrl1R {
+        Compctrl1R::new(((self.bits >> 4) & 1) != 0)
     }
     #[doc = "Bit 5 - COMPCTRL 2 Synchronization Busy"]
     #[inline(always)]
-    pub fn compctrl2(&self) -> COMPCTRL2_R {
-        COMPCTRL2_R::new(((self.bits >> 5) & 0x01) != 0)
+    pub fn compctrl2(&self) -> Compctrl2R {
+        Compctrl2R::new(((self.bits >> 5) & 1) != 0)
     }
     #[doc = "Bit 6 - COMPCTRL 3 Synchronization Busy"]
     #[inline(always)]
-    pub fn compctrl3(&self) -> COMPCTRL3_R {
-        COMPCTRL3_R::new(((self.bits >> 6) & 0x01) != 0)
+    pub fn compctrl3(&self) -> Compctrl3R {
+        Compctrl3R::new(((self.bits >> 6) & 1) != 0)
     }
 }
-#[doc = "Synchronization Busy\n\nThis register you can [`read`](crate::generic::Reg::read). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [syncbusy](index.html) module"]
-pub struct SYNCBUSY_SPEC;
-impl crate::RegisterSpec for SYNCBUSY_SPEC {
+#[doc = "Synchronization Busy\n\nYou can [`read`](crate::Reg::read) this register and get [`syncbusy::R`](R). See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct SyncbusySpec;
+impl crate::RegisterSpec for SyncbusySpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [syncbusy::R](R) reader structure"]
-impl crate::Readable for SYNCBUSY_SPEC {
-    type Reader = R;
-}
+#[doc = "`read()` method returns [`syncbusy::R`](R) reader structure"]
+impl crate::Readable for SyncbusySpec {}
 #[doc = "`reset()` method sets SYNCBUSY to value 0"]
-impl crate::Resettable for SYNCBUSY_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for SyncbusySpec {
+    const RESET_VALUE: u32 = 0;
 }

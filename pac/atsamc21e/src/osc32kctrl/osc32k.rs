@@ -1,549 +1,279 @@
 #[doc = "Register `OSC32K` reader"]
-pub struct R(crate::R<OSC32K_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<OSC32K_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<OSC32K_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<OSC32K_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<Osc32kSpec>;
 #[doc = "Register `OSC32K` writer"]
-pub struct W(crate::W<OSC32K_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<OSC32K_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<OSC32K_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<OSC32K_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<Osc32kSpec>;
 #[doc = "Field `ENABLE` reader - Oscillator Enable"]
-pub struct ENABLE_R(crate::FieldReader<bool, bool>);
-impl ENABLE_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ENABLE_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ENABLE_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type EnableR = crate::BitReader;
 #[doc = "Field `ENABLE` writer - Oscillator Enable"]
-pub struct ENABLE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> ENABLE_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 1)) | ((value as u32 & 0x01) << 1);
-        self.w
-    }
-}
+pub type EnableW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `EN32K` reader - 32kHz Output Enable"]
-pub struct EN32K_R(crate::FieldReader<bool, bool>);
-impl EN32K_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        EN32K_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for EN32K_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type En32kR = crate::BitReader;
 #[doc = "Field `EN32K` writer - 32kHz Output Enable"]
-pub struct EN32K_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> EN32K_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 2)) | ((value as u32 & 0x01) << 2);
-        self.w
-    }
-}
+pub type En32kW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `EN1K` reader - 1kHz Output Enable"]
-pub struct EN1K_R(crate::FieldReader<bool, bool>);
-impl EN1K_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        EN1K_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for EN1K_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type En1kR = crate::BitReader;
 #[doc = "Field `EN1K` writer - 1kHz Output Enable"]
-pub struct EN1K_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> EN1K_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 3)) | ((value as u32 & 0x01) << 3);
-        self.w
-    }
-}
+pub type En1kW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `RUNSTDBY` reader - Run in Standby"]
-pub struct RUNSTDBY_R(crate::FieldReader<bool, bool>);
-impl RUNSTDBY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        RUNSTDBY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for RUNSTDBY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type RunstdbyR = crate::BitReader;
 #[doc = "Field `RUNSTDBY` writer - Run in Standby"]
-pub struct RUNSTDBY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> RUNSTDBY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 6)) | ((value as u32 & 0x01) << 6);
-        self.w
-    }
-}
+pub type RunstdbyW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `ONDEMAND` reader - On Demand Control"]
-pub struct ONDEMAND_R(crate::FieldReader<bool, bool>);
-impl ONDEMAND_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ONDEMAND_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ONDEMAND_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type OndemandR = crate::BitReader;
 #[doc = "Field `ONDEMAND` writer - On Demand Control"]
-pub struct ONDEMAND_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> ONDEMAND_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 7)) | ((value as u32 & 0x01) << 7);
-        self.w
-    }
-}
+pub type OndemandW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Oscillator Start-Up Time\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum STARTUP_A {
+pub enum Startupselect {
     #[doc = "0: 0.092 ms"]
-    CYCLE3 = 0,
+    Cycle3 = 0,
     #[doc = "1: 0.122 ms"]
-    CYCLE4 = 1,
+    Cycle4 = 1,
     #[doc = "2: 0.183 ms"]
-    CYCLE6 = 2,
+    Cycle6 = 2,
     #[doc = "3: 0.305 ms"]
-    CYCLE10 = 3,
+    Cycle10 = 3,
     #[doc = "4: 0.549 ms"]
-    CYCLE18 = 4,
+    Cycle18 = 4,
     #[doc = "5: 1.038 ms"]
-    CYCLE34 = 5,
+    Cycle34 = 5,
     #[doc = "6: 2.014 ms"]
-    CYCLE66 = 6,
+    Cycle66 = 6,
     #[doc = "7: 3.967 ms"]
-    CYCLE130 = 7,
+    Cycle130 = 7,
 }
-impl From<STARTUP_A> for u8 {
+impl From<Startupselect> for u8 {
     #[inline(always)]
-    fn from(variant: STARTUP_A) -> Self {
+    fn from(variant: Startupselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Startupselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Startupselect {}
 #[doc = "Field `STARTUP` reader - Oscillator Start-Up Time"]
-pub struct STARTUP_R(crate::FieldReader<u8, STARTUP_A>);
-impl STARTUP_R {
+pub type StartupR = crate::FieldReader<Startupselect>;
+impl StartupR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        STARTUP_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> STARTUP_A {
+    pub const fn variant(&self) -> Startupselect {
         match self.bits {
-            0 => STARTUP_A::CYCLE3,
-            1 => STARTUP_A::CYCLE4,
-            2 => STARTUP_A::CYCLE6,
-            3 => STARTUP_A::CYCLE10,
-            4 => STARTUP_A::CYCLE18,
-            5 => STARTUP_A::CYCLE34,
-            6 => STARTUP_A::CYCLE66,
-            7 => STARTUP_A::CYCLE130,
+            0 => Startupselect::Cycle3,
+            1 => Startupselect::Cycle4,
+            2 => Startupselect::Cycle6,
+            3 => Startupselect::Cycle10,
+            4 => Startupselect::Cycle18,
+            5 => Startupselect::Cycle34,
+            6 => Startupselect::Cycle66,
+            7 => Startupselect::Cycle130,
             _ => unreachable!(),
         }
     }
-    #[doc = "Checks if the value of the field is `CYCLE3`"]
-    #[inline(always)]
-    pub fn is_cycle3(&self) -> bool {
-        **self == STARTUP_A::CYCLE3
-    }
-    #[doc = "Checks if the value of the field is `CYCLE4`"]
-    #[inline(always)]
-    pub fn is_cycle4(&self) -> bool {
-        **self == STARTUP_A::CYCLE4
-    }
-    #[doc = "Checks if the value of the field is `CYCLE6`"]
-    #[inline(always)]
-    pub fn is_cycle6(&self) -> bool {
-        **self == STARTUP_A::CYCLE6
-    }
-    #[doc = "Checks if the value of the field is `CYCLE10`"]
-    #[inline(always)]
-    pub fn is_cycle10(&self) -> bool {
-        **self == STARTUP_A::CYCLE10
-    }
-    #[doc = "Checks if the value of the field is `CYCLE18`"]
-    #[inline(always)]
-    pub fn is_cycle18(&self) -> bool {
-        **self == STARTUP_A::CYCLE18
-    }
-    #[doc = "Checks if the value of the field is `CYCLE34`"]
-    #[inline(always)]
-    pub fn is_cycle34(&self) -> bool {
-        **self == STARTUP_A::CYCLE34
-    }
-    #[doc = "Checks if the value of the field is `CYCLE66`"]
-    #[inline(always)]
-    pub fn is_cycle66(&self) -> bool {
-        **self == STARTUP_A::CYCLE66
-    }
-    #[doc = "Checks if the value of the field is `CYCLE130`"]
-    #[inline(always)]
-    pub fn is_cycle130(&self) -> bool {
-        **self == STARTUP_A::CYCLE130
-    }
-}
-impl core::ops::Deref for STARTUP_R {
-    type Target = crate::FieldReader<u8, STARTUP_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `STARTUP` writer - Oscillator Start-Up Time"]
-pub struct STARTUP_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> STARTUP_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: STARTUP_A) -> &'a mut W {
-        self.bits(variant.into())
-    }
     #[doc = "0.092 ms"]
     #[inline(always)]
-    pub fn cycle3(self) -> &'a mut W {
-        self.variant(STARTUP_A::CYCLE3)
+    pub fn is_cycle3(&self) -> bool {
+        *self == Startupselect::Cycle3
     }
     #[doc = "0.122 ms"]
     #[inline(always)]
-    pub fn cycle4(self) -> &'a mut W {
-        self.variant(STARTUP_A::CYCLE4)
+    pub fn is_cycle4(&self) -> bool {
+        *self == Startupselect::Cycle4
     }
     #[doc = "0.183 ms"]
     #[inline(always)]
-    pub fn cycle6(self) -> &'a mut W {
-        self.variant(STARTUP_A::CYCLE6)
+    pub fn is_cycle6(&self) -> bool {
+        *self == Startupselect::Cycle6
     }
     #[doc = "0.305 ms"]
     #[inline(always)]
-    pub fn cycle10(self) -> &'a mut W {
-        self.variant(STARTUP_A::CYCLE10)
+    pub fn is_cycle10(&self) -> bool {
+        *self == Startupselect::Cycle10
     }
     #[doc = "0.549 ms"]
     #[inline(always)]
-    pub fn cycle18(self) -> &'a mut W {
-        self.variant(STARTUP_A::CYCLE18)
+    pub fn is_cycle18(&self) -> bool {
+        *self == Startupselect::Cycle18
     }
     #[doc = "1.038 ms"]
     #[inline(always)]
-    pub fn cycle34(self) -> &'a mut W {
-        self.variant(STARTUP_A::CYCLE34)
+    pub fn is_cycle34(&self) -> bool {
+        *self == Startupselect::Cycle34
     }
     #[doc = "2.014 ms"]
     #[inline(always)]
-    pub fn cycle66(self) -> &'a mut W {
-        self.variant(STARTUP_A::CYCLE66)
+    pub fn is_cycle66(&self) -> bool {
+        *self == Startupselect::Cycle66
     }
     #[doc = "3.967 ms"]
     #[inline(always)]
-    pub fn cycle130(self) -> &'a mut W {
-        self.variant(STARTUP_A::CYCLE130)
+    pub fn is_cycle130(&self) -> bool {
+        *self == Startupselect::Cycle130
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `STARTUP` writer - Oscillator Start-Up Time"]
+pub type StartupW<'a, REG> = crate::FieldWriter<'a, REG, 3, Startupselect, crate::Safe>;
+impl<'a, REG> StartupW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "0.092 ms"]
     #[inline(always)]
-    pub fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 8)) | ((value as u32 & 0x07) << 8);
-        self.w
+    pub fn cycle3(self) -> &'a mut crate::W<REG> {
+        self.variant(Startupselect::Cycle3)
+    }
+    #[doc = "0.122 ms"]
+    #[inline(always)]
+    pub fn cycle4(self) -> &'a mut crate::W<REG> {
+        self.variant(Startupselect::Cycle4)
+    }
+    #[doc = "0.183 ms"]
+    #[inline(always)]
+    pub fn cycle6(self) -> &'a mut crate::W<REG> {
+        self.variant(Startupselect::Cycle6)
+    }
+    #[doc = "0.305 ms"]
+    #[inline(always)]
+    pub fn cycle10(self) -> &'a mut crate::W<REG> {
+        self.variant(Startupselect::Cycle10)
+    }
+    #[doc = "0.549 ms"]
+    #[inline(always)]
+    pub fn cycle18(self) -> &'a mut crate::W<REG> {
+        self.variant(Startupselect::Cycle18)
+    }
+    #[doc = "1.038 ms"]
+    #[inline(always)]
+    pub fn cycle34(self) -> &'a mut crate::W<REG> {
+        self.variant(Startupselect::Cycle34)
+    }
+    #[doc = "2.014 ms"]
+    #[inline(always)]
+    pub fn cycle66(self) -> &'a mut crate::W<REG> {
+        self.variant(Startupselect::Cycle66)
+    }
+    #[doc = "3.967 ms"]
+    #[inline(always)]
+    pub fn cycle130(self) -> &'a mut crate::W<REG> {
+        self.variant(Startupselect::Cycle130)
     }
 }
 #[doc = "Field `WRTLOCK` reader - Write Lock"]
-pub struct WRTLOCK_R(crate::FieldReader<bool, bool>);
-impl WRTLOCK_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        WRTLOCK_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for WRTLOCK_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type WrtlockR = crate::BitReader;
 #[doc = "Field `WRTLOCK` writer - Write Lock"]
-pub struct WRTLOCK_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> WRTLOCK_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 12)) | ((value as u32 & 0x01) << 12);
-        self.w
-    }
-}
+pub type WrtlockW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `CALIB` reader - Oscillator Calibration"]
-pub struct CALIB_R(crate::FieldReader<u8, u8>);
-impl CALIB_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        CALIB_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CALIB_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CalibR = crate::FieldReader;
 #[doc = "Field `CALIB` writer - Oscillator Calibration"]
-pub struct CALIB_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CALIB_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x7f << 16)) | ((value as u32 & 0x7f) << 16);
-        self.w
-    }
-}
+pub type CalibW<'a, REG> = crate::FieldWriter<'a, REG, 7>;
 impl R {
     #[doc = "Bit 1 - Oscillator Enable"]
     #[inline(always)]
-    pub fn enable(&self) -> ENABLE_R {
-        ENABLE_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn enable(&self) -> EnableR {
+        EnableR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 2 - 32kHz Output Enable"]
     #[inline(always)]
-    pub fn en32k(&self) -> EN32K_R {
-        EN32K_R::new(((self.bits >> 2) & 0x01) != 0)
+    pub fn en32k(&self) -> En32kR {
+        En32kR::new(((self.bits >> 2) & 1) != 0)
     }
     #[doc = "Bit 3 - 1kHz Output Enable"]
     #[inline(always)]
-    pub fn en1k(&self) -> EN1K_R {
-        EN1K_R::new(((self.bits >> 3) & 0x01) != 0)
+    pub fn en1k(&self) -> En1kR {
+        En1kR::new(((self.bits >> 3) & 1) != 0)
     }
     #[doc = "Bit 6 - Run in Standby"]
     #[inline(always)]
-    pub fn runstdby(&self) -> RUNSTDBY_R {
-        RUNSTDBY_R::new(((self.bits >> 6) & 0x01) != 0)
+    pub fn runstdby(&self) -> RunstdbyR {
+        RunstdbyR::new(((self.bits >> 6) & 1) != 0)
     }
     #[doc = "Bit 7 - On Demand Control"]
     #[inline(always)]
-    pub fn ondemand(&self) -> ONDEMAND_R {
-        ONDEMAND_R::new(((self.bits >> 7) & 0x01) != 0)
+    pub fn ondemand(&self) -> OndemandR {
+        OndemandR::new(((self.bits >> 7) & 1) != 0)
     }
     #[doc = "Bits 8:10 - Oscillator Start-Up Time"]
     #[inline(always)]
-    pub fn startup(&self) -> STARTUP_R {
-        STARTUP_R::new(((self.bits >> 8) & 0x07) as u8)
+    pub fn startup(&self) -> StartupR {
+        StartupR::new(((self.bits >> 8) & 7) as u8)
     }
     #[doc = "Bit 12 - Write Lock"]
     #[inline(always)]
-    pub fn wrtlock(&self) -> WRTLOCK_R {
-        WRTLOCK_R::new(((self.bits >> 12) & 0x01) != 0)
+    pub fn wrtlock(&self) -> WrtlockR {
+        WrtlockR::new(((self.bits >> 12) & 1) != 0)
     }
     #[doc = "Bits 16:22 - Oscillator Calibration"]
     #[inline(always)]
-    pub fn calib(&self) -> CALIB_R {
-        CALIB_R::new(((self.bits >> 16) & 0x7f) as u8)
+    pub fn calib(&self) -> CalibR {
+        CalibR::new(((self.bits >> 16) & 0x7f) as u8)
     }
 }
 impl W {
     #[doc = "Bit 1 - Oscillator Enable"]
     #[inline(always)]
-    pub fn enable(&mut self) -> ENABLE_W {
-        ENABLE_W { w: self }
+    #[must_use]
+    pub fn enable(&mut self) -> EnableW<Osc32kSpec> {
+        EnableW::new(self, 1)
     }
     #[doc = "Bit 2 - 32kHz Output Enable"]
     #[inline(always)]
-    pub fn en32k(&mut self) -> EN32K_W {
-        EN32K_W { w: self }
+    #[must_use]
+    pub fn en32k(&mut self) -> En32kW<Osc32kSpec> {
+        En32kW::new(self, 2)
     }
     #[doc = "Bit 3 - 1kHz Output Enable"]
     #[inline(always)]
-    pub fn en1k(&mut self) -> EN1K_W {
-        EN1K_W { w: self }
+    #[must_use]
+    pub fn en1k(&mut self) -> En1kW<Osc32kSpec> {
+        En1kW::new(self, 3)
     }
     #[doc = "Bit 6 - Run in Standby"]
     #[inline(always)]
-    pub fn runstdby(&mut self) -> RUNSTDBY_W {
-        RUNSTDBY_W { w: self }
+    #[must_use]
+    pub fn runstdby(&mut self) -> RunstdbyW<Osc32kSpec> {
+        RunstdbyW::new(self, 6)
     }
     #[doc = "Bit 7 - On Demand Control"]
     #[inline(always)]
-    pub fn ondemand(&mut self) -> ONDEMAND_W {
-        ONDEMAND_W { w: self }
+    #[must_use]
+    pub fn ondemand(&mut self) -> OndemandW<Osc32kSpec> {
+        OndemandW::new(self, 7)
     }
     #[doc = "Bits 8:10 - Oscillator Start-Up Time"]
     #[inline(always)]
-    pub fn startup(&mut self) -> STARTUP_W {
-        STARTUP_W { w: self }
+    #[must_use]
+    pub fn startup(&mut self) -> StartupW<Osc32kSpec> {
+        StartupW::new(self, 8)
     }
     #[doc = "Bit 12 - Write Lock"]
     #[inline(always)]
-    pub fn wrtlock(&mut self) -> WRTLOCK_W {
-        WRTLOCK_W { w: self }
+    #[must_use]
+    pub fn wrtlock(&mut self) -> WrtlockW<Osc32kSpec> {
+        WrtlockW::new(self, 12)
     }
     #[doc = "Bits 16:22 - Oscillator Calibration"]
     #[inline(always)]
-    pub fn calib(&mut self) -> CALIB_W {
-        CALIB_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn calib(&mut self) -> CalibW<Osc32kSpec> {
+        CalibW::new(self, 16)
     }
 }
-#[doc = "32kHz Internal Oscillator (OSC32K) Control\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [osc32k](index.html) module"]
-pub struct OSC32K_SPEC;
-impl crate::RegisterSpec for OSC32K_SPEC {
+#[doc = "32kHz Internal Oscillator (OSC32K) Control\n\nYou can [`read`](crate::Reg::read) this register and get [`osc32k::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`osc32k::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct Osc32kSpec;
+impl crate::RegisterSpec for Osc32kSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [osc32k::R](R) reader structure"]
-impl crate::Readable for OSC32K_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [osc32k::W](W) writer structure"]
-impl crate::Writable for OSC32K_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`osc32k::R`](R) reader structure"]
+impl crate::Readable for Osc32kSpec {}
+#[doc = "`write(|w| ..)` method takes [`osc32k::W`](W) writer structure"]
+impl crate::Writable for Osc32kSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets OSC32K to value 0x003f_0080"]
-impl crate::Resettable for OSC32K_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0x003f_0080
-    }
+impl crate::Resettable for Osc32kSpec {
+    const RESET_VALUE: u32 = 0x003f_0080;
 }

@@ -1,385 +1,130 @@
 #[doc = "Register `INTPEND` reader"]
-pub struct R(crate::R<INTPEND_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<INTPEND_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<INTPEND_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<INTPEND_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<IntpendSpec>;
 #[doc = "Register `INTPEND` writer"]
-pub struct W(crate::W<INTPEND_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<INTPEND_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<INTPEND_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<INTPEND_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<IntpendSpec>;
 #[doc = "Field `ID` reader - Channel ID"]
-pub struct ID_R(crate::FieldReader<u8, u8>);
-impl ID_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        ID_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ID_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type IdR = crate::FieldReader;
 #[doc = "Field `ID` writer - Channel ID"]
-pub struct ID_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> ID_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x07) | (value as u16 & 0x07);
-        self.w
-    }
-}
+pub type IdW<'a, REG> = crate::FieldWriter<'a, REG, 3>;
 #[doc = "Field `TERR` reader - Transfer Error"]
-pub struct TERR_R(crate::FieldReader<bool, bool>);
-impl TERR_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        TERR_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for TERR_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type TerrR = crate::BitReader;
 #[doc = "Field `TERR` writer - Transfer Error"]
-pub struct TERR_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> TERR_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 8)) | ((value as u16 & 0x01) << 8);
-        self.w
-    }
-}
+pub type TerrW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `TCMPL` reader - Transfer Complete"]
-pub struct TCMPL_R(crate::FieldReader<bool, bool>);
-impl TCMPL_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        TCMPL_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for TCMPL_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type TcmplR = crate::BitReader;
 #[doc = "Field `TCMPL` writer - Transfer Complete"]
-pub struct TCMPL_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> TCMPL_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 9)) | ((value as u16 & 0x01) << 9);
-        self.w
-    }
-}
+pub type TcmplW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `SUSP` reader - Channel Suspend"]
-pub struct SUSP_R(crate::FieldReader<bool, bool>);
-impl SUSP_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        SUSP_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for SUSP_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type SuspR = crate::BitReader;
 #[doc = "Field `SUSP` writer - Channel Suspend"]
-pub struct SUSP_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SUSP_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 10)) | ((value as u16 & 0x01) << 10);
-        self.w
-    }
-}
+pub type SuspW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `FERR` reader - Fetch Error"]
-pub struct FERR_R(crate::FieldReader<bool, bool>);
-impl FERR_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FERR_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FERR_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type FerrR = crate::BitReader;
 #[doc = "Field `FERR` writer - Fetch Error"]
-pub struct FERR_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FERR_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 13)) | ((value as u16 & 0x01) << 13);
-        self.w
-    }
-}
+pub type FerrW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `BUSY` reader - Busy"]
-pub struct BUSY_R(crate::FieldReader<bool, bool>);
-impl BUSY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        BUSY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for BUSY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type BusyR = crate::BitReader;
 #[doc = "Field `BUSY` writer - Busy"]
-pub struct BUSY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> BUSY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 14)) | ((value as u16 & 0x01) << 14);
-        self.w
-    }
-}
+pub type BusyW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `PEND` reader - Pending"]
-pub struct PEND_R(crate::FieldReader<bool, bool>);
-impl PEND_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        PEND_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for PEND_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type PendR = crate::BitReader;
 #[doc = "Field `PEND` writer - Pending"]
-pub struct PEND_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> PEND_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 15)) | ((value as u16 & 0x01) << 15);
-        self.w
-    }
-}
+pub type PendW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bits 0:2 - Channel ID"]
     #[inline(always)]
-    pub fn id(&self) -> ID_R {
-        ID_R::new((self.bits & 0x07) as u8)
+    pub fn id(&self) -> IdR {
+        IdR::new((self.bits & 7) as u8)
     }
     #[doc = "Bit 8 - Transfer Error"]
     #[inline(always)]
-    pub fn terr(&self) -> TERR_R {
-        TERR_R::new(((self.bits >> 8) & 0x01) != 0)
+    pub fn terr(&self) -> TerrR {
+        TerrR::new(((self.bits >> 8) & 1) != 0)
     }
     #[doc = "Bit 9 - Transfer Complete"]
     #[inline(always)]
-    pub fn tcmpl(&self) -> TCMPL_R {
-        TCMPL_R::new(((self.bits >> 9) & 0x01) != 0)
+    pub fn tcmpl(&self) -> TcmplR {
+        TcmplR::new(((self.bits >> 9) & 1) != 0)
     }
     #[doc = "Bit 10 - Channel Suspend"]
     #[inline(always)]
-    pub fn susp(&self) -> SUSP_R {
-        SUSP_R::new(((self.bits >> 10) & 0x01) != 0)
+    pub fn susp(&self) -> SuspR {
+        SuspR::new(((self.bits >> 10) & 1) != 0)
     }
     #[doc = "Bit 13 - Fetch Error"]
     #[inline(always)]
-    pub fn ferr(&self) -> FERR_R {
-        FERR_R::new(((self.bits >> 13) & 0x01) != 0)
+    pub fn ferr(&self) -> FerrR {
+        FerrR::new(((self.bits >> 13) & 1) != 0)
     }
     #[doc = "Bit 14 - Busy"]
     #[inline(always)]
-    pub fn busy(&self) -> BUSY_R {
-        BUSY_R::new(((self.bits >> 14) & 0x01) != 0)
+    pub fn busy(&self) -> BusyR {
+        BusyR::new(((self.bits >> 14) & 1) != 0)
     }
     #[doc = "Bit 15 - Pending"]
     #[inline(always)]
-    pub fn pend(&self) -> PEND_R {
-        PEND_R::new(((self.bits >> 15) & 0x01) != 0)
+    pub fn pend(&self) -> PendR {
+        PendR::new(((self.bits >> 15) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bits 0:2 - Channel ID"]
     #[inline(always)]
-    pub fn id(&mut self) -> ID_W {
-        ID_W { w: self }
+    #[must_use]
+    pub fn id(&mut self) -> IdW<IntpendSpec> {
+        IdW::new(self, 0)
     }
     #[doc = "Bit 8 - Transfer Error"]
     #[inline(always)]
-    pub fn terr(&mut self) -> TERR_W {
-        TERR_W { w: self }
+    #[must_use]
+    pub fn terr(&mut self) -> TerrW<IntpendSpec> {
+        TerrW::new(self, 8)
     }
     #[doc = "Bit 9 - Transfer Complete"]
     #[inline(always)]
-    pub fn tcmpl(&mut self) -> TCMPL_W {
-        TCMPL_W { w: self }
+    #[must_use]
+    pub fn tcmpl(&mut self) -> TcmplW<IntpendSpec> {
+        TcmplW::new(self, 9)
     }
     #[doc = "Bit 10 - Channel Suspend"]
     #[inline(always)]
-    pub fn susp(&mut self) -> SUSP_W {
-        SUSP_W { w: self }
+    #[must_use]
+    pub fn susp(&mut self) -> SuspW<IntpendSpec> {
+        SuspW::new(self, 10)
     }
     #[doc = "Bit 13 - Fetch Error"]
     #[inline(always)]
-    pub fn ferr(&mut self) -> FERR_W {
-        FERR_W { w: self }
+    #[must_use]
+    pub fn ferr(&mut self) -> FerrW<IntpendSpec> {
+        FerrW::new(self, 13)
     }
     #[doc = "Bit 14 - Busy"]
     #[inline(always)]
-    pub fn busy(&mut self) -> BUSY_W {
-        BUSY_W { w: self }
+    #[must_use]
+    pub fn busy(&mut self) -> BusyW<IntpendSpec> {
+        BusyW::new(self, 14)
     }
     #[doc = "Bit 15 - Pending"]
     #[inline(always)]
-    pub fn pend(&mut self) -> PEND_W {
-        PEND_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u16) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn pend(&mut self) -> PendW<IntpendSpec> {
+        PendW::new(self, 15)
     }
 }
-#[doc = "Interrupt Pending\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [intpend](index.html) module"]
-pub struct INTPEND_SPEC;
-impl crate::RegisterSpec for INTPEND_SPEC {
+#[doc = "Interrupt Pending\n\nYou can [`read`](crate::Reg::read) this register and get [`intpend::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`intpend::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct IntpendSpec;
+impl crate::RegisterSpec for IntpendSpec {
     type Ux = u16;
 }
-#[doc = "`read()` method returns [intpend::R](R) reader structure"]
-impl crate::Readable for INTPEND_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [intpend::W](W) writer structure"]
-impl crate::Writable for INTPEND_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`intpend::R`](R) reader structure"]
+impl crate::Readable for IntpendSpec {}
+#[doc = "`write(|w| ..)` method takes [`intpend::W`](W) writer structure"]
+impl crate::Writable for IntpendSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
 }
 #[doc = "`reset()` method sets INTPEND to value 0"]
-impl crate::Resettable for INTPEND_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for IntpendSpec {
+    const RESET_VALUE: u16 = 0;
 }

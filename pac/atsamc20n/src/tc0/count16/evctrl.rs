@@ -1,465 +1,249 @@
 #[doc = "Register `EVCTRL` reader"]
-pub struct R(crate::R<EVCTRL_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<EVCTRL_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<EVCTRL_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<EVCTRL_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<EvctrlSpec>;
 #[doc = "Register `EVCTRL` writer"]
-pub struct W(crate::W<EVCTRL_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<EVCTRL_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<EVCTRL_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<EVCTRL_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<EvctrlSpec>;
 #[doc = "Event Action\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum EVACT_A {
+pub enum Evactselect {
     #[doc = "0: Event action disabled"]
-    OFF = 0,
+    Off = 0,
     #[doc = "1: Start, restart or retrigger TC on event"]
-    RETRIGGER = 1,
+    Retrigger = 1,
     #[doc = "2: Count on event"]
-    COUNT = 2,
+    Count = 2,
     #[doc = "3: Start TC on event"]
-    START = 3,
+    Start = 3,
     #[doc = "4: Time stamp capture"]
-    STAMP = 4,
+    Stamp = 4,
     #[doc = "5: Period catured in CC0, pulse width in CC1"]
-    PPW = 5,
+    Ppw = 5,
     #[doc = "6: Period catured in CC1, pulse width in CC0"]
-    PWP = 6,
+    Pwp = 6,
     #[doc = "7: Pulse width capture"]
-    PW = 7,
+    Pw = 7,
 }
-impl From<EVACT_A> for u8 {
+impl From<Evactselect> for u8 {
     #[inline(always)]
-    fn from(variant: EVACT_A) -> Self {
+    fn from(variant: Evactselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Evactselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Evactselect {}
 #[doc = "Field `EVACT` reader - Event Action"]
-pub struct EVACT_R(crate::FieldReader<u8, EVACT_A>);
-impl EVACT_R {
+pub type EvactR = crate::FieldReader<Evactselect>;
+impl EvactR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        EVACT_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> EVACT_A {
+    pub const fn variant(&self) -> Evactselect {
         match self.bits {
-            0 => EVACT_A::OFF,
-            1 => EVACT_A::RETRIGGER,
-            2 => EVACT_A::COUNT,
-            3 => EVACT_A::START,
-            4 => EVACT_A::STAMP,
-            5 => EVACT_A::PPW,
-            6 => EVACT_A::PWP,
-            7 => EVACT_A::PW,
+            0 => Evactselect::Off,
+            1 => Evactselect::Retrigger,
+            2 => Evactselect::Count,
+            3 => Evactselect::Start,
+            4 => Evactselect::Stamp,
+            5 => Evactselect::Ppw,
+            6 => Evactselect::Pwp,
+            7 => Evactselect::Pw,
             _ => unreachable!(),
         }
     }
-    #[doc = "Checks if the value of the field is `OFF`"]
-    #[inline(always)]
-    pub fn is_off(&self) -> bool {
-        **self == EVACT_A::OFF
-    }
-    #[doc = "Checks if the value of the field is `RETRIGGER`"]
-    #[inline(always)]
-    pub fn is_retrigger(&self) -> bool {
-        **self == EVACT_A::RETRIGGER
-    }
-    #[doc = "Checks if the value of the field is `COUNT`"]
-    #[inline(always)]
-    pub fn is_count(&self) -> bool {
-        **self == EVACT_A::COUNT
-    }
-    #[doc = "Checks if the value of the field is `START`"]
-    #[inline(always)]
-    pub fn is_start(&self) -> bool {
-        **self == EVACT_A::START
-    }
-    #[doc = "Checks if the value of the field is `STAMP`"]
-    #[inline(always)]
-    pub fn is_stamp(&self) -> bool {
-        **self == EVACT_A::STAMP
-    }
-    #[doc = "Checks if the value of the field is `PPW`"]
-    #[inline(always)]
-    pub fn is_ppw(&self) -> bool {
-        **self == EVACT_A::PPW
-    }
-    #[doc = "Checks if the value of the field is `PWP`"]
-    #[inline(always)]
-    pub fn is_pwp(&self) -> bool {
-        **self == EVACT_A::PWP
-    }
-    #[doc = "Checks if the value of the field is `PW`"]
-    #[inline(always)]
-    pub fn is_pw(&self) -> bool {
-        **self == EVACT_A::PW
-    }
-}
-impl core::ops::Deref for EVACT_R {
-    type Target = crate::FieldReader<u8, EVACT_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `EVACT` writer - Event Action"]
-pub struct EVACT_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> EVACT_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: EVACT_A) -> &'a mut W {
-        self.bits(variant.into())
-    }
     #[doc = "Event action disabled"]
     #[inline(always)]
-    pub fn off(self) -> &'a mut W {
-        self.variant(EVACT_A::OFF)
+    pub fn is_off(&self) -> bool {
+        *self == Evactselect::Off
     }
     #[doc = "Start, restart or retrigger TC on event"]
     #[inline(always)]
-    pub fn retrigger(self) -> &'a mut W {
-        self.variant(EVACT_A::RETRIGGER)
+    pub fn is_retrigger(&self) -> bool {
+        *self == Evactselect::Retrigger
     }
     #[doc = "Count on event"]
     #[inline(always)]
-    pub fn count(self) -> &'a mut W {
-        self.variant(EVACT_A::COUNT)
+    pub fn is_count(&self) -> bool {
+        *self == Evactselect::Count
     }
     #[doc = "Start TC on event"]
     #[inline(always)]
-    pub fn start(self) -> &'a mut W {
-        self.variant(EVACT_A::START)
+    pub fn is_start(&self) -> bool {
+        *self == Evactselect::Start
     }
     #[doc = "Time stamp capture"]
     #[inline(always)]
-    pub fn stamp(self) -> &'a mut W {
-        self.variant(EVACT_A::STAMP)
+    pub fn is_stamp(&self) -> bool {
+        *self == Evactselect::Stamp
     }
     #[doc = "Period catured in CC0, pulse width in CC1"]
     #[inline(always)]
-    pub fn ppw(self) -> &'a mut W {
-        self.variant(EVACT_A::PPW)
+    pub fn is_ppw(&self) -> bool {
+        *self == Evactselect::Ppw
     }
     #[doc = "Period catured in CC1, pulse width in CC0"]
     #[inline(always)]
-    pub fn pwp(self) -> &'a mut W {
-        self.variant(EVACT_A::PWP)
+    pub fn is_pwp(&self) -> bool {
+        *self == Evactselect::Pwp
     }
     #[doc = "Pulse width capture"]
     #[inline(always)]
-    pub fn pw(self) -> &'a mut W {
-        self.variant(EVACT_A::PW)
+    pub fn is_pw(&self) -> bool {
+        *self == Evactselect::Pw
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `EVACT` writer - Event Action"]
+pub type EvactW<'a, REG> = crate::FieldWriter<'a, REG, 3, Evactselect, crate::Safe>;
+impl<'a, REG> EvactW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "Event action disabled"]
     #[inline(always)]
-    pub fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x07) | (value as u16 & 0x07);
-        self.w
+    pub fn off(self) -> &'a mut crate::W<REG> {
+        self.variant(Evactselect::Off)
+    }
+    #[doc = "Start, restart or retrigger TC on event"]
+    #[inline(always)]
+    pub fn retrigger(self) -> &'a mut crate::W<REG> {
+        self.variant(Evactselect::Retrigger)
+    }
+    #[doc = "Count on event"]
+    #[inline(always)]
+    pub fn count(self) -> &'a mut crate::W<REG> {
+        self.variant(Evactselect::Count)
+    }
+    #[doc = "Start TC on event"]
+    #[inline(always)]
+    pub fn start(self) -> &'a mut crate::W<REG> {
+        self.variant(Evactselect::Start)
+    }
+    #[doc = "Time stamp capture"]
+    #[inline(always)]
+    pub fn stamp(self) -> &'a mut crate::W<REG> {
+        self.variant(Evactselect::Stamp)
+    }
+    #[doc = "Period catured in CC0, pulse width in CC1"]
+    #[inline(always)]
+    pub fn ppw(self) -> &'a mut crate::W<REG> {
+        self.variant(Evactselect::Ppw)
+    }
+    #[doc = "Period catured in CC1, pulse width in CC0"]
+    #[inline(always)]
+    pub fn pwp(self) -> &'a mut crate::W<REG> {
+        self.variant(Evactselect::Pwp)
+    }
+    #[doc = "Pulse width capture"]
+    #[inline(always)]
+    pub fn pw(self) -> &'a mut crate::W<REG> {
+        self.variant(Evactselect::Pw)
     }
 }
 #[doc = "Field `TCINV` reader - TC Event Input Polarity"]
-pub struct TCINV_R(crate::FieldReader<bool, bool>);
-impl TCINV_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        TCINV_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for TCINV_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type TcinvR = crate::BitReader;
 #[doc = "Field `TCINV` writer - TC Event Input Polarity"]
-pub struct TCINV_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> TCINV_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 4)) | ((value as u16 & 0x01) << 4);
-        self.w
-    }
-}
+pub type TcinvW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `TCEI` reader - TC Event Enable"]
-pub struct TCEI_R(crate::FieldReader<bool, bool>);
-impl TCEI_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        TCEI_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for TCEI_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type TceiR = crate::BitReader;
 #[doc = "Field `TCEI` writer - TC Event Enable"]
-pub struct TCEI_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> TCEI_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 5)) | ((value as u16 & 0x01) << 5);
-        self.w
-    }
-}
+pub type TceiW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `OVFEO` reader - Event Output Enable"]
-pub struct OVFEO_R(crate::FieldReader<bool, bool>);
-impl OVFEO_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        OVFEO_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for OVFEO_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type OvfeoR = crate::BitReader;
 #[doc = "Field `OVFEO` writer - Event Output Enable"]
-pub struct OVFEO_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> OVFEO_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 8)) | ((value as u16 & 0x01) << 8);
-        self.w
-    }
-}
+pub type OvfeoW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `MCEO0` reader - MC Event Output Enable 0"]
-pub struct MCEO0_R(crate::FieldReader<bool, bool>);
-impl MCEO0_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        MCEO0_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for MCEO0_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Mceo0R = crate::BitReader;
 #[doc = "Field `MCEO0` writer - MC Event Output Enable 0"]
-pub struct MCEO0_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> MCEO0_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 12)) | ((value as u16 & 0x01) << 12);
-        self.w
-    }
-}
+pub type Mceo0W<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `MCEO1` reader - MC Event Output Enable 1"]
-pub struct MCEO1_R(crate::FieldReader<bool, bool>);
-impl MCEO1_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        MCEO1_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for MCEO1_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Mceo1R = crate::BitReader;
 #[doc = "Field `MCEO1` writer - MC Event Output Enable 1"]
-pub struct MCEO1_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> MCEO1_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 13)) | ((value as u16 & 0x01) << 13);
-        self.w
-    }
-}
+pub type Mceo1W<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bits 0:2 - Event Action"]
     #[inline(always)]
-    pub fn evact(&self) -> EVACT_R {
-        EVACT_R::new((self.bits & 0x07) as u8)
+    pub fn evact(&self) -> EvactR {
+        EvactR::new((self.bits & 7) as u8)
     }
     #[doc = "Bit 4 - TC Event Input Polarity"]
     #[inline(always)]
-    pub fn tcinv(&self) -> TCINV_R {
-        TCINV_R::new(((self.bits >> 4) & 0x01) != 0)
+    pub fn tcinv(&self) -> TcinvR {
+        TcinvR::new(((self.bits >> 4) & 1) != 0)
     }
     #[doc = "Bit 5 - TC Event Enable"]
     #[inline(always)]
-    pub fn tcei(&self) -> TCEI_R {
-        TCEI_R::new(((self.bits >> 5) & 0x01) != 0)
+    pub fn tcei(&self) -> TceiR {
+        TceiR::new(((self.bits >> 5) & 1) != 0)
     }
     #[doc = "Bit 8 - Event Output Enable"]
     #[inline(always)]
-    pub fn ovfeo(&self) -> OVFEO_R {
-        OVFEO_R::new(((self.bits >> 8) & 0x01) != 0)
+    pub fn ovfeo(&self) -> OvfeoR {
+        OvfeoR::new(((self.bits >> 8) & 1) != 0)
     }
     #[doc = "Bit 12 - MC Event Output Enable 0"]
     #[inline(always)]
-    pub fn mceo0(&self) -> MCEO0_R {
-        MCEO0_R::new(((self.bits >> 12) & 0x01) != 0)
+    pub fn mceo0(&self) -> Mceo0R {
+        Mceo0R::new(((self.bits >> 12) & 1) != 0)
     }
     #[doc = "Bit 13 - MC Event Output Enable 1"]
     #[inline(always)]
-    pub fn mceo1(&self) -> MCEO1_R {
-        MCEO1_R::new(((self.bits >> 13) & 0x01) != 0)
+    pub fn mceo1(&self) -> Mceo1R {
+        Mceo1R::new(((self.bits >> 13) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bits 0:2 - Event Action"]
     #[inline(always)]
-    pub fn evact(&mut self) -> EVACT_W {
-        EVACT_W { w: self }
+    #[must_use]
+    pub fn evact(&mut self) -> EvactW<EvctrlSpec> {
+        EvactW::new(self, 0)
     }
     #[doc = "Bit 4 - TC Event Input Polarity"]
     #[inline(always)]
-    pub fn tcinv(&mut self) -> TCINV_W {
-        TCINV_W { w: self }
+    #[must_use]
+    pub fn tcinv(&mut self) -> TcinvW<EvctrlSpec> {
+        TcinvW::new(self, 4)
     }
     #[doc = "Bit 5 - TC Event Enable"]
     #[inline(always)]
-    pub fn tcei(&mut self) -> TCEI_W {
-        TCEI_W { w: self }
+    #[must_use]
+    pub fn tcei(&mut self) -> TceiW<EvctrlSpec> {
+        TceiW::new(self, 5)
     }
     #[doc = "Bit 8 - Event Output Enable"]
     #[inline(always)]
-    pub fn ovfeo(&mut self) -> OVFEO_W {
-        OVFEO_W { w: self }
+    #[must_use]
+    pub fn ovfeo(&mut self) -> OvfeoW<EvctrlSpec> {
+        OvfeoW::new(self, 8)
     }
     #[doc = "Bit 12 - MC Event Output Enable 0"]
     #[inline(always)]
-    pub fn mceo0(&mut self) -> MCEO0_W {
-        MCEO0_W { w: self }
+    #[must_use]
+    pub fn mceo0(&mut self) -> Mceo0W<EvctrlSpec> {
+        Mceo0W::new(self, 12)
     }
     #[doc = "Bit 13 - MC Event Output Enable 1"]
     #[inline(always)]
-    pub fn mceo1(&mut self) -> MCEO1_W {
-        MCEO1_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u16) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn mceo1(&mut self) -> Mceo1W<EvctrlSpec> {
+        Mceo1W::new(self, 13)
     }
 }
-#[doc = "Event Control\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [evctrl](index.html) module"]
-pub struct EVCTRL_SPEC;
-impl crate::RegisterSpec for EVCTRL_SPEC {
+#[doc = "Event Control\n\nYou can [`read`](crate::Reg::read) this register and get [`evctrl::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`evctrl::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct EvctrlSpec;
+impl crate::RegisterSpec for EvctrlSpec {
     type Ux = u16;
 }
-#[doc = "`read()` method returns [evctrl::R](R) reader structure"]
-impl crate::Readable for EVCTRL_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [evctrl::W](W) writer structure"]
-impl crate::Writable for EVCTRL_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`evctrl::R`](R) reader structure"]
+impl crate::Readable for EvctrlSpec {}
+#[doc = "`write(|w| ..)` method takes [`evctrl::W`](W) writer structure"]
+impl crate::Writable for EvctrlSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
 }
 #[doc = "`reset()` method sets EVCTRL to value 0"]
-impl crate::Resettable for EVCTRL_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for EvctrlSpec {
+    const RESET_VALUE: u16 = 0;
 }

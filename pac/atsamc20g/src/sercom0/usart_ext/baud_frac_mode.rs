@@ -1,140 +1,55 @@
 #[doc = "Register `BAUD_FRAC_MODE` reader"]
-pub struct R(crate::R<BAUD_FRAC_MODE_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<BAUD_FRAC_MODE_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<BAUD_FRAC_MODE_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<BAUD_FRAC_MODE_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<BaudFracModeSpec>;
 #[doc = "Register `BAUD_FRAC_MODE` writer"]
-pub struct W(crate::W<BAUD_FRAC_MODE_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<BAUD_FRAC_MODE_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<BAUD_FRAC_MODE_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<BAUD_FRAC_MODE_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<BaudFracModeSpec>;
 #[doc = "Field `BAUD` reader - Baud Rate Value"]
-pub struct BAUD_R(crate::FieldReader<u16, u16>);
-impl BAUD_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u16) -> Self {
-        BAUD_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for BAUD_R {
-    type Target = crate::FieldReader<u16, u16>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type BaudR = crate::FieldReader<u16>;
 #[doc = "Field `BAUD` writer - Baud Rate Value"]
-pub struct BAUD_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> BAUD_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u16) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x1fff) | (value as u16 & 0x1fff);
-        self.w
-    }
-}
+pub type BaudW<'a, REG> = crate::FieldWriter<'a, REG, 13, u16>;
 #[doc = "Field `FP` reader - Fractional Part"]
-pub struct FP_R(crate::FieldReader<u8, u8>);
-impl FP_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        FP_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FP_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type FpR = crate::FieldReader;
 #[doc = "Field `FP` writer - Fractional Part"]
-pub struct FP_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FP_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 13)) | ((value as u16 & 0x07) << 13);
-        self.w
-    }
-}
+pub type FpW<'a, REG> = crate::FieldWriter<'a, REG, 3>;
 impl R {
     #[doc = "Bits 0:12 - Baud Rate Value"]
     #[inline(always)]
-    pub fn baud(&self) -> BAUD_R {
-        BAUD_R::new((self.bits & 0x1fff) as u16)
+    pub fn baud(&self) -> BaudR {
+        BaudR::new(self.bits & 0x1fff)
     }
     #[doc = "Bits 13:15 - Fractional Part"]
     #[inline(always)]
-    pub fn fp(&self) -> FP_R {
-        FP_R::new(((self.bits >> 13) & 0x07) as u8)
+    pub fn fp(&self) -> FpR {
+        FpR::new(((self.bits >> 13) & 7) as u8)
     }
 }
 impl W {
     #[doc = "Bits 0:12 - Baud Rate Value"]
     #[inline(always)]
-    pub fn baud(&mut self) -> BAUD_W {
-        BAUD_W { w: self }
+    #[must_use]
+    pub fn baud(&mut self) -> BaudW<BaudFracModeSpec> {
+        BaudW::new(self, 0)
     }
     #[doc = "Bits 13:15 - Fractional Part"]
     #[inline(always)]
-    pub fn fp(&mut self) -> FP_W {
-        FP_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u16) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn fp(&mut self) -> FpW<BaudFracModeSpec> {
+        FpW::new(self, 13)
     }
 }
-#[doc = "USART_EXT Baud Rate\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [baud_frac_mode](index.html) module"]
-pub struct BAUD_FRAC_MODE_SPEC;
-impl crate::RegisterSpec for BAUD_FRAC_MODE_SPEC {
+#[doc = "USART_EXT Baud Rate\n\nYou can [`read`](crate::Reg::read) this register and get [`baud_frac_mode::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`baud_frac_mode::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct BaudFracModeSpec;
+impl crate::RegisterSpec for BaudFracModeSpec {
     type Ux = u16;
 }
-#[doc = "`read()` method returns [baud_frac_mode::R](R) reader structure"]
-impl crate::Readable for BAUD_FRAC_MODE_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [baud_frac_mode::W](W) writer structure"]
-impl crate::Writable for BAUD_FRAC_MODE_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`baud_frac_mode::R`](R) reader structure"]
+impl crate::Readable for BaudFracModeSpec {}
+#[doc = "`write(|w| ..)` method takes [`baud_frac_mode::W`](W) writer structure"]
+impl crate::Writable for BaudFracModeSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
 }
 #[doc = "`reset()` method sets BAUD_FRAC_MODE to value 0"]
-impl crate::Resettable for BAUD_FRAC_MODE_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for BaudFracModeSpec {
+    const RESET_VALUE: u16 = 0;
 }

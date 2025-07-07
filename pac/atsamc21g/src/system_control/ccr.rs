@@ -1,137 +1,97 @@
 #[doc = "Register `CCR` reader"]
-pub struct R(crate::R<CCR_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CCR_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CCR_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CCR_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<CcrSpec>;
 #[doc = "Unaligned accesses generates a Hard Fault\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum UNALIGN_TRP_A {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum UnalignTrpselect {
     #[doc = "0: Do not trap unaligned halfword and word accesses"]
-    VALUE_0 = 0,
+    Value0 = 0,
     #[doc = "1: Trap unaligned halfword and word accesses"]
-    VALUE_1 = 1,
+    Value1 = 1,
 }
-impl From<UNALIGN_TRP_A> for bool {
+impl From<UnalignTrpselect> for bool {
     #[inline(always)]
-    fn from(variant: UNALIGN_TRP_A) -> Self {
+    fn from(variant: UnalignTrpselect) -> Self {
         variant as u8 != 0
     }
 }
 #[doc = "Field `UNALIGN_TRP` reader - Unaligned accesses generates a Hard Fault"]
-pub struct UNALIGN_TRP_R(crate::FieldReader<bool, UNALIGN_TRP_A>);
-impl UNALIGN_TRP_R {
+pub type UnalignTrpR = crate::BitReader<UnalignTrpselect>;
+impl UnalignTrpR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        UNALIGN_TRP_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> UNALIGN_TRP_A {
+    pub const fn variant(&self) -> UnalignTrpselect {
         match self.bits {
-            false => UNALIGN_TRP_A::VALUE_0,
-            true => UNALIGN_TRP_A::VALUE_1,
+            false => UnalignTrpselect::Value0,
+            true => UnalignTrpselect::Value1,
         }
     }
-    #[doc = "Checks if the value of the field is `VALUE_0`"]
+    #[doc = "Do not trap unaligned halfword and word accesses"]
     #[inline(always)]
     pub fn is_value_0(&self) -> bool {
-        **self == UNALIGN_TRP_A::VALUE_0
+        *self == UnalignTrpselect::Value0
     }
-    #[doc = "Checks if the value of the field is `VALUE_1`"]
+    #[doc = "Trap unaligned halfword and word accesses"]
     #[inline(always)]
     pub fn is_value_1(&self) -> bool {
-        **self == UNALIGN_TRP_A::VALUE_1
-    }
-}
-impl core::ops::Deref for UNALIGN_TRP_R {
-    type Target = crate::FieldReader<bool, UNALIGN_TRP_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == UnalignTrpselect::Value1
     }
 }
 #[doc = "Stack 8-byte aligned on exception entry\n\nValue on reset: 1"]
-#[derive(Clone, Copy, Debug, PartialEq)]
-pub enum STKALIGN_A {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Stkalignselect {
     #[doc = "0: 4-byte aligned"]
-    VALUE_0 = 0,
+    Value0 = 0,
     #[doc = "1: 8-byte aligned"]
-    VALUE_1 = 1,
+    Value1 = 1,
 }
-impl From<STKALIGN_A> for bool {
+impl From<Stkalignselect> for bool {
     #[inline(always)]
-    fn from(variant: STKALIGN_A) -> Self {
+    fn from(variant: Stkalignselect) -> Self {
         variant as u8 != 0
     }
 }
 #[doc = "Field `STKALIGN` reader - Stack 8-byte aligned on exception entry"]
-pub struct STKALIGN_R(crate::FieldReader<bool, STKALIGN_A>);
-impl STKALIGN_R {
+pub type StkalignR = crate::BitReader<Stkalignselect>;
+impl StkalignR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        STKALIGN_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> STKALIGN_A {
+    pub const fn variant(&self) -> Stkalignselect {
         match self.bits {
-            false => STKALIGN_A::VALUE_0,
-            true => STKALIGN_A::VALUE_1,
+            false => Stkalignselect::Value0,
+            true => Stkalignselect::Value1,
         }
     }
-    #[doc = "Checks if the value of the field is `VALUE_0`"]
+    #[doc = "4-byte aligned"]
     #[inline(always)]
     pub fn is_value_0(&self) -> bool {
-        **self == STKALIGN_A::VALUE_0
+        *self == Stkalignselect::Value0
     }
-    #[doc = "Checks if the value of the field is `VALUE_1`"]
+    #[doc = "8-byte aligned"]
     #[inline(always)]
     pub fn is_value_1(&self) -> bool {
-        **self == STKALIGN_A::VALUE_1
-    }
-}
-impl core::ops::Deref for STKALIGN_R {
-    type Target = crate::FieldReader<bool, STKALIGN_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
+        *self == Stkalignselect::Value1
     }
 }
 impl R {
     #[doc = "Bit 3 - Unaligned accesses generates a Hard Fault"]
     #[inline(always)]
-    pub fn unalign_trp(&self) -> UNALIGN_TRP_R {
-        UNALIGN_TRP_R::new(((self.bits >> 3) & 0x01) != 0)
+    pub fn unalign_trp(&self) -> UnalignTrpR {
+        UnalignTrpR::new(((self.bits >> 3) & 1) != 0)
     }
     #[doc = "Bit 9 - Stack 8-byte aligned on exception entry"]
     #[inline(always)]
-    pub fn stkalign(&self) -> STKALIGN_R {
-        STKALIGN_R::new(((self.bits >> 9) & 0x01) != 0)
+    pub fn stkalign(&self) -> StkalignR {
+        StkalignR::new(((self.bits >> 9) & 1) != 0)
     }
 }
-#[doc = "Configuration and Control Register\n\nThis register you can [`read`](crate::generic::Reg::read). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [ccr](index.html) module"]
-pub struct CCR_SPEC;
-impl crate::RegisterSpec for CCR_SPEC {
+#[doc = "Configuration and Control Register\n\nYou can [`read`](crate::Reg::read) this register and get [`ccr::R`](R). See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct CcrSpec;
+impl crate::RegisterSpec for CcrSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [ccr::R](R) reader structure"]
-impl crate::Readable for CCR_SPEC {
-    type Reader = R;
-}
+#[doc = "`read()` method returns [`ccr::R`](R) reader structure"]
+impl crate::Readable for CcrSpec {}
 #[doc = "`reset()` method sets CCR to value 0x0204"]
-impl crate::Resettable for CCR_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0x0204
-    }
+impl crate::Resettable for CcrSpec {
+    const RESET_VALUE: u32 = 0x0204;
 }

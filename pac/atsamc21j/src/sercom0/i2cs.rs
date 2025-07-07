@@ -1,36 +1,120 @@
-#[doc = "CTRLA register accessor: an alias for `Reg<CTRLA_SPEC>`"]
-pub type CTRLA = crate::Reg<ctrla::CTRLA_SPEC>;
+#[repr(C)]
+#[doc = "I2C Slave Mode"]
+#[doc(alias = "I2CS")]
+pub struct I2cs {
+    ctrla: Ctrla,
+    ctrlb: Ctrlb,
+    _reserved2: [u8; 0x0c],
+    intenclr: Intenclr,
+    _reserved3: [u8; 0x01],
+    intenset: Intenset,
+    _reserved4: [u8; 0x01],
+    intflag: Intflag,
+    _reserved5: [u8; 0x01],
+    status: Status,
+    syncbusy: Syncbusy,
+    _reserved7: [u8; 0x04],
+    addr: Addr,
+    data: Data,
+}
+impl I2cs {
+    #[doc = "0x00 - I2CS Control A"]
+    #[inline(always)]
+    pub const fn ctrla(&self) -> &Ctrla {
+        &self.ctrla
+    }
+    #[doc = "0x04 - I2CS Control B"]
+    #[inline(always)]
+    pub const fn ctrlb(&self) -> &Ctrlb {
+        &self.ctrlb
+    }
+    #[doc = "0x14 - I2CS Interrupt Enable Clear"]
+    #[inline(always)]
+    pub const fn intenclr(&self) -> &Intenclr {
+        &self.intenclr
+    }
+    #[doc = "0x16 - I2CS Interrupt Enable Set"]
+    #[inline(always)]
+    pub const fn intenset(&self) -> &Intenset {
+        &self.intenset
+    }
+    #[doc = "0x18 - I2CS Interrupt Flag Status and Clear"]
+    #[inline(always)]
+    pub const fn intflag(&self) -> &Intflag {
+        &self.intflag
+    }
+    #[doc = "0x1a - I2CS Status"]
+    #[inline(always)]
+    pub const fn status(&self) -> &Status {
+        &self.status
+    }
+    #[doc = "0x1c - I2CS Synchronization Busy"]
+    #[inline(always)]
+    pub const fn syncbusy(&self) -> &Syncbusy {
+        &self.syncbusy
+    }
+    #[doc = "0x24 - I2CS Address"]
+    #[inline(always)]
+    pub const fn addr(&self) -> &Addr {
+        &self.addr
+    }
+    #[doc = "0x28 - I2CS Data"]
+    #[inline(always)]
+    pub const fn data(&self) -> &Data {
+        &self.data
+    }
+}
+#[doc = "CTRLA (rw) register accessor: I2CS Control A\n\nYou can [`read`](crate::Reg::read) this register and get [`ctrla::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`ctrla::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@ctrla`]
+module"]
+#[doc(alias = "CTRLA")]
+pub type Ctrla = crate::Reg<ctrla::CtrlaSpec>;
 #[doc = "I2CS Control A"]
 pub mod ctrla;
-#[doc = "CTRLB register accessor: an alias for `Reg<CTRLB_SPEC>`"]
-pub type CTRLB = crate::Reg<ctrlb::CTRLB_SPEC>;
+#[doc = "CTRLB (rw) register accessor: I2CS Control B\n\nYou can [`read`](crate::Reg::read) this register and get [`ctrlb::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`ctrlb::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@ctrlb`]
+module"]
+#[doc(alias = "CTRLB")]
+pub type Ctrlb = crate::Reg<ctrlb::CtrlbSpec>;
 #[doc = "I2CS Control B"]
 pub mod ctrlb;
-#[doc = "INTENCLR register accessor: an alias for `Reg<INTENCLR_SPEC>`"]
-pub type INTENCLR = crate::Reg<intenclr::INTENCLR_SPEC>;
+#[doc = "INTENCLR (rw) register accessor: I2CS Interrupt Enable Clear\n\nYou can [`read`](crate::Reg::read) this register and get [`intenclr::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`intenclr::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@intenclr`]
+module"]
+#[doc(alias = "INTENCLR")]
+pub type Intenclr = crate::Reg<intenclr::IntenclrSpec>;
 #[doc = "I2CS Interrupt Enable Clear"]
 pub mod intenclr;
-#[doc = "INTENSET register accessor: an alias for `Reg<INTENSET_SPEC>`"]
-pub type INTENSET = crate::Reg<intenset::INTENSET_SPEC>;
+#[doc = "INTENSET (rw) register accessor: I2CS Interrupt Enable Set\n\nYou can [`read`](crate::Reg::read) this register and get [`intenset::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`intenset::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@intenset`]
+module"]
+#[doc(alias = "INTENSET")]
+pub type Intenset = crate::Reg<intenset::IntensetSpec>;
 #[doc = "I2CS Interrupt Enable Set"]
 pub mod intenset;
-#[doc = "INTFLAG register accessor: an alias for `Reg<INTFLAG_SPEC>`"]
-pub type INTFLAG = crate::Reg<intflag::INTFLAG_SPEC>;
+#[doc = "INTFLAG (rw) register accessor: I2CS Interrupt Flag Status and Clear\n\nYou can [`read`](crate::Reg::read) this register and get [`intflag::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`intflag::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@intflag`]
+module"]
+#[doc(alias = "INTFLAG")]
+pub type Intflag = crate::Reg<intflag::IntflagSpec>;
 #[doc = "I2CS Interrupt Flag Status and Clear"]
 pub mod intflag;
-#[doc = "STATUS register accessor: an alias for `Reg<STATUS_SPEC>`"]
-pub type STATUS = crate::Reg<status::STATUS_SPEC>;
+#[doc = "STATUS (rw) register accessor: I2CS Status\n\nYou can [`read`](crate::Reg::read) this register and get [`status::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`status::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@status`]
+module"]
+#[doc(alias = "STATUS")]
+pub type Status = crate::Reg<status::StatusSpec>;
 #[doc = "I2CS Status"]
 pub mod status;
-#[doc = "SYNCBUSY register accessor: an alias for `Reg<SYNCBUSY_SPEC>`"]
-pub type SYNCBUSY = crate::Reg<syncbusy::SYNCBUSY_SPEC>;
+#[doc = "SYNCBUSY (r) register accessor: I2CS Synchronization Busy\n\nYou can [`read`](crate::Reg::read) this register and get [`syncbusy::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@syncbusy`]
+module"]
+#[doc(alias = "SYNCBUSY")]
+pub type Syncbusy = crate::Reg<syncbusy::SyncbusySpec>;
 #[doc = "I2CS Synchronization Busy"]
 pub mod syncbusy;
-#[doc = "ADDR register accessor: an alias for `Reg<ADDR_SPEC>`"]
-pub type ADDR = crate::Reg<addr::ADDR_SPEC>;
+#[doc = "ADDR (rw) register accessor: I2CS Address\n\nYou can [`read`](crate::Reg::read) this register and get [`addr::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`addr::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@addr`]
+module"]
+#[doc(alias = "ADDR")]
+pub type Addr = crate::Reg<addr::AddrSpec>;
 #[doc = "I2CS Address"]
 pub mod addr;
-#[doc = "DATA register accessor: an alias for `Reg<DATA_SPEC>`"]
-pub type DATA = crate::Reg<data::DATA_SPEC>;
+#[doc = "DATA (rw) register accessor: I2CS Data\n\nYou can [`read`](crate::Reg::read) this register and get [`data::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`data::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@data`]
+module"]
+#[doc(alias = "DATA")]
+pub type Data = crate::Reg<data::DataSpec>;
 #[doc = "I2CS Data"]
 pub mod data;

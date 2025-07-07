@@ -1,409 +1,252 @@
 #[doc = "Register `CHANNEL[%s]` reader"]
-pub struct R(crate::R<CHANNEL_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CHANNEL_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CHANNEL_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CHANNEL_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<ChannelSpec>;
 #[doc = "Register `CHANNEL[%s]` writer"]
-pub struct W(crate::W<CHANNEL_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CHANNEL_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CHANNEL_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CHANNEL_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<ChannelSpec>;
 #[doc = "Field `EVGEN` reader - Event Generator Selection"]
-pub struct EVGEN_R(crate::FieldReader<u8, u8>);
-impl EVGEN_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        EVGEN_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for EVGEN_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type EvgenR = crate::FieldReader;
 #[doc = "Field `EVGEN` writer - Event Generator Selection"]
-pub struct EVGEN_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> EVGEN_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x7f) | (value as u32 & 0x7f);
-        self.w
-    }
-}
+pub type EvgenW<'a, REG> = crate::FieldWriter<'a, REG, 7>;
 #[doc = "Path Selection\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum PATH_A {
+pub enum Pathselect {
     #[doc = "0: Synchronous path"]
-    SYNCHRONOUS = 0,
+    Synchronous = 0,
     #[doc = "1: Resynchronized path"]
-    RESYNCHRONIZED = 1,
+    Resynchronized = 1,
     #[doc = "2: Asynchronous path"]
-    ASYNCHRONOUS = 2,
+    Asynchronous = 2,
 }
-impl From<PATH_A> for u8 {
+impl From<Pathselect> for u8 {
     #[inline(always)]
-    fn from(variant: PATH_A) -> Self {
+    fn from(variant: Pathselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Pathselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Pathselect {}
 #[doc = "Field `PATH` reader - Path Selection"]
-pub struct PATH_R(crate::FieldReader<u8, PATH_A>);
-impl PATH_R {
+pub type PathR = crate::FieldReader<Pathselect>;
+impl PathR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        PATH_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<PATH_A> {
+    pub const fn variant(&self) -> Option<Pathselect> {
         match self.bits {
-            0 => Some(PATH_A::SYNCHRONOUS),
-            1 => Some(PATH_A::RESYNCHRONIZED),
-            2 => Some(PATH_A::ASYNCHRONOUS),
+            0 => Some(Pathselect::Synchronous),
+            1 => Some(Pathselect::Resynchronized),
+            2 => Some(Pathselect::Asynchronous),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `SYNCHRONOUS`"]
-    #[inline(always)]
-    pub fn is_synchronous(&self) -> bool {
-        **self == PATH_A::SYNCHRONOUS
-    }
-    #[doc = "Checks if the value of the field is `RESYNCHRONIZED`"]
-    #[inline(always)]
-    pub fn is_resynchronized(&self) -> bool {
-        **self == PATH_A::RESYNCHRONIZED
-    }
-    #[doc = "Checks if the value of the field is `ASYNCHRONOUS`"]
-    #[inline(always)]
-    pub fn is_asynchronous(&self) -> bool {
-        **self == PATH_A::ASYNCHRONOUS
-    }
-}
-impl core::ops::Deref for PATH_R {
-    type Target = crate::FieldReader<u8, PATH_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `PATH` writer - Path Selection"]
-pub struct PATH_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> PATH_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: PATH_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
     #[doc = "Synchronous path"]
     #[inline(always)]
-    pub fn synchronous(self) -> &'a mut W {
-        self.variant(PATH_A::SYNCHRONOUS)
+    pub fn is_synchronous(&self) -> bool {
+        *self == Pathselect::Synchronous
     }
     #[doc = "Resynchronized path"]
     #[inline(always)]
-    pub fn resynchronized(self) -> &'a mut W {
-        self.variant(PATH_A::RESYNCHRONIZED)
+    pub fn is_resynchronized(&self) -> bool {
+        *self == Pathselect::Resynchronized
     }
     #[doc = "Asynchronous path"]
     #[inline(always)]
-    pub fn asynchronous(self) -> &'a mut W {
-        self.variant(PATH_A::ASYNCHRONOUS)
+    pub fn is_asynchronous(&self) -> bool {
+        *self == Pathselect::Asynchronous
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `PATH` writer - Path Selection"]
+pub type PathW<'a, REG> = crate::FieldWriter<'a, REG, 2, Pathselect>;
+impl<'a, REG> PathW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "Synchronous path"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 8)) | ((value as u32 & 0x03) << 8);
-        self.w
+    pub fn synchronous(self) -> &'a mut crate::W<REG> {
+        self.variant(Pathselect::Synchronous)
+    }
+    #[doc = "Resynchronized path"]
+    #[inline(always)]
+    pub fn resynchronized(self) -> &'a mut crate::W<REG> {
+        self.variant(Pathselect::Resynchronized)
+    }
+    #[doc = "Asynchronous path"]
+    #[inline(always)]
+    pub fn asynchronous(self) -> &'a mut crate::W<REG> {
+        self.variant(Pathselect::Asynchronous)
     }
 }
 #[doc = "Edge Detection Selection\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum EDGSEL_A {
+pub enum Edgselselect {
     #[doc = "0: No event output when using the resynchronized or synchronous path"]
-    NO_EVT_OUTPUT = 0,
+    NoEvtOutput = 0,
     #[doc = "1: Event detection only on the rising edge of the signal from the event generator when using the resynchronized or synchronous path"]
-    RISING_EDGE = 1,
+    RisingEdge = 1,
     #[doc = "2: Event detection only on the falling edge of the signal from the event generator when using the resynchronized or synchronous path"]
-    FALLING_EDGE = 2,
+    FallingEdge = 2,
     #[doc = "3: Event detection on rising and falling edges of the signal from the event generator when using the resynchronized or synchronous path"]
-    BOTH_EDGES = 3,
+    BothEdges = 3,
 }
-impl From<EDGSEL_A> for u8 {
+impl From<Edgselselect> for u8 {
     #[inline(always)]
-    fn from(variant: EDGSEL_A) -> Self {
+    fn from(variant: Edgselselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Edgselselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Edgselselect {}
 #[doc = "Field `EDGSEL` reader - Edge Detection Selection"]
-pub struct EDGSEL_R(crate::FieldReader<u8, EDGSEL_A>);
-impl EDGSEL_R {
+pub type EdgselR = crate::FieldReader<Edgselselect>;
+impl EdgselR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        EDGSEL_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> EDGSEL_A {
+    pub const fn variant(&self) -> Edgselselect {
         match self.bits {
-            0 => EDGSEL_A::NO_EVT_OUTPUT,
-            1 => EDGSEL_A::RISING_EDGE,
-            2 => EDGSEL_A::FALLING_EDGE,
-            3 => EDGSEL_A::BOTH_EDGES,
+            0 => Edgselselect::NoEvtOutput,
+            1 => Edgselselect::RisingEdge,
+            2 => Edgselselect::FallingEdge,
+            3 => Edgselselect::BothEdges,
             _ => unreachable!(),
         }
     }
-    #[doc = "Checks if the value of the field is `NO_EVT_OUTPUT`"]
-    #[inline(always)]
-    pub fn is_no_evt_output(&self) -> bool {
-        **self == EDGSEL_A::NO_EVT_OUTPUT
-    }
-    #[doc = "Checks if the value of the field is `RISING_EDGE`"]
-    #[inline(always)]
-    pub fn is_rising_edge(&self) -> bool {
-        **self == EDGSEL_A::RISING_EDGE
-    }
-    #[doc = "Checks if the value of the field is `FALLING_EDGE`"]
-    #[inline(always)]
-    pub fn is_falling_edge(&self) -> bool {
-        **self == EDGSEL_A::FALLING_EDGE
-    }
-    #[doc = "Checks if the value of the field is `BOTH_EDGES`"]
-    #[inline(always)]
-    pub fn is_both_edges(&self) -> bool {
-        **self == EDGSEL_A::BOTH_EDGES
-    }
-}
-impl core::ops::Deref for EDGSEL_R {
-    type Target = crate::FieldReader<u8, EDGSEL_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `EDGSEL` writer - Edge Detection Selection"]
-pub struct EDGSEL_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> EDGSEL_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: EDGSEL_A) -> &'a mut W {
-        self.bits(variant.into())
-    }
     #[doc = "No event output when using the resynchronized or synchronous path"]
     #[inline(always)]
-    pub fn no_evt_output(self) -> &'a mut W {
-        self.variant(EDGSEL_A::NO_EVT_OUTPUT)
+    pub fn is_no_evt_output(&self) -> bool {
+        *self == Edgselselect::NoEvtOutput
     }
     #[doc = "Event detection only on the rising edge of the signal from the event generator when using the resynchronized or synchronous path"]
     #[inline(always)]
-    pub fn rising_edge(self) -> &'a mut W {
-        self.variant(EDGSEL_A::RISING_EDGE)
+    pub fn is_rising_edge(&self) -> bool {
+        *self == Edgselselect::RisingEdge
     }
     #[doc = "Event detection only on the falling edge of the signal from the event generator when using the resynchronized or synchronous path"]
     #[inline(always)]
-    pub fn falling_edge(self) -> &'a mut W {
-        self.variant(EDGSEL_A::FALLING_EDGE)
+    pub fn is_falling_edge(&self) -> bool {
+        *self == Edgselselect::FallingEdge
     }
     #[doc = "Event detection on rising and falling edges of the signal from the event generator when using the resynchronized or synchronous path"]
     #[inline(always)]
-    pub fn both_edges(self) -> &'a mut W {
-        self.variant(EDGSEL_A::BOTH_EDGES)
+    pub fn is_both_edges(&self) -> bool {
+        *self == Edgselselect::BothEdges
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `EDGSEL` writer - Edge Detection Selection"]
+pub type EdgselW<'a, REG> = crate::FieldWriter<'a, REG, 2, Edgselselect, crate::Safe>;
+impl<'a, REG> EdgselW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "No event output when using the resynchronized or synchronous path"]
     #[inline(always)]
-    pub fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 10)) | ((value as u32 & 0x03) << 10);
-        self.w
+    pub fn no_evt_output(self) -> &'a mut crate::W<REG> {
+        self.variant(Edgselselect::NoEvtOutput)
+    }
+    #[doc = "Event detection only on the rising edge of the signal from the event generator when using the resynchronized or synchronous path"]
+    #[inline(always)]
+    pub fn rising_edge(self) -> &'a mut crate::W<REG> {
+        self.variant(Edgselselect::RisingEdge)
+    }
+    #[doc = "Event detection only on the falling edge of the signal from the event generator when using the resynchronized or synchronous path"]
+    #[inline(always)]
+    pub fn falling_edge(self) -> &'a mut crate::W<REG> {
+        self.variant(Edgselselect::FallingEdge)
+    }
+    #[doc = "Event detection on rising and falling edges of the signal from the event generator when using the resynchronized or synchronous path"]
+    #[inline(always)]
+    pub fn both_edges(self) -> &'a mut crate::W<REG> {
+        self.variant(Edgselselect::BothEdges)
     }
 }
 #[doc = "Field `RUNSTDBY` reader - Run in standby"]
-pub struct RUNSTDBY_R(crate::FieldReader<bool, bool>);
-impl RUNSTDBY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        RUNSTDBY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for RUNSTDBY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type RunstdbyR = crate::BitReader;
 #[doc = "Field `RUNSTDBY` writer - Run in standby"]
-pub struct RUNSTDBY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> RUNSTDBY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 14)) | ((value as u32 & 0x01) << 14);
-        self.w
-    }
-}
+pub type RunstdbyW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `ONDEMAND` reader - Generic Clock On Demand"]
-pub struct ONDEMAND_R(crate::FieldReader<bool, bool>);
-impl ONDEMAND_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ONDEMAND_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ONDEMAND_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type OndemandR = crate::BitReader;
 #[doc = "Field `ONDEMAND` writer - Generic Clock On Demand"]
-pub struct ONDEMAND_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> ONDEMAND_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 15)) | ((value as u32 & 0x01) << 15);
-        self.w
-    }
-}
+pub type OndemandW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bits 0:6 - Event Generator Selection"]
     #[inline(always)]
-    pub fn evgen(&self) -> EVGEN_R {
-        EVGEN_R::new((self.bits & 0x7f) as u8)
+    pub fn evgen(&self) -> EvgenR {
+        EvgenR::new((self.bits & 0x7f) as u8)
     }
     #[doc = "Bits 8:9 - Path Selection"]
     #[inline(always)]
-    pub fn path(&self) -> PATH_R {
-        PATH_R::new(((self.bits >> 8) & 0x03) as u8)
+    pub fn path(&self) -> PathR {
+        PathR::new(((self.bits >> 8) & 3) as u8)
     }
     #[doc = "Bits 10:11 - Edge Detection Selection"]
     #[inline(always)]
-    pub fn edgsel(&self) -> EDGSEL_R {
-        EDGSEL_R::new(((self.bits >> 10) & 0x03) as u8)
+    pub fn edgsel(&self) -> EdgselR {
+        EdgselR::new(((self.bits >> 10) & 3) as u8)
     }
     #[doc = "Bit 14 - Run in standby"]
     #[inline(always)]
-    pub fn runstdby(&self) -> RUNSTDBY_R {
-        RUNSTDBY_R::new(((self.bits >> 14) & 0x01) != 0)
+    pub fn runstdby(&self) -> RunstdbyR {
+        RunstdbyR::new(((self.bits >> 14) & 1) != 0)
     }
     #[doc = "Bit 15 - Generic Clock On Demand"]
     #[inline(always)]
-    pub fn ondemand(&self) -> ONDEMAND_R {
-        ONDEMAND_R::new(((self.bits >> 15) & 0x01) != 0)
+    pub fn ondemand(&self) -> OndemandR {
+        OndemandR::new(((self.bits >> 15) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bits 0:6 - Event Generator Selection"]
     #[inline(always)]
-    pub fn evgen(&mut self) -> EVGEN_W {
-        EVGEN_W { w: self }
+    #[must_use]
+    pub fn evgen(&mut self) -> EvgenW<ChannelSpec> {
+        EvgenW::new(self, 0)
     }
     #[doc = "Bits 8:9 - Path Selection"]
     #[inline(always)]
-    pub fn path(&mut self) -> PATH_W {
-        PATH_W { w: self }
+    #[must_use]
+    pub fn path(&mut self) -> PathW<ChannelSpec> {
+        PathW::new(self, 8)
     }
     #[doc = "Bits 10:11 - Edge Detection Selection"]
     #[inline(always)]
-    pub fn edgsel(&mut self) -> EDGSEL_W {
-        EDGSEL_W { w: self }
+    #[must_use]
+    pub fn edgsel(&mut self) -> EdgselW<ChannelSpec> {
+        EdgselW::new(self, 10)
     }
     #[doc = "Bit 14 - Run in standby"]
     #[inline(always)]
-    pub fn runstdby(&mut self) -> RUNSTDBY_W {
-        RUNSTDBY_W { w: self }
+    #[must_use]
+    pub fn runstdby(&mut self) -> RunstdbyW<ChannelSpec> {
+        RunstdbyW::new(self, 14)
     }
     #[doc = "Bit 15 - Generic Clock On Demand"]
     #[inline(always)]
-    pub fn ondemand(&mut self) -> ONDEMAND_W {
-        ONDEMAND_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn ondemand(&mut self) -> OndemandW<ChannelSpec> {
+        OndemandW::new(self, 15)
     }
 }
-#[doc = "Channel n\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [channel](index.html) module"]
-pub struct CHANNEL_SPEC;
-impl crate::RegisterSpec for CHANNEL_SPEC {
+#[doc = "Channel n\n\nYou can [`read`](crate::Reg::read) this register and get [`channel::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`channel::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct ChannelSpec;
+impl crate::RegisterSpec for ChannelSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [channel::R](R) reader structure"]
-impl crate::Readable for CHANNEL_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [channel::W](W) writer structure"]
-impl crate::Writable for CHANNEL_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`channel::R`](R) reader structure"]
+impl crate::Readable for ChannelSpec {}
+#[doc = "`write(|w| ..)` method takes [`channel::W`](W) writer structure"]
+impl crate::Writable for ChannelSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets CHANNEL[%s]
 to value 0x8000"]
-impl crate::Resettable for CHANNEL_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0x8000
-    }
+impl crate::Resettable for ChannelSpec {
+    const RESET_VALUE: u32 = 0x8000;
 }

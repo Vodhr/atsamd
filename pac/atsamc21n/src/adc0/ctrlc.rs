@@ -1,624 +1,378 @@
 #[doc = "Register `CTRLC` reader"]
-pub struct R(crate::R<CTRLC_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CTRLC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CTRLC_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CTRLC_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<CtrlcSpec>;
 #[doc = "Register `CTRLC` writer"]
-pub struct W(crate::W<CTRLC_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CTRLC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CTRLC_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CTRLC_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<CtrlcSpec>;
 #[doc = "Field `DIFFMODE` reader - Differential Mode"]
-pub struct DIFFMODE_R(crate::FieldReader<bool, bool>);
-impl DIFFMODE_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        DIFFMODE_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for DIFFMODE_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type DiffmodeR = crate::BitReader;
 #[doc = "Field `DIFFMODE` writer - Differential Mode"]
-pub struct DIFFMODE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> DIFFMODE_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x01) | (value as u16 & 0x01);
-        self.w
-    }
-}
+pub type DiffmodeW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `LEFTADJ` reader - Left-Adjusted Result"]
-pub struct LEFTADJ_R(crate::FieldReader<bool, bool>);
-impl LEFTADJ_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        LEFTADJ_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for LEFTADJ_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type LeftadjR = crate::BitReader;
 #[doc = "Field `LEFTADJ` writer - Left-Adjusted Result"]
-pub struct LEFTADJ_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> LEFTADJ_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 1)) | ((value as u16 & 0x01) << 1);
-        self.w
-    }
-}
+pub type LeftadjW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `FREERUN` reader - Free Running Mode"]
-pub struct FREERUN_R(crate::FieldReader<bool, bool>);
-impl FREERUN_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        FREERUN_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FREERUN_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type FreerunR = crate::BitReader;
 #[doc = "Field `FREERUN` writer - Free Running Mode"]
-pub struct FREERUN_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FREERUN_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 2)) | ((value as u16 & 0x01) << 2);
-        self.w
-    }
-}
+pub type FreerunW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `CORREN` reader - Digital Correction Logic Enable"]
-pub struct CORREN_R(crate::FieldReader<bool, bool>);
-impl CORREN_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        CORREN_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CORREN_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CorrenR = crate::BitReader;
 #[doc = "Field `CORREN` writer - Digital Correction Logic Enable"]
-pub struct CORREN_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CORREN_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 3)) | ((value as u16 & 0x01) << 3);
-        self.w
-    }
-}
+pub type CorrenW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Conversion Result Resolution\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum RESSEL_A {
+pub enum Resselselect {
     #[doc = "0: 12-bit"]
-    _12BIT = 0,
+    _12bit = 0,
     #[doc = "1: 16-bit averaging mode"]
-    _16BIT = 1,
+    _16bit = 1,
     #[doc = "2: 10-bit"]
-    _10BIT = 2,
+    _10bit = 2,
     #[doc = "3: 8-bit"]
-    _8BIT = 3,
+    _8bit = 3,
 }
-impl From<RESSEL_A> for u8 {
+impl From<Resselselect> for u8 {
     #[inline(always)]
-    fn from(variant: RESSEL_A) -> Self {
+    fn from(variant: Resselselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Resselselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Resselselect {}
 #[doc = "Field `RESSEL` reader - Conversion Result Resolution"]
-pub struct RESSEL_R(crate::FieldReader<u8, RESSEL_A>);
-impl RESSEL_R {
+pub type ResselR = crate::FieldReader<Resselselect>;
+impl ResselR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        RESSEL_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> RESSEL_A {
+    pub const fn variant(&self) -> Resselselect {
         match self.bits {
-            0 => RESSEL_A::_12BIT,
-            1 => RESSEL_A::_16BIT,
-            2 => RESSEL_A::_10BIT,
-            3 => RESSEL_A::_8BIT,
+            0 => Resselselect::_12bit,
+            1 => Resselselect::_16bit,
+            2 => Resselselect::_10bit,
+            3 => Resselselect::_8bit,
             _ => unreachable!(),
         }
     }
-    #[doc = "Checks if the value of the field is `_12BIT`"]
-    #[inline(always)]
-    pub fn is_12bit(&self) -> bool {
-        **self == RESSEL_A::_12BIT
-    }
-    #[doc = "Checks if the value of the field is `_16BIT`"]
-    #[inline(always)]
-    pub fn is_16bit(&self) -> bool {
-        **self == RESSEL_A::_16BIT
-    }
-    #[doc = "Checks if the value of the field is `_10BIT`"]
-    #[inline(always)]
-    pub fn is_10bit(&self) -> bool {
-        **self == RESSEL_A::_10BIT
-    }
-    #[doc = "Checks if the value of the field is `_8BIT`"]
-    #[inline(always)]
-    pub fn is_8bit(&self) -> bool {
-        **self == RESSEL_A::_8BIT
-    }
-}
-impl core::ops::Deref for RESSEL_R {
-    type Target = crate::FieldReader<u8, RESSEL_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `RESSEL` writer - Conversion Result Resolution"]
-pub struct RESSEL_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> RESSEL_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: RESSEL_A) -> &'a mut W {
-        self.bits(variant.into())
-    }
     #[doc = "12-bit"]
     #[inline(always)]
-    pub fn _12bit(self) -> &'a mut W {
-        self.variant(RESSEL_A::_12BIT)
+    pub fn is_12bit(&self) -> bool {
+        *self == Resselselect::_12bit
     }
     #[doc = "16-bit averaging mode"]
     #[inline(always)]
-    pub fn _16bit(self) -> &'a mut W {
-        self.variant(RESSEL_A::_16BIT)
+    pub fn is_16bit(&self) -> bool {
+        *self == Resselselect::_16bit
     }
     #[doc = "10-bit"]
     #[inline(always)]
-    pub fn _10bit(self) -> &'a mut W {
-        self.variant(RESSEL_A::_10BIT)
+    pub fn is_10bit(&self) -> bool {
+        *self == Resselselect::_10bit
     }
     #[doc = "8-bit"]
     #[inline(always)]
-    pub fn _8bit(self) -> &'a mut W {
-        self.variant(RESSEL_A::_8BIT)
+    pub fn is_8bit(&self) -> bool {
+        *self == Resselselect::_8bit
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `RESSEL` writer - Conversion Result Resolution"]
+pub type ResselW<'a, REG> = crate::FieldWriter<'a, REG, 2, Resselselect, crate::Safe>;
+impl<'a, REG> ResselW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "12-bit"]
     #[inline(always)]
-    pub fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 4)) | ((value as u16 & 0x03) << 4);
-        self.w
+    pub fn _12bit(self) -> &'a mut crate::W<REG> {
+        self.variant(Resselselect::_12bit)
+    }
+    #[doc = "16-bit averaging mode"]
+    #[inline(always)]
+    pub fn _16bit(self) -> &'a mut crate::W<REG> {
+        self.variant(Resselselect::_16bit)
+    }
+    #[doc = "10-bit"]
+    #[inline(always)]
+    pub fn _10bit(self) -> &'a mut crate::W<REG> {
+        self.variant(Resselselect::_10bit)
+    }
+    #[doc = "8-bit"]
+    #[inline(always)]
+    pub fn _8bit(self) -> &'a mut crate::W<REG> {
+        self.variant(Resselselect::_8bit)
     }
 }
 #[doc = "Field `R2R` reader - Rail-to-Rail mode enable"]
-pub struct R2R_R(crate::FieldReader<bool, bool>);
-impl R2R_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        R2R_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for R2R_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type R2rR = crate::BitReader;
 #[doc = "Field `R2R` writer - Rail-to-Rail mode enable"]
-pub struct R2R_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> R2R_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 7)) | ((value as u16 & 0x01) << 7);
-        self.w
-    }
-}
+pub type R2rW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Window Monitor Mode\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum WINMODE_A {
+pub enum Winmodeselect {
     #[doc = "0: No window mode (default)"]
-    DISABLE = 0,
+    Disable = 0,
     #[doc = "1: RESULT > WINLT"]
-    MODE1 = 1,
-    #[doc = "2: RESULT < WINUT"]
-    MODE2 = 2,
-    #[doc = "3: WINLT < RESULT < WINUT"]
-    MODE3 = 3,
-    #[doc = "4: !(WINLT < RESULT < WINUT)"]
-    MODE4 = 4,
+    Mode1 = 1,
+    #[doc = "2: RESULT &lt; WINUT"]
+    Mode2 = 2,
+    #[doc = "3: WINLT &lt; RESULT &lt; WINUT"]
+    Mode3 = 3,
+    #[doc = "4: !(WINLT &lt; RESULT &lt; WINUT)"]
+    Mode4 = 4,
 }
-impl From<WINMODE_A> for u8 {
+impl From<Winmodeselect> for u8 {
     #[inline(always)]
-    fn from(variant: WINMODE_A) -> Self {
+    fn from(variant: Winmodeselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Winmodeselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Winmodeselect {}
 #[doc = "Field `WINMODE` reader - Window Monitor Mode"]
-pub struct WINMODE_R(crate::FieldReader<u8, WINMODE_A>);
-impl WINMODE_R {
+pub type WinmodeR = crate::FieldReader<Winmodeselect>;
+impl WinmodeR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        WINMODE_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<WINMODE_A> {
+    pub const fn variant(&self) -> Option<Winmodeselect> {
         match self.bits {
-            0 => Some(WINMODE_A::DISABLE),
-            1 => Some(WINMODE_A::MODE1),
-            2 => Some(WINMODE_A::MODE2),
-            3 => Some(WINMODE_A::MODE3),
-            4 => Some(WINMODE_A::MODE4),
+            0 => Some(Winmodeselect::Disable),
+            1 => Some(Winmodeselect::Mode1),
+            2 => Some(Winmodeselect::Mode2),
+            3 => Some(Winmodeselect::Mode3),
+            4 => Some(Winmodeselect::Mode4),
             _ => None,
         }
-    }
-    #[doc = "Checks if the value of the field is `DISABLE`"]
-    #[inline(always)]
-    pub fn is_disable(&self) -> bool {
-        **self == WINMODE_A::DISABLE
-    }
-    #[doc = "Checks if the value of the field is `MODE1`"]
-    #[inline(always)]
-    pub fn is_mode1(&self) -> bool {
-        **self == WINMODE_A::MODE1
-    }
-    #[doc = "Checks if the value of the field is `MODE2`"]
-    #[inline(always)]
-    pub fn is_mode2(&self) -> bool {
-        **self == WINMODE_A::MODE2
-    }
-    #[doc = "Checks if the value of the field is `MODE3`"]
-    #[inline(always)]
-    pub fn is_mode3(&self) -> bool {
-        **self == WINMODE_A::MODE3
-    }
-    #[doc = "Checks if the value of the field is `MODE4`"]
-    #[inline(always)]
-    pub fn is_mode4(&self) -> bool {
-        **self == WINMODE_A::MODE4
-    }
-}
-impl core::ops::Deref for WINMODE_R {
-    type Target = crate::FieldReader<u8, WINMODE_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `WINMODE` writer - Window Monitor Mode"]
-pub struct WINMODE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> WINMODE_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: WINMODE_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
     }
     #[doc = "No window mode (default)"]
     #[inline(always)]
-    pub fn disable(self) -> &'a mut W {
-        self.variant(WINMODE_A::DISABLE)
+    pub fn is_disable(&self) -> bool {
+        *self == Winmodeselect::Disable
     }
     #[doc = "RESULT > WINLT"]
     #[inline(always)]
-    pub fn mode1(self) -> &'a mut W {
-        self.variant(WINMODE_A::MODE1)
+    pub fn is_mode1(&self) -> bool {
+        *self == Winmodeselect::Mode1
     }
-    #[doc = "RESULT < WINUT"]
+    #[doc = "RESULT &lt; WINUT"]
     #[inline(always)]
-    pub fn mode2(self) -> &'a mut W {
-        self.variant(WINMODE_A::MODE2)
+    pub fn is_mode2(&self) -> bool {
+        *self == Winmodeselect::Mode2
     }
-    #[doc = "WINLT < RESULT < WINUT"]
+    #[doc = "WINLT &lt; RESULT &lt; WINUT"]
     #[inline(always)]
-    pub fn mode3(self) -> &'a mut W {
-        self.variant(WINMODE_A::MODE3)
+    pub fn is_mode3(&self) -> bool {
+        *self == Winmodeselect::Mode3
     }
-    #[doc = "!(WINLT < RESULT < WINUT)"]
+    #[doc = "!(WINLT &lt; RESULT &lt; WINUT)"]
     #[inline(always)]
-    pub fn mode4(self) -> &'a mut W {
-        self.variant(WINMODE_A::MODE4)
+    pub fn is_mode4(&self) -> bool {
+        *self == Winmodeselect::Mode4
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `WINMODE` writer - Window Monitor Mode"]
+pub type WinmodeW<'a, REG> = crate::FieldWriter<'a, REG, 3, Winmodeselect>;
+impl<'a, REG> WinmodeW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "No window mode (default)"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x07 << 8)) | ((value as u16 & 0x07) << 8);
-        self.w
+    pub fn disable(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Disable)
+    }
+    #[doc = "RESULT > WINLT"]
+    #[inline(always)]
+    pub fn mode1(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Mode1)
+    }
+    #[doc = "RESULT &lt; WINUT"]
+    #[inline(always)]
+    pub fn mode2(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Mode2)
+    }
+    #[doc = "WINLT &lt; RESULT &lt; WINUT"]
+    #[inline(always)]
+    pub fn mode3(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Mode3)
+    }
+    #[doc = "!(WINLT &lt; RESULT &lt; WINUT)"]
+    #[inline(always)]
+    pub fn mode4(self) -> &'a mut crate::W<REG> {
+        self.variant(Winmodeselect::Mode4)
     }
 }
 #[doc = "Dual Mode Trigger Selection\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum DUALSEL_A {
+pub enum Dualselselect {
     #[doc = "0: Start event or software trigger will start a conversion on both ADCs"]
-    BOTH = 0,
+    Both = 0,
     #[doc = "1: START event or software trigger will alternatingly start a conversion on ADC0 and ADC1"]
-    INTERLEAVE = 1,
+    Interleave = 1,
 }
-impl From<DUALSEL_A> for u8 {
+impl From<Dualselselect> for u8 {
     #[inline(always)]
-    fn from(variant: DUALSEL_A) -> Self {
+    fn from(variant: Dualselselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Dualselselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Dualselselect {}
 #[doc = "Field `DUALSEL` reader - Dual Mode Trigger Selection"]
-pub struct DUALSEL_R(crate::FieldReader<u8, DUALSEL_A>);
-impl DUALSEL_R {
+pub type DualselR = crate::FieldReader<Dualselselect>;
+impl DualselR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        DUALSEL_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<DUALSEL_A> {
+    pub const fn variant(&self) -> Option<Dualselselect> {
         match self.bits {
-            0 => Some(DUALSEL_A::BOTH),
-            1 => Some(DUALSEL_A::INTERLEAVE),
+            0 => Some(Dualselselect::Both),
+            1 => Some(Dualselselect::Interleave),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `BOTH`"]
-    #[inline(always)]
-    pub fn is_both(&self) -> bool {
-        **self == DUALSEL_A::BOTH
-    }
-    #[doc = "Checks if the value of the field is `INTERLEAVE`"]
-    #[inline(always)]
-    pub fn is_interleave(&self) -> bool {
-        **self == DUALSEL_A::INTERLEAVE
-    }
-}
-impl core::ops::Deref for DUALSEL_R {
-    type Target = crate::FieldReader<u8, DUALSEL_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `DUALSEL` writer - Dual Mode Trigger Selection"]
-pub struct DUALSEL_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> DUALSEL_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: DUALSEL_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
     #[doc = "Start event or software trigger will start a conversion on both ADCs"]
     #[inline(always)]
-    pub fn both(self) -> &'a mut W {
-        self.variant(DUALSEL_A::BOTH)
+    pub fn is_both(&self) -> bool {
+        *self == Dualselselect::Both
     }
     #[doc = "START event or software trigger will alternatingly start a conversion on ADC0 and ADC1"]
     #[inline(always)]
-    pub fn interleave(self) -> &'a mut W {
-        self.variant(DUALSEL_A::INTERLEAVE)
+    pub fn is_interleave(&self) -> bool {
+        *self == Dualselselect::Interleave
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `DUALSEL` writer - Dual Mode Trigger Selection"]
+pub type DualselW<'a, REG> = crate::FieldWriter<'a, REG, 2, Dualselselect>;
+impl<'a, REG> DualselW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "Start event or software trigger will start a conversion on both ADCs"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 12)) | ((value as u16 & 0x03) << 12);
-        self.w
+    pub fn both(self) -> &'a mut crate::W<REG> {
+        self.variant(Dualselselect::Both)
+    }
+    #[doc = "START event or software trigger will alternatingly start a conversion on ADC0 and ADC1"]
+    #[inline(always)]
+    pub fn interleave(self) -> &'a mut crate::W<REG> {
+        self.variant(Dualselselect::Interleave)
     }
 }
 impl R {
     #[doc = "Bit 0 - Differential Mode"]
     #[inline(always)]
-    pub fn diffmode(&self) -> DIFFMODE_R {
-        DIFFMODE_R::new((self.bits & 0x01) != 0)
+    pub fn diffmode(&self) -> DiffmodeR {
+        DiffmodeR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - Left-Adjusted Result"]
     #[inline(always)]
-    pub fn leftadj(&self) -> LEFTADJ_R {
-        LEFTADJ_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn leftadj(&self) -> LeftadjR {
+        LeftadjR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 2 - Free Running Mode"]
     #[inline(always)]
-    pub fn freerun(&self) -> FREERUN_R {
-        FREERUN_R::new(((self.bits >> 2) & 0x01) != 0)
+    pub fn freerun(&self) -> FreerunR {
+        FreerunR::new(((self.bits >> 2) & 1) != 0)
     }
     #[doc = "Bit 3 - Digital Correction Logic Enable"]
     #[inline(always)]
-    pub fn corren(&self) -> CORREN_R {
-        CORREN_R::new(((self.bits >> 3) & 0x01) != 0)
+    pub fn corren(&self) -> CorrenR {
+        CorrenR::new(((self.bits >> 3) & 1) != 0)
     }
     #[doc = "Bits 4:5 - Conversion Result Resolution"]
     #[inline(always)]
-    pub fn ressel(&self) -> RESSEL_R {
-        RESSEL_R::new(((self.bits >> 4) & 0x03) as u8)
+    pub fn ressel(&self) -> ResselR {
+        ResselR::new(((self.bits >> 4) & 3) as u8)
     }
     #[doc = "Bit 7 - Rail-to-Rail mode enable"]
     #[inline(always)]
-    pub fn r2r(&self) -> R2R_R {
-        R2R_R::new(((self.bits >> 7) & 0x01) != 0)
+    pub fn r2r(&self) -> R2rR {
+        R2rR::new(((self.bits >> 7) & 1) != 0)
     }
     #[doc = "Bits 8:10 - Window Monitor Mode"]
     #[inline(always)]
-    pub fn winmode(&self) -> WINMODE_R {
-        WINMODE_R::new(((self.bits >> 8) & 0x07) as u8)
+    pub fn winmode(&self) -> WinmodeR {
+        WinmodeR::new(((self.bits >> 8) & 7) as u8)
     }
     #[doc = "Bits 12:13 - Dual Mode Trigger Selection"]
     #[inline(always)]
-    pub fn dualsel(&self) -> DUALSEL_R {
-        DUALSEL_R::new(((self.bits >> 12) & 0x03) as u8)
+    pub fn dualsel(&self) -> DualselR {
+        DualselR::new(((self.bits >> 12) & 3) as u8)
     }
 }
 impl W {
     #[doc = "Bit 0 - Differential Mode"]
     #[inline(always)]
-    pub fn diffmode(&mut self) -> DIFFMODE_W {
-        DIFFMODE_W { w: self }
+    #[must_use]
+    pub fn diffmode(&mut self) -> DiffmodeW<CtrlcSpec> {
+        DiffmodeW::new(self, 0)
     }
     #[doc = "Bit 1 - Left-Adjusted Result"]
     #[inline(always)]
-    pub fn leftadj(&mut self) -> LEFTADJ_W {
-        LEFTADJ_W { w: self }
+    #[must_use]
+    pub fn leftadj(&mut self) -> LeftadjW<CtrlcSpec> {
+        LeftadjW::new(self, 1)
     }
     #[doc = "Bit 2 - Free Running Mode"]
     #[inline(always)]
-    pub fn freerun(&mut self) -> FREERUN_W {
-        FREERUN_W { w: self }
+    #[must_use]
+    pub fn freerun(&mut self) -> FreerunW<CtrlcSpec> {
+        FreerunW::new(self, 2)
     }
     #[doc = "Bit 3 - Digital Correction Logic Enable"]
     #[inline(always)]
-    pub fn corren(&mut self) -> CORREN_W {
-        CORREN_W { w: self }
+    #[must_use]
+    pub fn corren(&mut self) -> CorrenW<CtrlcSpec> {
+        CorrenW::new(self, 3)
     }
     #[doc = "Bits 4:5 - Conversion Result Resolution"]
     #[inline(always)]
-    pub fn ressel(&mut self) -> RESSEL_W {
-        RESSEL_W { w: self }
+    #[must_use]
+    pub fn ressel(&mut self) -> ResselW<CtrlcSpec> {
+        ResselW::new(self, 4)
     }
     #[doc = "Bit 7 - Rail-to-Rail mode enable"]
     #[inline(always)]
-    pub fn r2r(&mut self) -> R2R_W {
-        R2R_W { w: self }
+    #[must_use]
+    pub fn r2r(&mut self) -> R2rW<CtrlcSpec> {
+        R2rW::new(self, 7)
     }
     #[doc = "Bits 8:10 - Window Monitor Mode"]
     #[inline(always)]
-    pub fn winmode(&mut self) -> WINMODE_W {
-        WINMODE_W { w: self }
+    #[must_use]
+    pub fn winmode(&mut self) -> WinmodeW<CtrlcSpec> {
+        WinmodeW::new(self, 8)
     }
     #[doc = "Bits 12:13 - Dual Mode Trigger Selection"]
     #[inline(always)]
-    pub fn dualsel(&mut self) -> DUALSEL_W {
-        DUALSEL_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u16) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn dualsel(&mut self) -> DualselW<CtrlcSpec> {
+        DualselW::new(self, 12)
     }
 }
-#[doc = "Control C\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [ctrlc](index.html) module"]
-pub struct CTRLC_SPEC;
-impl crate::RegisterSpec for CTRLC_SPEC {
+#[doc = "Control C\n\nYou can [`read`](crate::Reg::read) this register and get [`ctrlc::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`ctrlc::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct CtrlcSpec;
+impl crate::RegisterSpec for CtrlcSpec {
     type Ux = u16;
 }
-#[doc = "`read()` method returns [ctrlc::R](R) reader structure"]
-impl crate::Readable for CTRLC_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [ctrlc::W](W) writer structure"]
-impl crate::Writable for CTRLC_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`ctrlc::R`](R) reader structure"]
+impl crate::Readable for CtrlcSpec {}
+#[doc = "`write(|w| ..)` method takes [`ctrlc::W`](W) writer structure"]
+impl crate::Writable for CtrlcSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
 }
 #[doc = "`reset()` method sets CTRLC to value 0"]
-impl crate::Resettable for CTRLC_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for CtrlcSpec {
+    const RESET_VALUE: u16 = 0;
 }

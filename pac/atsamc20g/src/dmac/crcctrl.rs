@@ -1,337 +1,251 @@
 #[doc = "Register `CRCCTRL` reader"]
-pub struct R(crate::R<CRCCTRL_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CRCCTRL_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CRCCTRL_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CRCCTRL_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<CrcctrlSpec>;
 #[doc = "Register `CRCCTRL` writer"]
-pub struct W(crate::W<CRCCTRL_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CRCCTRL_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CRCCTRL_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CRCCTRL_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<CrcctrlSpec>;
 #[doc = "CRC Beat Size\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum CRCBEATSIZE_A {
+pub enum Crcbeatsizeselect {
     #[doc = "0: 8-bit bus transfer"]
-    BYTE = 0,
+    Byte = 0,
     #[doc = "1: 16-bit bus transfer"]
-    HWORD = 1,
+    Hword = 1,
     #[doc = "2: 32-bit bus transfer"]
-    WORD = 2,
+    Word = 2,
 }
-impl From<CRCBEATSIZE_A> for u8 {
+impl From<Crcbeatsizeselect> for u8 {
     #[inline(always)]
-    fn from(variant: CRCBEATSIZE_A) -> Self {
+    fn from(variant: Crcbeatsizeselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Crcbeatsizeselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Crcbeatsizeselect {}
 #[doc = "Field `CRCBEATSIZE` reader - CRC Beat Size"]
-pub struct CRCBEATSIZE_R(crate::FieldReader<u8, CRCBEATSIZE_A>);
-impl CRCBEATSIZE_R {
+pub type CrcbeatsizeR = crate::FieldReader<Crcbeatsizeselect>;
+impl CrcbeatsizeR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        CRCBEATSIZE_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<CRCBEATSIZE_A> {
+    pub const fn variant(&self) -> Option<Crcbeatsizeselect> {
         match self.bits {
-            0 => Some(CRCBEATSIZE_A::BYTE),
-            1 => Some(CRCBEATSIZE_A::HWORD),
-            2 => Some(CRCBEATSIZE_A::WORD),
+            0 => Some(Crcbeatsizeselect::Byte),
+            1 => Some(Crcbeatsizeselect::Hword),
+            2 => Some(Crcbeatsizeselect::Word),
             _ => None,
         }
-    }
-    #[doc = "Checks if the value of the field is `BYTE`"]
-    #[inline(always)]
-    pub fn is_byte(&self) -> bool {
-        **self == CRCBEATSIZE_A::BYTE
-    }
-    #[doc = "Checks if the value of the field is `HWORD`"]
-    #[inline(always)]
-    pub fn is_hword(&self) -> bool {
-        **self == CRCBEATSIZE_A::HWORD
-    }
-    #[doc = "Checks if the value of the field is `WORD`"]
-    #[inline(always)]
-    pub fn is_word(&self) -> bool {
-        **self == CRCBEATSIZE_A::WORD
-    }
-}
-impl core::ops::Deref for CRCBEATSIZE_R {
-    type Target = crate::FieldReader<u8, CRCBEATSIZE_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `CRCBEATSIZE` writer - CRC Beat Size"]
-pub struct CRCBEATSIZE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CRCBEATSIZE_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: CRCBEATSIZE_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
     }
     #[doc = "8-bit bus transfer"]
     #[inline(always)]
-    pub fn byte(self) -> &'a mut W {
-        self.variant(CRCBEATSIZE_A::BYTE)
+    pub fn is_byte(&self) -> bool {
+        *self == Crcbeatsizeselect::Byte
     }
     #[doc = "16-bit bus transfer"]
     #[inline(always)]
-    pub fn hword(self) -> &'a mut W {
-        self.variant(CRCBEATSIZE_A::HWORD)
+    pub fn is_hword(&self) -> bool {
+        *self == Crcbeatsizeselect::Hword
     }
     #[doc = "32-bit bus transfer"]
     #[inline(always)]
-    pub fn word(self) -> &'a mut W {
-        self.variant(CRCBEATSIZE_A::WORD)
+    pub fn is_word(&self) -> bool {
+        *self == Crcbeatsizeselect::Word
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `CRCBEATSIZE` writer - CRC Beat Size"]
+pub type CrcbeatsizeW<'a, REG> = crate::FieldWriter<'a, REG, 2, Crcbeatsizeselect>;
+impl<'a, REG> CrcbeatsizeW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "8-bit bus transfer"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x03) | (value as u16 & 0x03);
-        self.w
+    pub fn byte(self) -> &'a mut crate::W<REG> {
+        self.variant(Crcbeatsizeselect::Byte)
+    }
+    #[doc = "16-bit bus transfer"]
+    #[inline(always)]
+    pub fn hword(self) -> &'a mut crate::W<REG> {
+        self.variant(Crcbeatsizeselect::Hword)
+    }
+    #[doc = "32-bit bus transfer"]
+    #[inline(always)]
+    pub fn word(self) -> &'a mut crate::W<REG> {
+        self.variant(Crcbeatsizeselect::Word)
     }
 }
 #[doc = "CRC Polynomial Type\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum CRCPOLY_A {
+pub enum Crcpolyselect {
     #[doc = "0: CRC-16 (CRC-CCITT)"]
-    CRC16 = 0,
+    Crc16 = 0,
     #[doc = "1: CRC32 (IEEE 802.3)"]
-    CRC32 = 1,
+    Crc32 = 1,
 }
-impl From<CRCPOLY_A> for u8 {
+impl From<Crcpolyselect> for u8 {
     #[inline(always)]
-    fn from(variant: CRCPOLY_A) -> Self {
+    fn from(variant: Crcpolyselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Crcpolyselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Crcpolyselect {}
 #[doc = "Field `CRCPOLY` reader - CRC Polynomial Type"]
-pub struct CRCPOLY_R(crate::FieldReader<u8, CRCPOLY_A>);
-impl CRCPOLY_R {
+pub type CrcpolyR = crate::FieldReader<Crcpolyselect>;
+impl CrcpolyR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        CRCPOLY_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<CRCPOLY_A> {
+    pub const fn variant(&self) -> Option<Crcpolyselect> {
         match self.bits {
-            0 => Some(CRCPOLY_A::CRC16),
-            1 => Some(CRCPOLY_A::CRC32),
+            0 => Some(Crcpolyselect::Crc16),
+            1 => Some(Crcpolyselect::Crc32),
             _ => None,
         }
-    }
-    #[doc = "Checks if the value of the field is `CRC16`"]
-    #[inline(always)]
-    pub fn is_crc16(&self) -> bool {
-        **self == CRCPOLY_A::CRC16
-    }
-    #[doc = "Checks if the value of the field is `CRC32`"]
-    #[inline(always)]
-    pub fn is_crc32(&self) -> bool {
-        **self == CRCPOLY_A::CRC32
-    }
-}
-impl core::ops::Deref for CRCPOLY_R {
-    type Target = crate::FieldReader<u8, CRCPOLY_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `CRCPOLY` writer - CRC Polynomial Type"]
-pub struct CRCPOLY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CRCPOLY_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: CRCPOLY_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
     }
     #[doc = "CRC-16 (CRC-CCITT)"]
     #[inline(always)]
-    pub fn crc16(self) -> &'a mut W {
-        self.variant(CRCPOLY_A::CRC16)
+    pub fn is_crc16(&self) -> bool {
+        *self == Crcpolyselect::Crc16
     }
     #[doc = "CRC32 (IEEE 802.3)"]
     #[inline(always)]
-    pub fn crc32(self) -> &'a mut W {
-        self.variant(CRCPOLY_A::CRC32)
+    pub fn is_crc32(&self) -> bool {
+        *self == Crcpolyselect::Crc32
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `CRCPOLY` writer - CRC Polynomial Type"]
+pub type CrcpolyW<'a, REG> = crate::FieldWriter<'a, REG, 2, Crcpolyselect>;
+impl<'a, REG> CrcpolyW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "CRC-16 (CRC-CCITT)"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 2)) | ((value as u16 & 0x03) << 2);
-        self.w
+    pub fn crc16(self) -> &'a mut crate::W<REG> {
+        self.variant(Crcpolyselect::Crc16)
+    }
+    #[doc = "CRC32 (IEEE 802.3)"]
+    #[inline(always)]
+    pub fn crc32(self) -> &'a mut crate::W<REG> {
+        self.variant(Crcpolyselect::Crc32)
     }
 }
 #[doc = "CRC Input Source\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum CRCSRC_A {
+pub enum Crcsrcselect {
     #[doc = "0: No action"]
-    NOACT = 0,
+    Noact = 0,
     #[doc = "1: I/O interface"]
-    IO = 1,
+    Io = 1,
 }
-impl From<CRCSRC_A> for u8 {
+impl From<Crcsrcselect> for u8 {
     #[inline(always)]
-    fn from(variant: CRCSRC_A) -> Self {
+    fn from(variant: Crcsrcselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Crcsrcselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Crcsrcselect {}
 #[doc = "Field `CRCSRC` reader - CRC Input Source"]
-pub struct CRCSRC_R(crate::FieldReader<u8, CRCSRC_A>);
-impl CRCSRC_R {
+pub type CrcsrcR = crate::FieldReader<Crcsrcselect>;
+impl CrcsrcR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        CRCSRC_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<CRCSRC_A> {
+    pub const fn variant(&self) -> Option<Crcsrcselect> {
         match self.bits {
-            0 => Some(CRCSRC_A::NOACT),
-            1 => Some(CRCSRC_A::IO),
+            0 => Some(Crcsrcselect::Noact),
+            1 => Some(Crcsrcselect::Io),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NOACT`"]
-    #[inline(always)]
-    pub fn is_noact(&self) -> bool {
-        **self == CRCSRC_A::NOACT
-    }
-    #[doc = "Checks if the value of the field is `IO`"]
-    #[inline(always)]
-    pub fn is_io(&self) -> bool {
-        **self == CRCSRC_A::IO
-    }
-}
-impl core::ops::Deref for CRCSRC_R {
-    type Target = crate::FieldReader<u8, CRCSRC_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `CRCSRC` writer - CRC Input Source"]
-pub struct CRCSRC_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CRCSRC_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: CRCSRC_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
     #[doc = "No action"]
     #[inline(always)]
-    pub fn noact(self) -> &'a mut W {
-        self.variant(CRCSRC_A::NOACT)
+    pub fn is_noact(&self) -> bool {
+        *self == Crcsrcselect::Noact
     }
     #[doc = "I/O interface"]
     #[inline(always)]
-    pub fn io(self) -> &'a mut W {
-        self.variant(CRCSRC_A::IO)
+    pub fn is_io(&self) -> bool {
+        *self == Crcsrcselect::Io
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `CRCSRC` writer - CRC Input Source"]
+pub type CrcsrcW<'a, REG> = crate::FieldWriter<'a, REG, 6, Crcsrcselect>;
+impl<'a, REG> CrcsrcW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "No action"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x3f << 8)) | ((value as u16 & 0x3f) << 8);
-        self.w
+    pub fn noact(self) -> &'a mut crate::W<REG> {
+        self.variant(Crcsrcselect::Noact)
+    }
+    #[doc = "I/O interface"]
+    #[inline(always)]
+    pub fn io(self) -> &'a mut crate::W<REG> {
+        self.variant(Crcsrcselect::Io)
     }
 }
 impl R {
     #[doc = "Bits 0:1 - CRC Beat Size"]
     #[inline(always)]
-    pub fn crcbeatsize(&self) -> CRCBEATSIZE_R {
-        CRCBEATSIZE_R::new((self.bits & 0x03) as u8)
+    pub fn crcbeatsize(&self) -> CrcbeatsizeR {
+        CrcbeatsizeR::new((self.bits & 3) as u8)
     }
     #[doc = "Bits 2:3 - CRC Polynomial Type"]
     #[inline(always)]
-    pub fn crcpoly(&self) -> CRCPOLY_R {
-        CRCPOLY_R::new(((self.bits >> 2) & 0x03) as u8)
+    pub fn crcpoly(&self) -> CrcpolyR {
+        CrcpolyR::new(((self.bits >> 2) & 3) as u8)
     }
     #[doc = "Bits 8:13 - CRC Input Source"]
     #[inline(always)]
-    pub fn crcsrc(&self) -> CRCSRC_R {
-        CRCSRC_R::new(((self.bits >> 8) & 0x3f) as u8)
+    pub fn crcsrc(&self) -> CrcsrcR {
+        CrcsrcR::new(((self.bits >> 8) & 0x3f) as u8)
     }
 }
 impl W {
     #[doc = "Bits 0:1 - CRC Beat Size"]
     #[inline(always)]
-    pub fn crcbeatsize(&mut self) -> CRCBEATSIZE_W {
-        CRCBEATSIZE_W { w: self }
+    #[must_use]
+    pub fn crcbeatsize(&mut self) -> CrcbeatsizeW<CrcctrlSpec> {
+        CrcbeatsizeW::new(self, 0)
     }
     #[doc = "Bits 2:3 - CRC Polynomial Type"]
     #[inline(always)]
-    pub fn crcpoly(&mut self) -> CRCPOLY_W {
-        CRCPOLY_W { w: self }
+    #[must_use]
+    pub fn crcpoly(&mut self) -> CrcpolyW<CrcctrlSpec> {
+        CrcpolyW::new(self, 2)
     }
     #[doc = "Bits 8:13 - CRC Input Source"]
     #[inline(always)]
-    pub fn crcsrc(&mut self) -> CRCSRC_W {
-        CRCSRC_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u16) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn crcsrc(&mut self) -> CrcsrcW<CrcctrlSpec> {
+        CrcsrcW::new(self, 8)
     }
 }
-#[doc = "CRC Control\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [crcctrl](index.html) module"]
-pub struct CRCCTRL_SPEC;
-impl crate::RegisterSpec for CRCCTRL_SPEC {
+#[doc = "CRC Control\n\nYou can [`read`](crate::Reg::read) this register and get [`crcctrl::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`crcctrl::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct CrcctrlSpec;
+impl crate::RegisterSpec for CrcctrlSpec {
     type Ux = u16;
 }
-#[doc = "`read()` method returns [crcctrl::R](R) reader structure"]
-impl crate::Readable for CRCCTRL_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [crcctrl::W](W) writer structure"]
-impl crate::Writable for CRCCTRL_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`crcctrl::R`](R) reader structure"]
+impl crate::Readable for CrcctrlSpec {}
+#[doc = "`write(|w| ..)` method takes [`crcctrl::W`](W) writer structure"]
+impl crate::Writable for CrcctrlSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u16 = 0;
 }
 #[doc = "`reset()` method sets CRCCTRL to value 0"]
-impl crate::Resettable for CRCCTRL_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for CrcctrlSpec {
+    const RESET_VALUE: u16 = 0;
 }

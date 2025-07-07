@@ -1,273 +1,99 @@
 #[doc = "Register `SYNCBUSY` reader"]
-pub struct R(crate::R<SYNCBUSY_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<SYNCBUSY_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<SYNCBUSY_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<SYNCBUSY_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<SyncbusySpec>;
 #[doc = "Field `SWRST` reader - SWRST Synchronization Busy"]
-pub struct SWRST_R(crate::FieldReader<bool, bool>);
-impl SWRST_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        SWRST_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for SWRST_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type SwrstR = crate::BitReader;
 #[doc = "Field `ENABLE` reader - ENABLE Synchronization Busy"]
-pub struct ENABLE_R(crate::FieldReader<bool, bool>);
-impl ENABLE_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ENABLE_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ENABLE_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type EnableR = crate::BitReader;
 #[doc = "Field `CTRLC` reader - CTRLC Synchronization Busy"]
-pub struct CTRLC_R(crate::FieldReader<bool, bool>);
-impl CTRLC_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        CTRLC_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CTRLC_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CtrlcR = crate::BitReader;
 #[doc = "Field `INPUTCTRL` reader - INPUTCTRL Synchronization Busy"]
-pub struct INPUTCTRL_R(crate::FieldReader<bool, bool>);
-impl INPUTCTRL_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        INPUTCTRL_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for INPUTCTRL_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type InputctrlR = crate::BitReader;
 #[doc = "Field `WINCTRL` reader - WINCTRL Synchronization Busy"]
-pub struct WINCTRL_R(crate::FieldReader<bool, bool>);
-impl WINCTRL_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        WINCTRL_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for WINCTRL_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type WinctrlR = crate::BitReader;
 #[doc = "Field `WINLT` reader - WINLT Synchronization Busy"]
-pub struct WINLT_R(crate::FieldReader<bool, bool>);
-impl WINLT_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        WINLT_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for WINLT_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type WinltR = crate::BitReader;
 #[doc = "Field `WINUT` reader - WINUT Synchronization Busy"]
-pub struct WINUT_R(crate::FieldReader<bool, bool>);
-impl WINUT_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        WINUT_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for WINUT_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type WinutR = crate::BitReader;
 #[doc = "Field `OFFSETCORR` reader - OFFSETCTRL Synchronization Busy"]
-pub struct OFFSETCORR_R(crate::FieldReader<bool, bool>);
-impl OFFSETCORR_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        OFFSETCORR_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for OFFSETCORR_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type OffsetcorrR = crate::BitReader;
 #[doc = "Field `GAINCORR` reader - GAINCORR Synchronization Busy"]
-pub struct GAINCORR_R(crate::FieldReader<bool, bool>);
-impl GAINCORR_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        GAINCORR_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for GAINCORR_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type GaincorrR = crate::BitReader;
 #[doc = "Field `SHIFTCORR` reader - SHIFTCORR Synchronization Busy"]
-pub struct SHIFTCORR_R(crate::FieldReader<bool, bool>);
-impl SHIFTCORR_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        SHIFTCORR_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for SHIFTCORR_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type ShiftcorrR = crate::BitReader;
 #[doc = "Field `SWTRIG` reader - SWTRG Synchronization Busy"]
-pub struct SWTRIG_R(crate::FieldReader<bool, bool>);
-impl SWTRIG_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        SWTRIG_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for SWTRIG_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type SwtrigR = crate::BitReader;
 #[doc = "Field `ANACTRL` reader - ANACTRL Synchronization Busy"]
-pub struct ANACTRL_R(crate::FieldReader<bool, bool>);
-impl ANACTRL_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        ANACTRL_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for ANACTRL_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type AnactrlR = crate::BitReader;
 impl R {
     #[doc = "Bit 0 - SWRST Synchronization Busy"]
     #[inline(always)]
-    pub fn swrst(&self) -> SWRST_R {
-        SWRST_R::new((self.bits & 0x01) != 0)
+    pub fn swrst(&self) -> SwrstR {
+        SwrstR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - ENABLE Synchronization Busy"]
     #[inline(always)]
-    pub fn enable(&self) -> ENABLE_R {
-        ENABLE_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn enable(&self) -> EnableR {
+        EnableR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 2 - CTRLC Synchronization Busy"]
     #[inline(always)]
-    pub fn ctrlc(&self) -> CTRLC_R {
-        CTRLC_R::new(((self.bits >> 2) & 0x01) != 0)
+    pub fn ctrlc(&self) -> CtrlcR {
+        CtrlcR::new(((self.bits >> 2) & 1) != 0)
     }
     #[doc = "Bit 3 - INPUTCTRL Synchronization Busy"]
     #[inline(always)]
-    pub fn inputctrl(&self) -> INPUTCTRL_R {
-        INPUTCTRL_R::new(((self.bits >> 3) & 0x01) != 0)
+    pub fn inputctrl(&self) -> InputctrlR {
+        InputctrlR::new(((self.bits >> 3) & 1) != 0)
     }
     #[doc = "Bit 4 - WINCTRL Synchronization Busy"]
     #[inline(always)]
-    pub fn winctrl(&self) -> WINCTRL_R {
-        WINCTRL_R::new(((self.bits >> 4) & 0x01) != 0)
+    pub fn winctrl(&self) -> WinctrlR {
+        WinctrlR::new(((self.bits >> 4) & 1) != 0)
     }
     #[doc = "Bit 5 - WINLT Synchronization Busy"]
     #[inline(always)]
-    pub fn winlt(&self) -> WINLT_R {
-        WINLT_R::new(((self.bits >> 5) & 0x01) != 0)
+    pub fn winlt(&self) -> WinltR {
+        WinltR::new(((self.bits >> 5) & 1) != 0)
     }
     #[doc = "Bit 6 - WINUT Synchronization Busy"]
     #[inline(always)]
-    pub fn winut(&self) -> WINUT_R {
-        WINUT_R::new(((self.bits >> 6) & 0x01) != 0)
+    pub fn winut(&self) -> WinutR {
+        WinutR::new(((self.bits >> 6) & 1) != 0)
     }
     #[doc = "Bit 7 - OFFSETCTRL Synchronization Busy"]
     #[inline(always)]
-    pub fn offsetcorr(&self) -> OFFSETCORR_R {
-        OFFSETCORR_R::new(((self.bits >> 7) & 0x01) != 0)
+    pub fn offsetcorr(&self) -> OffsetcorrR {
+        OffsetcorrR::new(((self.bits >> 7) & 1) != 0)
     }
     #[doc = "Bit 8 - GAINCORR Synchronization Busy"]
     #[inline(always)]
-    pub fn gaincorr(&self) -> GAINCORR_R {
-        GAINCORR_R::new(((self.bits >> 8) & 0x01) != 0)
+    pub fn gaincorr(&self) -> GaincorrR {
+        GaincorrR::new(((self.bits >> 8) & 1) != 0)
     }
     #[doc = "Bit 9 - SHIFTCORR Synchronization Busy"]
     #[inline(always)]
-    pub fn shiftcorr(&self) -> SHIFTCORR_R {
-        SHIFTCORR_R::new(((self.bits >> 9) & 0x01) != 0)
+    pub fn shiftcorr(&self) -> ShiftcorrR {
+        ShiftcorrR::new(((self.bits >> 9) & 1) != 0)
     }
     #[doc = "Bit 10 - SWTRG Synchronization Busy"]
     #[inline(always)]
-    pub fn swtrig(&self) -> SWTRIG_R {
-        SWTRIG_R::new(((self.bits >> 10) & 0x01) != 0)
+    pub fn swtrig(&self) -> SwtrigR {
+        SwtrigR::new(((self.bits >> 10) & 1) != 0)
     }
     #[doc = "Bit 11 - ANACTRL Synchronization Busy"]
     #[inline(always)]
-    pub fn anactrl(&self) -> ANACTRL_R {
-        ANACTRL_R::new(((self.bits >> 11) & 0x01) != 0)
+    pub fn anactrl(&self) -> AnactrlR {
+        AnactrlR::new(((self.bits >> 11) & 1) != 0)
     }
 }
-#[doc = "Synchronization Busy\n\nThis register you can [`read`](crate::generic::Reg::read). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [syncbusy](index.html) module"]
-pub struct SYNCBUSY_SPEC;
-impl crate::RegisterSpec for SYNCBUSY_SPEC {
+#[doc = "Synchronization Busy\n\nYou can [`read`](crate::Reg::read) this register and get [`syncbusy::R`](R). See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct SyncbusySpec;
+impl crate::RegisterSpec for SyncbusySpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [syncbusy::R](R) reader structure"]
-impl crate::Readable for SYNCBUSY_SPEC {
-    type Reader = R;
-}
+#[doc = "`read()` method returns [`syncbusy::R`](R) reader structure"]
+impl crate::Readable for SyncbusySpec {}
 #[doc = "`reset()` method sets SYNCBUSY to value 0"]
-impl crate::Resettable for SYNCBUSY_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for SyncbusySpec {
+    const RESET_VALUE: u32 = 0;
 }

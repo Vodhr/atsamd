@@ -1,163 +1,333 @@
-#[doc = r"Register block"]
 #[repr(C)]
+#[doc = "Register block"]
 pub struct RegisterBlock {
-    #[doc = "0x00 - Control"]
-    pub ctrl: crate::Reg<ctrl::CTRL_SPEC>,
-    #[doc = "0x01 - Status A"]
-    pub statusa: crate::Reg<statusa::STATUSA_SPEC>,
-    #[doc = "0x02 - Status B"]
-    pub statusb: crate::Reg<statusb::STATUSB_SPEC>,
-    #[doc = "0x03 - Status C"]
-    pub statusc: crate::Reg<statusc::STATUSC_SPEC>,
-    #[doc = "0x04 - Address"]
-    pub addr: crate::Reg<addr::ADDR_SPEC>,
-    #[doc = "0x08 - Length"]
-    pub length: crate::Reg<length::LENGTH_SPEC>,
-    #[doc = "0x0c - Data"]
-    pub data: crate::Reg<data::DATA_SPEC>,
-    #[doc = "0x10..0x18 - Debug Communication Channel n"]
-    pub dcc: [crate::Reg<dcc::DCC_SPEC>; 2],
-    #[doc = "0x18 - Device Identification"]
-    pub did: crate::Reg<did::DID_SPEC>,
+    ctrl: Ctrl,
+    statusa: Statusa,
+    statusb: Statusb,
+    statusc: Statusc,
+    addr: Addr,
+    length: Length,
+    data: Data,
+    dcc: [Dcc; 2],
+    did: Did,
     _reserved9: [u8; 0xd4],
-    #[doc = "0xf0..0xf8 - Device Configuration"]
-    pub dcfg: [crate::Reg<dcfg::DCFG_SPEC>; 2],
+    dcfg: [Dcfg; 2],
     _reserved10: [u8; 0x0f08],
-    #[doc = "0x1000 - CoreSight ROM Table Entry 0"]
-    pub entry0: crate::Reg<entry0::ENTRY0_SPEC>,
-    #[doc = "0x1004 - CoreSight ROM Table Entry 1"]
-    pub entry1: crate::Reg<entry1::ENTRY1_SPEC>,
-    #[doc = "0x1008 - CoreSight ROM Table End"]
-    pub end: crate::Reg<end::END_SPEC>,
+    entry0: Entry0,
+    entry1: Entry1,
+    end: End,
     _reserved13: [u8; 0x0fc0],
-    #[doc = "0x1fcc - CoreSight ROM Table Memory Type"]
-    pub memtype: crate::Reg<memtype::MEMTYPE_SPEC>,
-    #[doc = "0x1fd0 - Peripheral Identification 4"]
-    pub pid4: crate::Reg<pid4::PID4_SPEC>,
-    #[doc = "0x1fd4 - Peripheral Identification 5"]
-    pub pid5: crate::Reg<pid5::PID5_SPEC>,
-    #[doc = "0x1fd8 - Peripheral Identification 6"]
-    pub pid6: crate::Reg<pid6::PID6_SPEC>,
-    #[doc = "0x1fdc - Peripheral Identification 7"]
-    pub pid7: crate::Reg<pid7::PID7_SPEC>,
-    #[doc = "0x1fe0 - Peripheral Identification 0"]
-    pub pid0: crate::Reg<pid0::PID0_SPEC>,
-    #[doc = "0x1fe4 - Peripheral Identification 1"]
-    pub pid1: crate::Reg<pid1::PID1_SPEC>,
-    #[doc = "0x1fe8 - Peripheral Identification 2"]
-    pub pid2: crate::Reg<pid2::PID2_SPEC>,
-    #[doc = "0x1fec - Peripheral Identification 3"]
-    pub pid3: crate::Reg<pid3::PID3_SPEC>,
-    #[doc = "0x1ff0 - Component Identification 0"]
-    pub cid0: crate::Reg<cid0::CID0_SPEC>,
-    #[doc = "0x1ff4 - Component Identification 1"]
-    pub cid1: crate::Reg<cid1::CID1_SPEC>,
-    #[doc = "0x1ff8 - Component Identification 2"]
-    pub cid2: crate::Reg<cid2::CID2_SPEC>,
-    #[doc = "0x1ffc - Component Identification 3"]
-    pub cid3: crate::Reg<cid3::CID3_SPEC>,
+    memtype: Memtype,
+    pid4: Pid4,
+    pid5: Pid5,
+    pid6: Pid6,
+    pid7: Pid7,
+    pid0: Pid0,
+    pid1: Pid1,
+    pid2: Pid2,
+    pid3: Pid3,
+    cid0: Cid0,
+    cid1: Cid1,
+    cid2: Cid2,
+    cid3: Cid3,
 }
-#[doc = "CTRL register accessor: an alias for `Reg<CTRL_SPEC>`"]
-pub type CTRL = crate::Reg<ctrl::CTRL_SPEC>;
+impl RegisterBlock {
+    #[doc = "0x00 - Control"]
+    #[inline(always)]
+    pub const fn ctrl(&self) -> &Ctrl {
+        &self.ctrl
+    }
+    #[doc = "0x01 - Status A"]
+    #[inline(always)]
+    pub const fn statusa(&self) -> &Statusa {
+        &self.statusa
+    }
+    #[doc = "0x02 - Status B"]
+    #[inline(always)]
+    pub const fn statusb(&self) -> &Statusb {
+        &self.statusb
+    }
+    #[doc = "0x03 - Status C"]
+    #[inline(always)]
+    pub const fn statusc(&self) -> &Statusc {
+        &self.statusc
+    }
+    #[doc = "0x04 - Address"]
+    #[inline(always)]
+    pub const fn addr(&self) -> &Addr {
+        &self.addr
+    }
+    #[doc = "0x08 - Length"]
+    #[inline(always)]
+    pub const fn length(&self) -> &Length {
+        &self.length
+    }
+    #[doc = "0x0c - Data"]
+    #[inline(always)]
+    pub const fn data(&self) -> &Data {
+        &self.data
+    }
+    #[doc = "0x10..0x18 - Debug Communication Channel n"]
+    #[inline(always)]
+    pub const fn dcc(&self, n: usize) -> &Dcc {
+        &self.dcc[n]
+    }
+    #[doc = "Iterator for array of:"]
+    #[doc = "0x10..0x18 - Debug Communication Channel n"]
+    #[inline(always)]
+    pub fn dcc_iter(&self) -> impl Iterator<Item = &Dcc> {
+        self.dcc.iter()
+    }
+    #[doc = "0x18 - Device Identification"]
+    #[inline(always)]
+    pub const fn did(&self) -> &Did {
+        &self.did
+    }
+    #[doc = "0xf0..0xf8 - Device Configuration"]
+    #[inline(always)]
+    pub const fn dcfg(&self, n: usize) -> &Dcfg {
+        &self.dcfg[n]
+    }
+    #[doc = "Iterator for array of:"]
+    #[doc = "0xf0..0xf8 - Device Configuration"]
+    #[inline(always)]
+    pub fn dcfg_iter(&self) -> impl Iterator<Item = &Dcfg> {
+        self.dcfg.iter()
+    }
+    #[doc = "0x1000 - CoreSight ROM Table Entry 0"]
+    #[inline(always)]
+    pub const fn entry0(&self) -> &Entry0 {
+        &self.entry0
+    }
+    #[doc = "0x1004 - CoreSight ROM Table Entry 1"]
+    #[inline(always)]
+    pub const fn entry1(&self) -> &Entry1 {
+        &self.entry1
+    }
+    #[doc = "0x1008 - CoreSight ROM Table End"]
+    #[inline(always)]
+    pub const fn end(&self) -> &End {
+        &self.end
+    }
+    #[doc = "0x1fcc - CoreSight ROM Table Memory Type"]
+    #[inline(always)]
+    pub const fn memtype(&self) -> &Memtype {
+        &self.memtype
+    }
+    #[doc = "0x1fd0 - Peripheral Identification 4"]
+    #[inline(always)]
+    pub const fn pid4(&self) -> &Pid4 {
+        &self.pid4
+    }
+    #[doc = "0x1fd4 - Peripheral Identification 5"]
+    #[inline(always)]
+    pub const fn pid5(&self) -> &Pid5 {
+        &self.pid5
+    }
+    #[doc = "0x1fd8 - Peripheral Identification 6"]
+    #[inline(always)]
+    pub const fn pid6(&self) -> &Pid6 {
+        &self.pid6
+    }
+    #[doc = "0x1fdc - Peripheral Identification 7"]
+    #[inline(always)]
+    pub const fn pid7(&self) -> &Pid7 {
+        &self.pid7
+    }
+    #[doc = "0x1fe0 - Peripheral Identification 0"]
+    #[inline(always)]
+    pub const fn pid0(&self) -> &Pid0 {
+        &self.pid0
+    }
+    #[doc = "0x1fe4 - Peripheral Identification 1"]
+    #[inline(always)]
+    pub const fn pid1(&self) -> &Pid1 {
+        &self.pid1
+    }
+    #[doc = "0x1fe8 - Peripheral Identification 2"]
+    #[inline(always)]
+    pub const fn pid2(&self) -> &Pid2 {
+        &self.pid2
+    }
+    #[doc = "0x1fec - Peripheral Identification 3"]
+    #[inline(always)]
+    pub const fn pid3(&self) -> &Pid3 {
+        &self.pid3
+    }
+    #[doc = "0x1ff0 - Component Identification 0"]
+    #[inline(always)]
+    pub const fn cid0(&self) -> &Cid0 {
+        &self.cid0
+    }
+    #[doc = "0x1ff4 - Component Identification 1"]
+    #[inline(always)]
+    pub const fn cid1(&self) -> &Cid1 {
+        &self.cid1
+    }
+    #[doc = "0x1ff8 - Component Identification 2"]
+    #[inline(always)]
+    pub const fn cid2(&self) -> &Cid2 {
+        &self.cid2
+    }
+    #[doc = "0x1ffc - Component Identification 3"]
+    #[inline(always)]
+    pub const fn cid3(&self) -> &Cid3 {
+        &self.cid3
+    }
+}
+#[doc = "CTRL (w) register accessor: Control\n\nYou can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`ctrl::W`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@ctrl`]
+module"]
+#[doc(alias = "CTRL")]
+pub type Ctrl = crate::Reg<ctrl::CtrlSpec>;
 #[doc = "Control"]
 pub mod ctrl;
-#[doc = "STATUSA register accessor: an alias for `Reg<STATUSA_SPEC>`"]
-pub type STATUSA = crate::Reg<statusa::STATUSA_SPEC>;
+#[doc = "STATUSA (rw) register accessor: Status A\n\nYou can [`read`](crate::Reg::read) this register and get [`statusa::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`statusa::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@statusa`]
+module"]
+#[doc(alias = "STATUSA")]
+pub type Statusa = crate::Reg<statusa::StatusaSpec>;
 #[doc = "Status A"]
 pub mod statusa;
-#[doc = "STATUSB register accessor: an alias for `Reg<STATUSB_SPEC>`"]
-pub type STATUSB = crate::Reg<statusb::STATUSB_SPEC>;
+#[doc = "STATUSB (r) register accessor: Status B\n\nYou can [`read`](crate::Reg::read) this register and get [`statusb::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@statusb`]
+module"]
+#[doc(alias = "STATUSB")]
+pub type Statusb = crate::Reg<statusb::StatusbSpec>;
 #[doc = "Status B"]
 pub mod statusb;
-#[doc = "STATUSC register accessor: an alias for `Reg<STATUSC_SPEC>`"]
-pub type STATUSC = crate::Reg<statusc::STATUSC_SPEC>;
+#[doc = "STATUSC (r) register accessor: Status C\n\nYou can [`read`](crate::Reg::read) this register and get [`statusc::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@statusc`]
+module"]
+#[doc(alias = "STATUSC")]
+pub type Statusc = crate::Reg<statusc::StatuscSpec>;
 #[doc = "Status C"]
 pub mod statusc;
-#[doc = "ADDR register accessor: an alias for `Reg<ADDR_SPEC>`"]
-pub type ADDR = crate::Reg<addr::ADDR_SPEC>;
+#[doc = "ADDR (rw) register accessor: Address\n\nYou can [`read`](crate::Reg::read) this register and get [`addr::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`addr::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@addr`]
+module"]
+#[doc(alias = "ADDR")]
+pub type Addr = crate::Reg<addr::AddrSpec>;
 #[doc = "Address"]
 pub mod addr;
-#[doc = "LENGTH register accessor: an alias for `Reg<LENGTH_SPEC>`"]
-pub type LENGTH = crate::Reg<length::LENGTH_SPEC>;
+#[doc = "LENGTH (rw) register accessor: Length\n\nYou can [`read`](crate::Reg::read) this register and get [`length::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`length::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@length`]
+module"]
+#[doc(alias = "LENGTH")]
+pub type Length = crate::Reg<length::LengthSpec>;
 #[doc = "Length"]
 pub mod length;
-#[doc = "DATA register accessor: an alias for `Reg<DATA_SPEC>`"]
-pub type DATA = crate::Reg<data::DATA_SPEC>;
+#[doc = "DATA (rw) register accessor: Data\n\nYou can [`read`](crate::Reg::read) this register and get [`data::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`data::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@data`]
+module"]
+#[doc(alias = "DATA")]
+pub type Data = crate::Reg<data::DataSpec>;
 #[doc = "Data"]
 pub mod data;
-#[doc = "DCC register accessor: an alias for `Reg<DCC_SPEC>`"]
-pub type DCC = crate::Reg<dcc::DCC_SPEC>;
+#[doc = "DCC (rw) register accessor: Debug Communication Channel n\n\nYou can [`read`](crate::Reg::read) this register and get [`dcc::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`dcc::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@dcc`]
+module"]
+#[doc(alias = "DCC")]
+pub type Dcc = crate::Reg<dcc::DccSpec>;
 #[doc = "Debug Communication Channel n"]
 pub mod dcc;
-#[doc = "DID register accessor: an alias for `Reg<DID_SPEC>`"]
-pub type DID = crate::Reg<did::DID_SPEC>;
+#[doc = "DID (r) register accessor: Device Identification\n\nYou can [`read`](crate::Reg::read) this register and get [`did::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@did`]
+module"]
+#[doc(alias = "DID")]
+pub type Did = crate::Reg<did::DidSpec>;
 #[doc = "Device Identification"]
 pub mod did;
-#[doc = "DCFG register accessor: an alias for `Reg<DCFG_SPEC>`"]
-pub type DCFG = crate::Reg<dcfg::DCFG_SPEC>;
+#[doc = "DCFG (rw) register accessor: Device Configuration\n\nYou can [`read`](crate::Reg::read) this register and get [`dcfg::R`]. You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`dcfg::W`]. You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@dcfg`]
+module"]
+#[doc(alias = "DCFG")]
+pub type Dcfg = crate::Reg<dcfg::DcfgSpec>;
 #[doc = "Device Configuration"]
 pub mod dcfg;
-#[doc = "ENTRY0 register accessor: an alias for `Reg<ENTRY0_SPEC>`"]
-pub type ENTRY0 = crate::Reg<entry0::ENTRY0_SPEC>;
+#[doc = "ENTRY0 (r) register accessor: CoreSight ROM Table Entry 0\n\nYou can [`read`](crate::Reg::read) this register and get [`entry0::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@entry0`]
+module"]
+#[doc(alias = "ENTRY0")]
+pub type Entry0 = crate::Reg<entry0::Entry0Spec>;
 #[doc = "CoreSight ROM Table Entry 0"]
 pub mod entry0;
-#[doc = "ENTRY1 register accessor: an alias for `Reg<ENTRY1_SPEC>`"]
-pub type ENTRY1 = crate::Reg<entry1::ENTRY1_SPEC>;
+#[doc = "ENTRY1 (r) register accessor: CoreSight ROM Table Entry 1\n\nYou can [`read`](crate::Reg::read) this register and get [`entry1::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@entry1`]
+module"]
+#[doc(alias = "ENTRY1")]
+pub type Entry1 = crate::Reg<entry1::Entry1Spec>;
 #[doc = "CoreSight ROM Table Entry 1"]
 pub mod entry1;
-#[doc = "END register accessor: an alias for `Reg<END_SPEC>`"]
-pub type END = crate::Reg<end::END_SPEC>;
+#[doc = "END (r) register accessor: CoreSight ROM Table End\n\nYou can [`read`](crate::Reg::read) this register and get [`end::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@end`]
+module"]
+#[doc(alias = "END")]
+pub type End = crate::Reg<end::EndSpec>;
 #[doc = "CoreSight ROM Table End"]
 pub mod end;
-#[doc = "MEMTYPE register accessor: an alias for `Reg<MEMTYPE_SPEC>`"]
-pub type MEMTYPE = crate::Reg<memtype::MEMTYPE_SPEC>;
+#[doc = "MEMTYPE (r) register accessor: CoreSight ROM Table Memory Type\n\nYou can [`read`](crate::Reg::read) this register and get [`memtype::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@memtype`]
+module"]
+#[doc(alias = "MEMTYPE")]
+pub type Memtype = crate::Reg<memtype::MemtypeSpec>;
 #[doc = "CoreSight ROM Table Memory Type"]
 pub mod memtype;
-#[doc = "PID4 register accessor: an alias for `Reg<PID4_SPEC>`"]
-pub type PID4 = crate::Reg<pid4::PID4_SPEC>;
+#[doc = "PID4 (r) register accessor: Peripheral Identification 4\n\nYou can [`read`](crate::Reg::read) this register and get [`pid4::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@pid4`]
+module"]
+#[doc(alias = "PID4")]
+pub type Pid4 = crate::Reg<pid4::Pid4Spec>;
 #[doc = "Peripheral Identification 4"]
 pub mod pid4;
-#[doc = "PID5 register accessor: an alias for `Reg<PID5_SPEC>`"]
-pub type PID5 = crate::Reg<pid5::PID5_SPEC>;
+#[doc = "PID5 (r) register accessor: Peripheral Identification 5\n\nYou can [`read`](crate::Reg::read) this register and get [`pid5::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@pid5`]
+module"]
+#[doc(alias = "PID5")]
+pub type Pid5 = crate::Reg<pid5::Pid5Spec>;
 #[doc = "Peripheral Identification 5"]
 pub mod pid5;
-#[doc = "PID6 register accessor: an alias for `Reg<PID6_SPEC>`"]
-pub type PID6 = crate::Reg<pid6::PID6_SPEC>;
+#[doc = "PID6 (r) register accessor: Peripheral Identification 6\n\nYou can [`read`](crate::Reg::read) this register and get [`pid6::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@pid6`]
+module"]
+#[doc(alias = "PID6")]
+pub type Pid6 = crate::Reg<pid6::Pid6Spec>;
 #[doc = "Peripheral Identification 6"]
 pub mod pid6;
-#[doc = "PID7 register accessor: an alias for `Reg<PID7_SPEC>`"]
-pub type PID7 = crate::Reg<pid7::PID7_SPEC>;
+#[doc = "PID7 (r) register accessor: Peripheral Identification 7\n\nYou can [`read`](crate::Reg::read) this register and get [`pid7::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@pid7`]
+module"]
+#[doc(alias = "PID7")]
+pub type Pid7 = crate::Reg<pid7::Pid7Spec>;
 #[doc = "Peripheral Identification 7"]
 pub mod pid7;
-#[doc = "PID0 register accessor: an alias for `Reg<PID0_SPEC>`"]
-pub type PID0 = crate::Reg<pid0::PID0_SPEC>;
+#[doc = "PID0 (r) register accessor: Peripheral Identification 0\n\nYou can [`read`](crate::Reg::read) this register and get [`pid0::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@pid0`]
+module"]
+#[doc(alias = "PID0")]
+pub type Pid0 = crate::Reg<pid0::Pid0Spec>;
 #[doc = "Peripheral Identification 0"]
 pub mod pid0;
-#[doc = "PID1 register accessor: an alias for `Reg<PID1_SPEC>`"]
-pub type PID1 = crate::Reg<pid1::PID1_SPEC>;
+#[doc = "PID1 (r) register accessor: Peripheral Identification 1\n\nYou can [`read`](crate::Reg::read) this register and get [`pid1::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@pid1`]
+module"]
+#[doc(alias = "PID1")]
+pub type Pid1 = crate::Reg<pid1::Pid1Spec>;
 #[doc = "Peripheral Identification 1"]
 pub mod pid1;
-#[doc = "PID2 register accessor: an alias for `Reg<PID2_SPEC>`"]
-pub type PID2 = crate::Reg<pid2::PID2_SPEC>;
+#[doc = "PID2 (r) register accessor: Peripheral Identification 2\n\nYou can [`read`](crate::Reg::read) this register and get [`pid2::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@pid2`]
+module"]
+#[doc(alias = "PID2")]
+pub type Pid2 = crate::Reg<pid2::Pid2Spec>;
 #[doc = "Peripheral Identification 2"]
 pub mod pid2;
-#[doc = "PID3 register accessor: an alias for `Reg<PID3_SPEC>`"]
-pub type PID3 = crate::Reg<pid3::PID3_SPEC>;
+#[doc = "PID3 (r) register accessor: Peripheral Identification 3\n\nYou can [`read`](crate::Reg::read) this register and get [`pid3::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@pid3`]
+module"]
+#[doc(alias = "PID3")]
+pub type Pid3 = crate::Reg<pid3::Pid3Spec>;
 #[doc = "Peripheral Identification 3"]
 pub mod pid3;
-#[doc = "CID0 register accessor: an alias for `Reg<CID0_SPEC>`"]
-pub type CID0 = crate::Reg<cid0::CID0_SPEC>;
+#[doc = "CID0 (r) register accessor: Component Identification 0\n\nYou can [`read`](crate::Reg::read) this register and get [`cid0::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@cid0`]
+module"]
+#[doc(alias = "CID0")]
+pub type Cid0 = crate::Reg<cid0::Cid0Spec>;
 #[doc = "Component Identification 0"]
 pub mod cid0;
-#[doc = "CID1 register accessor: an alias for `Reg<CID1_SPEC>`"]
-pub type CID1 = crate::Reg<cid1::CID1_SPEC>;
+#[doc = "CID1 (r) register accessor: Component Identification 1\n\nYou can [`read`](crate::Reg::read) this register and get [`cid1::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@cid1`]
+module"]
+#[doc(alias = "CID1")]
+pub type Cid1 = crate::Reg<cid1::Cid1Spec>;
 #[doc = "Component Identification 1"]
 pub mod cid1;
-#[doc = "CID2 register accessor: an alias for `Reg<CID2_SPEC>`"]
-pub type CID2 = crate::Reg<cid2::CID2_SPEC>;
+#[doc = "CID2 (r) register accessor: Component Identification 2\n\nYou can [`read`](crate::Reg::read) this register and get [`cid2::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@cid2`]
+module"]
+#[doc(alias = "CID2")]
+pub type Cid2 = crate::Reg<cid2::Cid2Spec>;
 #[doc = "Component Identification 2"]
 pub mod cid2;
-#[doc = "CID3 register accessor: an alias for `Reg<CID3_SPEC>`"]
-pub type CID3 = crate::Reg<cid3::CID3_SPEC>;
+#[doc = "CID3 (r) register accessor: Component Identification 3\n\nYou can [`read`](crate::Reg::read) this register and get [`cid3::R`]. See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [`mod@cid3`]
+module"]
+#[doc(alias = "CID3")]
+pub type Cid3 = crate::Reg<cid3::Cid3Spec>;
 #[doc = "Component Identification 3"]
 pub mod cid3;

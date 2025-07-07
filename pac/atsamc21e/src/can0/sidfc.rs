@@ -1,140 +1,55 @@
 #[doc = "Register `SIDFC` reader"]
-pub struct R(crate::R<SIDFC_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<SIDFC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<SIDFC_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<SIDFC_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<SidfcSpec>;
 #[doc = "Register `SIDFC` writer"]
-pub struct W(crate::W<SIDFC_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<SIDFC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<SIDFC_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<SIDFC_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<SidfcSpec>;
 #[doc = "Field `FLSSA` reader - Filter List Standard Start Address"]
-pub struct FLSSA_R(crate::FieldReader<u16, u16>);
-impl FLSSA_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u16) -> Self {
-        FLSSA_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for FLSSA_R {
-    type Target = crate::FieldReader<u16, u16>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type FlssaR = crate::FieldReader<u16>;
 #[doc = "Field `FLSSA` writer - Filter List Standard Start Address"]
-pub struct FLSSA_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> FLSSA_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u16) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0xffff) | (value as u32 & 0xffff);
-        self.w
-    }
-}
+pub type FlssaW<'a, REG> = crate::FieldWriter<'a, REG, 16, u16>;
 #[doc = "Field `LSS` reader - List Size Standard"]
-pub struct LSS_R(crate::FieldReader<u8, u8>);
-impl LSS_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        LSS_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for LSS_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type LssR = crate::FieldReader;
 #[doc = "Field `LSS` writer - List Size Standard"]
-pub struct LSS_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> LSS_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0xff << 16)) | ((value as u32 & 0xff) << 16);
-        self.w
-    }
-}
+pub type LssW<'a, REG> = crate::FieldWriter<'a, REG, 8>;
 impl R {
     #[doc = "Bits 0:15 - Filter List Standard Start Address"]
     #[inline(always)]
-    pub fn flssa(&self) -> FLSSA_R {
-        FLSSA_R::new((self.bits & 0xffff) as u16)
+    pub fn flssa(&self) -> FlssaR {
+        FlssaR::new((self.bits & 0xffff) as u16)
     }
     #[doc = "Bits 16:23 - List Size Standard"]
     #[inline(always)]
-    pub fn lss(&self) -> LSS_R {
-        LSS_R::new(((self.bits >> 16) & 0xff) as u8)
+    pub fn lss(&self) -> LssR {
+        LssR::new(((self.bits >> 16) & 0xff) as u8)
     }
 }
 impl W {
     #[doc = "Bits 0:15 - Filter List Standard Start Address"]
     #[inline(always)]
-    pub fn flssa(&mut self) -> FLSSA_W {
-        FLSSA_W { w: self }
+    #[must_use]
+    pub fn flssa(&mut self) -> FlssaW<SidfcSpec> {
+        FlssaW::new(self, 0)
     }
     #[doc = "Bits 16:23 - List Size Standard"]
     #[inline(always)]
-    pub fn lss(&mut self) -> LSS_W {
-        LSS_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn lss(&mut self) -> LssW<SidfcSpec> {
+        LssW::new(self, 16)
     }
 }
-#[doc = "Standard ID Filter Configuration\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [sidfc](index.html) module"]
-pub struct SIDFC_SPEC;
-impl crate::RegisterSpec for SIDFC_SPEC {
+#[doc = "Standard ID Filter Configuration\n\nYou can [`read`](crate::Reg::read) this register and get [`sidfc::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`sidfc::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct SidfcSpec;
+impl crate::RegisterSpec for SidfcSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [sidfc::R](R) reader structure"]
-impl crate::Readable for SIDFC_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [sidfc::W](W) writer structure"]
-impl crate::Writable for SIDFC_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`sidfc::R`](R) reader structure"]
+impl crate::Readable for SidfcSpec {}
+#[doc = "`write(|w| ..)` method takes [`sidfc::W`](W) writer structure"]
+impl crate::Writable for SidfcSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets SIDFC to value 0"]
-impl crate::Resettable for SIDFC_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for SidfcSpec {
+    const RESET_VALUE: u32 = 0;
 }

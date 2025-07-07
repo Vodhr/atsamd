@@ -1,447 +1,307 @@
 #[doc = "Register `CTRLB` reader"]
-pub struct R(crate::R<CTRLB_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<CTRLB_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<CTRLB_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<CTRLB_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<CtrlbSpec>;
 #[doc = "Register `CTRLB` writer"]
-pub struct W(crate::W<CTRLB_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<CTRLB_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<CTRLB_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<CTRLB_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<CtrlbSpec>;
 #[doc = "NVM Read Wait States\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum RWS_A {
+pub enum Rwsselect {
     #[doc = "0: Single Auto Wait State"]
-    SINGLE = 0,
+    Single = 0,
     #[doc = "1: Half Auto Wait State"]
-    HALF = 1,
+    Half = 1,
     #[doc = "2: Dual Auto Wait State"]
-    DUAL = 2,
+    Dual = 2,
 }
-impl From<RWS_A> for u8 {
+impl From<Rwsselect> for u8 {
     #[inline(always)]
-    fn from(variant: RWS_A) -> Self {
+    fn from(variant: Rwsselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Rwsselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Rwsselect {}
 #[doc = "Field `RWS` reader - NVM Read Wait States"]
-pub struct RWS_R(crate::FieldReader<u8, RWS_A>);
-impl RWS_R {
+pub type RwsR = crate::FieldReader<Rwsselect>;
+impl RwsR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        RWS_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<RWS_A> {
+    pub const fn variant(&self) -> Option<Rwsselect> {
         match self.bits {
-            0 => Some(RWS_A::SINGLE),
-            1 => Some(RWS_A::HALF),
-            2 => Some(RWS_A::DUAL),
+            0 => Some(Rwsselect::Single),
+            1 => Some(Rwsselect::Half),
+            2 => Some(Rwsselect::Dual),
             _ => None,
         }
-    }
-    #[doc = "Checks if the value of the field is `SINGLE`"]
-    #[inline(always)]
-    pub fn is_single(&self) -> bool {
-        **self == RWS_A::SINGLE
-    }
-    #[doc = "Checks if the value of the field is `HALF`"]
-    #[inline(always)]
-    pub fn is_half(&self) -> bool {
-        **self == RWS_A::HALF
-    }
-    #[doc = "Checks if the value of the field is `DUAL`"]
-    #[inline(always)]
-    pub fn is_dual(&self) -> bool {
-        **self == RWS_A::DUAL
-    }
-}
-impl core::ops::Deref for RWS_R {
-    type Target = crate::FieldReader<u8, RWS_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `RWS` writer - NVM Read Wait States"]
-pub struct RWS_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> RWS_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: RWS_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
     }
     #[doc = "Single Auto Wait State"]
     #[inline(always)]
-    pub fn single(self) -> &'a mut W {
-        self.variant(RWS_A::SINGLE)
+    pub fn is_single(&self) -> bool {
+        *self == Rwsselect::Single
     }
     #[doc = "Half Auto Wait State"]
     #[inline(always)]
-    pub fn half(self) -> &'a mut W {
-        self.variant(RWS_A::HALF)
+    pub fn is_half(&self) -> bool {
+        *self == Rwsselect::Half
     }
     #[doc = "Dual Auto Wait State"]
     #[inline(always)]
-    pub fn dual(self) -> &'a mut W {
-        self.variant(RWS_A::DUAL)
+    pub fn is_dual(&self) -> bool {
+        *self == Rwsselect::Dual
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `RWS` writer - NVM Read Wait States"]
+pub type RwsW<'a, REG> = crate::FieldWriter<'a, REG, 4, Rwsselect>;
+impl<'a, REG> RwsW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "Single Auto Wait State"]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x0f << 1)) | ((value as u32 & 0x0f) << 1);
-        self.w
+    pub fn single(self) -> &'a mut crate::W<REG> {
+        self.variant(Rwsselect::Single)
+    }
+    #[doc = "Half Auto Wait State"]
+    #[inline(always)]
+    pub fn half(self) -> &'a mut crate::W<REG> {
+        self.variant(Rwsselect::Half)
+    }
+    #[doc = "Dual Auto Wait State"]
+    #[inline(always)]
+    pub fn dual(self) -> &'a mut crate::W<REG> {
+        self.variant(Rwsselect::Dual)
     }
 }
 #[doc = "Field `MANW` reader - Manual Write"]
-pub struct MANW_R(crate::FieldReader<bool, bool>);
-impl MANW_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        MANW_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for MANW_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type ManwR = crate::BitReader;
 #[doc = "Field `MANW` writer - Manual Write"]
-pub struct MANW_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> MANW_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 7)) | ((value as u32 & 0x01) << 7);
-        self.w
-    }
-}
+pub type ManwW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Power Reduction Mode during Sleep\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum SLEEPPRM_A {
+pub enum Sleepprmselect {
     #[doc = "0: NVM block enters low-power mode when entering sleep.NVM block exits low-power mode upon first access."]
-    WAKEONACCESS = 0,
+    Wakeonaccess = 0,
     #[doc = "1: NVM block enters low-power mode when entering sleep.NVM block exits low-power mode when exiting sleep."]
-    WAKEUPINSTANT = 1,
+    Wakeupinstant = 1,
     #[doc = "3: Auto power reduction disabled."]
-    DISABLED = 3,
+    Disabled = 3,
 }
-impl From<SLEEPPRM_A> for u8 {
+impl From<Sleepprmselect> for u8 {
     #[inline(always)]
-    fn from(variant: SLEEPPRM_A) -> Self {
+    fn from(variant: Sleepprmselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Sleepprmselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Sleepprmselect {}
 #[doc = "Field `SLEEPPRM` reader - Power Reduction Mode during Sleep"]
-pub struct SLEEPPRM_R(crate::FieldReader<u8, SLEEPPRM_A>);
-impl SLEEPPRM_R {
+pub type SleepprmR = crate::FieldReader<Sleepprmselect>;
+impl SleepprmR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        SLEEPPRM_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<SLEEPPRM_A> {
+    pub const fn variant(&self) -> Option<Sleepprmselect> {
         match self.bits {
-            0 => Some(SLEEPPRM_A::WAKEONACCESS),
-            1 => Some(SLEEPPRM_A::WAKEUPINSTANT),
-            3 => Some(SLEEPPRM_A::DISABLED),
+            0 => Some(Sleepprmselect::Wakeonaccess),
+            1 => Some(Sleepprmselect::Wakeupinstant),
+            3 => Some(Sleepprmselect::Disabled),
             _ => None,
         }
-    }
-    #[doc = "Checks if the value of the field is `WAKEONACCESS`"]
-    #[inline(always)]
-    pub fn is_wakeonaccess(&self) -> bool {
-        **self == SLEEPPRM_A::WAKEONACCESS
-    }
-    #[doc = "Checks if the value of the field is `WAKEUPINSTANT`"]
-    #[inline(always)]
-    pub fn is_wakeupinstant(&self) -> bool {
-        **self == SLEEPPRM_A::WAKEUPINSTANT
-    }
-    #[doc = "Checks if the value of the field is `DISABLED`"]
-    #[inline(always)]
-    pub fn is_disabled(&self) -> bool {
-        **self == SLEEPPRM_A::DISABLED
-    }
-}
-impl core::ops::Deref for SLEEPPRM_R {
-    type Target = crate::FieldReader<u8, SLEEPPRM_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `SLEEPPRM` writer - Power Reduction Mode during Sleep"]
-pub struct SLEEPPRM_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> SLEEPPRM_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: SLEEPPRM_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
     }
     #[doc = "NVM block enters low-power mode when entering sleep.NVM block exits low-power mode upon first access."]
     #[inline(always)]
-    pub fn wakeonaccess(self) -> &'a mut W {
-        self.variant(SLEEPPRM_A::WAKEONACCESS)
+    pub fn is_wakeonaccess(&self) -> bool {
+        *self == Sleepprmselect::Wakeonaccess
     }
     #[doc = "NVM block enters low-power mode when entering sleep.NVM block exits low-power mode when exiting sleep."]
     #[inline(always)]
-    pub fn wakeupinstant(self) -> &'a mut W {
-        self.variant(SLEEPPRM_A::WAKEUPINSTANT)
+    pub fn is_wakeupinstant(&self) -> bool {
+        *self == Sleepprmselect::Wakeupinstant
     }
     #[doc = "Auto power reduction disabled."]
     #[inline(always)]
-    pub fn disabled(self) -> &'a mut W {
-        self.variant(SLEEPPRM_A::DISABLED)
+    pub fn is_disabled(&self) -> bool {
+        *self == Sleepprmselect::Disabled
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `SLEEPPRM` writer - Power Reduction Mode during Sleep"]
+pub type SleepprmW<'a, REG> = crate::FieldWriter<'a, REG, 2, Sleepprmselect>;
+impl<'a, REG> SleepprmW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "NVM block enters low-power mode when entering sleep.NVM block exits low-power mode upon first access."]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 8)) | ((value as u32 & 0x03) << 8);
-        self.w
+    pub fn wakeonaccess(self) -> &'a mut crate::W<REG> {
+        self.variant(Sleepprmselect::Wakeonaccess)
+    }
+    #[doc = "NVM block enters low-power mode when entering sleep.NVM block exits low-power mode when exiting sleep."]
+    #[inline(always)]
+    pub fn wakeupinstant(self) -> &'a mut crate::W<REG> {
+        self.variant(Sleepprmselect::Wakeupinstant)
+    }
+    #[doc = "Auto power reduction disabled."]
+    #[inline(always)]
+    pub fn disabled(self) -> &'a mut crate::W<REG> {
+        self.variant(Sleepprmselect::Disabled)
     }
 }
 #[doc = "NVMCTRL Read Mode\n\nValue on reset: 0"]
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[repr(u8)]
-pub enum READMODE_A {
+pub enum Readmodeselect {
     #[doc = "0: The NVM Controller (cache system) does not insert wait states on a cache miss. Gives the best system performance."]
-    NO_MISS_PENALTY = 0,
+    NoMissPenalty = 0,
     #[doc = "1: Reduces power consumption of the cache system, but inserts a wait state each time there is a cache miss. This mode may not be relevant if CPU performance is required, as the application will be stalled and may lead to increase run time."]
-    LOW_POWER = 1,
+    LowPower = 1,
     #[doc = "2: The cache system ensures that a cache hit or miss takes the same amount of time, determined by the number of programmed flash wait states. This mode can be used for real-time applications that require deterministic execution timings."]
-    DETERMINISTIC = 2,
+    Deterministic = 2,
 }
-impl From<READMODE_A> for u8 {
+impl From<Readmodeselect> for u8 {
     #[inline(always)]
-    fn from(variant: READMODE_A) -> Self {
+    fn from(variant: Readmodeselect) -> Self {
         variant as _
     }
 }
+impl crate::FieldSpec for Readmodeselect {
+    type Ux = u8;
+}
+impl crate::IsEnum for Readmodeselect {}
 #[doc = "Field `READMODE` reader - NVMCTRL Read Mode"]
-pub struct READMODE_R(crate::FieldReader<u8, READMODE_A>);
-impl READMODE_R {
+pub type ReadmodeR = crate::FieldReader<Readmodeselect>;
+impl ReadmodeR {
+    #[doc = "Get enumerated values variant"]
     #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        READMODE_R(crate::FieldReader::new(bits))
-    }
-    #[doc = r"Get enumerated values variant"]
-    #[inline(always)]
-    pub fn variant(&self) -> Option<READMODE_A> {
+    pub const fn variant(&self) -> Option<Readmodeselect> {
         match self.bits {
-            0 => Some(READMODE_A::NO_MISS_PENALTY),
-            1 => Some(READMODE_A::LOW_POWER),
-            2 => Some(READMODE_A::DETERMINISTIC),
+            0 => Some(Readmodeselect::NoMissPenalty),
+            1 => Some(Readmodeselect::LowPower),
+            2 => Some(Readmodeselect::Deterministic),
             _ => None,
         }
     }
-    #[doc = "Checks if the value of the field is `NO_MISS_PENALTY`"]
-    #[inline(always)]
-    pub fn is_no_miss_penalty(&self) -> bool {
-        **self == READMODE_A::NO_MISS_PENALTY
-    }
-    #[doc = "Checks if the value of the field is `LOW_POWER`"]
-    #[inline(always)]
-    pub fn is_low_power(&self) -> bool {
-        **self == READMODE_A::LOW_POWER
-    }
-    #[doc = "Checks if the value of the field is `DETERMINISTIC`"]
-    #[inline(always)]
-    pub fn is_deterministic(&self) -> bool {
-        **self == READMODE_A::DETERMINISTIC
-    }
-}
-impl core::ops::Deref for READMODE_R {
-    type Target = crate::FieldReader<u8, READMODE_A>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-#[doc = "Field `READMODE` writer - NVMCTRL Read Mode"]
-pub struct READMODE_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> READMODE_W<'a> {
-    #[doc = r"Writes `variant` to the field"]
-    #[inline(always)]
-    pub fn variant(self, variant: READMODE_A) -> &'a mut W {
-        unsafe { self.bits(variant.into()) }
-    }
     #[doc = "The NVM Controller (cache system) does not insert wait states on a cache miss. Gives the best system performance."]
     #[inline(always)]
-    pub fn no_miss_penalty(self) -> &'a mut W {
-        self.variant(READMODE_A::NO_MISS_PENALTY)
+    pub fn is_no_miss_penalty(&self) -> bool {
+        *self == Readmodeselect::NoMissPenalty
     }
     #[doc = "Reduces power consumption of the cache system, but inserts a wait state each time there is a cache miss. This mode may not be relevant if CPU performance is required, as the application will be stalled and may lead to increase run time."]
     #[inline(always)]
-    pub fn low_power(self) -> &'a mut W {
-        self.variant(READMODE_A::LOW_POWER)
+    pub fn is_low_power(&self) -> bool {
+        *self == Readmodeselect::LowPower
     }
     #[doc = "The cache system ensures that a cache hit or miss takes the same amount of time, determined by the number of programmed flash wait states. This mode can be used for real-time applications that require deterministic execution timings."]
     #[inline(always)]
-    pub fn deterministic(self) -> &'a mut W {
-        self.variant(READMODE_A::DETERMINISTIC)
+    pub fn is_deterministic(&self) -> bool {
+        *self == Readmodeselect::Deterministic
     }
-    #[doc = r"Writes raw bits to the field"]
+}
+#[doc = "Field `READMODE` writer - NVMCTRL Read Mode"]
+pub type ReadmodeW<'a, REG> = crate::FieldWriter<'a, REG, 2, Readmodeselect>;
+impl<'a, REG> ReadmodeW<'a, REG>
+where
+    REG: crate::Writable + crate::RegisterSpec,
+    REG::Ux: From<u8>,
+{
+    #[doc = "The NVM Controller (cache system) does not insert wait states on a cache miss. Gives the best system performance."]
     #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 16)) | ((value as u32 & 0x03) << 16);
-        self.w
+    pub fn no_miss_penalty(self) -> &'a mut crate::W<REG> {
+        self.variant(Readmodeselect::NoMissPenalty)
+    }
+    #[doc = "Reduces power consumption of the cache system, but inserts a wait state each time there is a cache miss. This mode may not be relevant if CPU performance is required, as the application will be stalled and may lead to increase run time."]
+    #[inline(always)]
+    pub fn low_power(self) -> &'a mut crate::W<REG> {
+        self.variant(Readmodeselect::LowPower)
+    }
+    #[doc = "The cache system ensures that a cache hit or miss takes the same amount of time, determined by the number of programmed flash wait states. This mode can be used for real-time applications that require deterministic execution timings."]
+    #[inline(always)]
+    pub fn deterministic(self) -> &'a mut crate::W<REG> {
+        self.variant(Readmodeselect::Deterministic)
     }
 }
 #[doc = "Field `CACHEDIS` reader - Cache Disable"]
-pub struct CACHEDIS_R(crate::FieldReader<u8, u8>);
-impl CACHEDIS_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u8) -> Self {
-        CACHEDIS_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CACHEDIS_R {
-    type Target = crate::FieldReader<u8, u8>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type CachedisR = crate::FieldReader;
 #[doc = "Field `CACHEDIS` writer - Cache Disable"]
-pub struct CACHEDIS_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CACHEDIS_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u8) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x03 << 18)) | ((value as u32 & 0x03) << 18);
-        self.w
-    }
-}
+pub type CachedisW<'a, REG> = crate::FieldWriter<'a, REG, 2>;
 impl R {
     #[doc = "Bits 1:4 - NVM Read Wait States"]
     #[inline(always)]
-    pub fn rws(&self) -> RWS_R {
-        RWS_R::new(((self.bits >> 1) & 0x0f) as u8)
+    pub fn rws(&self) -> RwsR {
+        RwsR::new(((self.bits >> 1) & 0x0f) as u8)
     }
     #[doc = "Bit 7 - Manual Write"]
     #[inline(always)]
-    pub fn manw(&self) -> MANW_R {
-        MANW_R::new(((self.bits >> 7) & 0x01) != 0)
+    pub fn manw(&self) -> ManwR {
+        ManwR::new(((self.bits >> 7) & 1) != 0)
     }
     #[doc = "Bits 8:9 - Power Reduction Mode during Sleep"]
     #[inline(always)]
-    pub fn sleepprm(&self) -> SLEEPPRM_R {
-        SLEEPPRM_R::new(((self.bits >> 8) & 0x03) as u8)
+    pub fn sleepprm(&self) -> SleepprmR {
+        SleepprmR::new(((self.bits >> 8) & 3) as u8)
     }
     #[doc = "Bits 16:17 - NVMCTRL Read Mode"]
     #[inline(always)]
-    pub fn readmode(&self) -> READMODE_R {
-        READMODE_R::new(((self.bits >> 16) & 0x03) as u8)
+    pub fn readmode(&self) -> ReadmodeR {
+        ReadmodeR::new(((self.bits >> 16) & 3) as u8)
     }
     #[doc = "Bits 18:19 - Cache Disable"]
     #[inline(always)]
-    pub fn cachedis(&self) -> CACHEDIS_R {
-        CACHEDIS_R::new(((self.bits >> 18) & 0x03) as u8)
+    pub fn cachedis(&self) -> CachedisR {
+        CachedisR::new(((self.bits >> 18) & 3) as u8)
     }
 }
 impl W {
     #[doc = "Bits 1:4 - NVM Read Wait States"]
     #[inline(always)]
-    pub fn rws(&mut self) -> RWS_W {
-        RWS_W { w: self }
+    #[must_use]
+    pub fn rws(&mut self) -> RwsW<CtrlbSpec> {
+        RwsW::new(self, 1)
     }
     #[doc = "Bit 7 - Manual Write"]
     #[inline(always)]
-    pub fn manw(&mut self) -> MANW_W {
-        MANW_W { w: self }
+    #[must_use]
+    pub fn manw(&mut self) -> ManwW<CtrlbSpec> {
+        ManwW::new(self, 7)
     }
     #[doc = "Bits 8:9 - Power Reduction Mode during Sleep"]
     #[inline(always)]
-    pub fn sleepprm(&mut self) -> SLEEPPRM_W {
-        SLEEPPRM_W { w: self }
+    #[must_use]
+    pub fn sleepprm(&mut self) -> SleepprmW<CtrlbSpec> {
+        SleepprmW::new(self, 8)
     }
     #[doc = "Bits 16:17 - NVMCTRL Read Mode"]
     #[inline(always)]
-    pub fn readmode(&mut self) -> READMODE_W {
-        READMODE_W { w: self }
+    #[must_use]
+    pub fn readmode(&mut self) -> ReadmodeW<CtrlbSpec> {
+        ReadmodeW::new(self, 16)
     }
     #[doc = "Bits 18:19 - Cache Disable"]
     #[inline(always)]
-    pub fn cachedis(&mut self) -> CACHEDIS_W {
-        CACHEDIS_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn cachedis(&mut self) -> CachedisW<CtrlbSpec> {
+        CachedisW::new(self, 18)
     }
 }
-#[doc = "Control B\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [ctrlb](index.html) module"]
-pub struct CTRLB_SPEC;
-impl crate::RegisterSpec for CTRLB_SPEC {
+#[doc = "Control B\n\nYou can [`read`](crate::Reg::read) this register and get [`ctrlb::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`ctrlb::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct CtrlbSpec;
+impl crate::RegisterSpec for CtrlbSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [ctrlb::R](R) reader structure"]
-impl crate::Readable for CTRLB_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [ctrlb::W](W) writer structure"]
-impl crate::Writable for CTRLB_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`ctrlb::R`](R) reader structure"]
+impl crate::Readable for CtrlbSpec {}
+#[doc = "`write(|w| ..)` method takes [`ctrlb::W`](W) writer structure"]
+impl crate::Writable for CtrlbSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets CTRLB to value 0x80"]
-impl crate::Resettable for CTRLB_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0x80
-    }
+impl crate::Resettable for CtrlbSpec {
+    const RESET_VALUE: u32 = 0x80;
 }

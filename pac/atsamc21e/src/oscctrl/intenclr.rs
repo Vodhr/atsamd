@@ -1,395 +1,130 @@
 #[doc = "Register `INTENCLR` reader"]
-pub struct R(crate::R<INTENCLR_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<INTENCLR_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<INTENCLR_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<INTENCLR_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<IntenclrSpec>;
 #[doc = "Register `INTENCLR` writer"]
-pub struct W(crate::W<INTENCLR_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<INTENCLR_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<INTENCLR_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<INTENCLR_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<IntenclrSpec>;
 #[doc = "Field `XOSCRDY` reader - XOSC Ready Interrupt Enable"]
-pub struct XOSCRDY_R(crate::FieldReader<bool, bool>);
-impl XOSCRDY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        XOSCRDY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for XOSCRDY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type XoscrdyR = crate::BitReader;
 #[doc = "Field `XOSCRDY` writer - XOSC Ready Interrupt Enable"]
-pub struct XOSCRDY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> XOSCRDY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x01) | (value as u32 & 0x01);
-        self.w
-    }
-}
+pub type XoscrdyW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `XOSCFAIL` reader - XOSC Clock Failure Detector Interrupt Enable"]
-pub struct XOSCFAIL_R(crate::FieldReader<bool, bool>);
-impl XOSCFAIL_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        XOSCFAIL_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for XOSCFAIL_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type XoscfailR = crate::BitReader;
 #[doc = "Field `XOSCFAIL` writer - XOSC Clock Failure Detector Interrupt Enable"]
-pub struct XOSCFAIL_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> XOSCFAIL_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 1)) | ((value as u32 & 0x01) << 1);
-        self.w
-    }
-}
+pub type XoscfailW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `OSC48MRDY` reader - OSC48M Ready Interrupt Enable"]
-pub struct OSC48MRDY_R(crate::FieldReader<bool, bool>);
-impl OSC48MRDY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        OSC48MRDY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for OSC48MRDY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Osc48mrdyR = crate::BitReader;
 #[doc = "Field `OSC48MRDY` writer - OSC48M Ready Interrupt Enable"]
-pub struct OSC48MRDY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> OSC48MRDY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 4)) | ((value as u32 & 0x01) << 4);
-        self.w
-    }
-}
+pub type Osc48mrdyW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `DPLLLCKR` reader - DPLL Lock Rise Interrupt Enable"]
-pub struct DPLLLCKR_R(crate::FieldReader<bool, bool>);
-impl DPLLLCKR_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        DPLLLCKR_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for DPLLLCKR_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type DplllckrR = crate::BitReader;
 #[doc = "Field `DPLLLCKR` writer - DPLL Lock Rise Interrupt Enable"]
-pub struct DPLLLCKR_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> DPLLLCKR_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 8)) | ((value as u32 & 0x01) << 8);
-        self.w
-    }
-}
+pub type DplllckrW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `DPLLLCKF` reader - DPLL Lock Fall Interrupt Enable"]
-pub struct DPLLLCKF_R(crate::FieldReader<bool, bool>);
-impl DPLLLCKF_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        DPLLLCKF_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for DPLLLCKF_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type DplllckfR = crate::BitReader;
 #[doc = "Field `DPLLLCKF` writer - DPLL Lock Fall Interrupt Enable"]
-pub struct DPLLLCKF_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> DPLLLCKF_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 9)) | ((value as u32 & 0x01) << 9);
-        self.w
-    }
-}
+pub type DplllckfW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `DPLLLTO` reader - DPLL Time Out Interrupt Enable"]
-pub struct DPLLLTO_R(crate::FieldReader<bool, bool>);
-impl DPLLLTO_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        DPLLLTO_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for DPLLLTO_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type DpllltoR = crate::BitReader;
 #[doc = "Field `DPLLLTO` writer - DPLL Time Out Interrupt Enable"]
-pub struct DPLLLTO_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> DPLLLTO_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 10)) | ((value as u32 & 0x01) << 10);
-        self.w
-    }
-}
+pub type DpllltoW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `DPLLLDRTO` reader - DPLL Ratio Ready Interrupt Enable"]
-pub struct DPLLLDRTO_R(crate::FieldReader<bool, bool>);
-impl DPLLLDRTO_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        DPLLLDRTO_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for DPLLLDRTO_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type DpllldrtoR = crate::BitReader;
 #[doc = "Field `DPLLLDRTO` writer - DPLL Ratio Ready Interrupt Enable"]
-pub struct DPLLLDRTO_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> DPLLLDRTO_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 11)) | ((value as u32 & 0x01) << 11);
-        self.w
-    }
-}
+pub type DpllldrtoW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bit 0 - XOSC Ready Interrupt Enable"]
     #[inline(always)]
-    pub fn xoscrdy(&self) -> XOSCRDY_R {
-        XOSCRDY_R::new((self.bits & 0x01) != 0)
+    pub fn xoscrdy(&self) -> XoscrdyR {
+        XoscrdyR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - XOSC Clock Failure Detector Interrupt Enable"]
     #[inline(always)]
-    pub fn xoscfail(&self) -> XOSCFAIL_R {
-        XOSCFAIL_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn xoscfail(&self) -> XoscfailR {
+        XoscfailR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 4 - OSC48M Ready Interrupt Enable"]
     #[inline(always)]
-    pub fn osc48mrdy(&self) -> OSC48MRDY_R {
-        OSC48MRDY_R::new(((self.bits >> 4) & 0x01) != 0)
+    pub fn osc48mrdy(&self) -> Osc48mrdyR {
+        Osc48mrdyR::new(((self.bits >> 4) & 1) != 0)
     }
     #[doc = "Bit 8 - DPLL Lock Rise Interrupt Enable"]
     #[inline(always)]
-    pub fn dplllckr(&self) -> DPLLLCKR_R {
-        DPLLLCKR_R::new(((self.bits >> 8) & 0x01) != 0)
+    pub fn dplllckr(&self) -> DplllckrR {
+        DplllckrR::new(((self.bits >> 8) & 1) != 0)
     }
     #[doc = "Bit 9 - DPLL Lock Fall Interrupt Enable"]
     #[inline(always)]
-    pub fn dplllckf(&self) -> DPLLLCKF_R {
-        DPLLLCKF_R::new(((self.bits >> 9) & 0x01) != 0)
+    pub fn dplllckf(&self) -> DplllckfR {
+        DplllckfR::new(((self.bits >> 9) & 1) != 0)
     }
     #[doc = "Bit 10 - DPLL Time Out Interrupt Enable"]
     #[inline(always)]
-    pub fn dplllto(&self) -> DPLLLTO_R {
-        DPLLLTO_R::new(((self.bits >> 10) & 0x01) != 0)
+    pub fn dplllto(&self) -> DpllltoR {
+        DpllltoR::new(((self.bits >> 10) & 1) != 0)
     }
     #[doc = "Bit 11 - DPLL Ratio Ready Interrupt Enable"]
     #[inline(always)]
-    pub fn dpllldrto(&self) -> DPLLLDRTO_R {
-        DPLLLDRTO_R::new(((self.bits >> 11) & 0x01) != 0)
+    pub fn dpllldrto(&self) -> DpllldrtoR {
+        DpllldrtoR::new(((self.bits >> 11) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bit 0 - XOSC Ready Interrupt Enable"]
     #[inline(always)]
-    pub fn xoscrdy(&mut self) -> XOSCRDY_W {
-        XOSCRDY_W { w: self }
+    #[must_use]
+    pub fn xoscrdy(&mut self) -> XoscrdyW<IntenclrSpec> {
+        XoscrdyW::new(self, 0)
     }
     #[doc = "Bit 1 - XOSC Clock Failure Detector Interrupt Enable"]
     #[inline(always)]
-    pub fn xoscfail(&mut self) -> XOSCFAIL_W {
-        XOSCFAIL_W { w: self }
+    #[must_use]
+    pub fn xoscfail(&mut self) -> XoscfailW<IntenclrSpec> {
+        XoscfailW::new(self, 1)
     }
     #[doc = "Bit 4 - OSC48M Ready Interrupt Enable"]
     #[inline(always)]
-    pub fn osc48mrdy(&mut self) -> OSC48MRDY_W {
-        OSC48MRDY_W { w: self }
+    #[must_use]
+    pub fn osc48mrdy(&mut self) -> Osc48mrdyW<IntenclrSpec> {
+        Osc48mrdyW::new(self, 4)
     }
     #[doc = "Bit 8 - DPLL Lock Rise Interrupt Enable"]
     #[inline(always)]
-    pub fn dplllckr(&mut self) -> DPLLLCKR_W {
-        DPLLLCKR_W { w: self }
+    #[must_use]
+    pub fn dplllckr(&mut self) -> DplllckrW<IntenclrSpec> {
+        DplllckrW::new(self, 8)
     }
     #[doc = "Bit 9 - DPLL Lock Fall Interrupt Enable"]
     #[inline(always)]
-    pub fn dplllckf(&mut self) -> DPLLLCKF_W {
-        DPLLLCKF_W { w: self }
+    #[must_use]
+    pub fn dplllckf(&mut self) -> DplllckfW<IntenclrSpec> {
+        DplllckfW::new(self, 9)
     }
     #[doc = "Bit 10 - DPLL Time Out Interrupt Enable"]
     #[inline(always)]
-    pub fn dplllto(&mut self) -> DPLLLTO_W {
-        DPLLLTO_W { w: self }
+    #[must_use]
+    pub fn dplllto(&mut self) -> DpllltoW<IntenclrSpec> {
+        DpllltoW::new(self, 10)
     }
     #[doc = "Bit 11 - DPLL Ratio Ready Interrupt Enable"]
     #[inline(always)]
-    pub fn dpllldrto(&mut self) -> DPLLLDRTO_W {
-        DPLLLDRTO_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn dpllldrto(&mut self) -> DpllldrtoW<IntenclrSpec> {
+        DpllldrtoW::new(self, 11)
     }
 }
-#[doc = "Interrupt Enable Clear\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [intenclr](index.html) module"]
-pub struct INTENCLR_SPEC;
-impl crate::RegisterSpec for INTENCLR_SPEC {
+#[doc = "Interrupt Enable Clear\n\nYou can [`read`](crate::Reg::read) this register and get [`intenclr::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`intenclr::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct IntenclrSpec;
+impl crate::RegisterSpec for IntenclrSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [intenclr::R](R) reader structure"]
-impl crate::Readable for INTENCLR_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [intenclr::W](W) writer structure"]
-impl crate::Writable for INTENCLR_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`intenclr::R`](R) reader structure"]
+impl crate::Readable for IntenclrSpec {}
+#[doc = "`write(|w| ..)` method takes [`intenclr::W`](W) writer structure"]
+impl crate::Writable for IntenclrSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets INTENCLR to value 0"]
-impl crate::Resettable for INTENCLR_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for IntenclrSpec {
+    const RESET_VALUE: u32 = 0;
 }

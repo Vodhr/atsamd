@@ -1,207 +1,70 @@
 #[doc = "Register `INTFLAG` reader"]
-pub struct R(crate::R<INTFLAG_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<INTFLAG_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<INTFLAG_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<INTFLAG_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<IntflagSpec>;
 #[doc = "Register `INTFLAG` writer"]
-pub struct W(crate::W<INTFLAG_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<INTFLAG_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<INTFLAG_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<INTFLAG_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<IntflagSpec>;
 #[doc = "Field `XOSC32KRDY` reader - XOSC32K Ready"]
-pub struct XOSC32KRDY_R(crate::FieldReader<bool, bool>);
-impl XOSC32KRDY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        XOSC32KRDY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for XOSC32KRDY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Xosc32krdyR = crate::BitReader;
 #[doc = "Field `XOSC32KRDY` writer - XOSC32K Ready"]
-pub struct XOSC32KRDY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> XOSC32KRDY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x01) | (value as u32 & 0x01);
-        self.w
-    }
-}
+pub type Xosc32krdyW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `OSC32KRDY` reader - OSC32K Ready"]
-pub struct OSC32KRDY_R(crate::FieldReader<bool, bool>);
-impl OSC32KRDY_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        OSC32KRDY_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for OSC32KRDY_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type Osc32krdyR = crate::BitReader;
 #[doc = "Field `OSC32KRDY` writer - OSC32K Ready"]
-pub struct OSC32KRDY_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> OSC32KRDY_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 1)) | ((value as u32 & 0x01) << 1);
-        self.w
-    }
-}
+pub type Osc32krdyW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `CLKFAIL` reader - XOSC32K Clock Failure Detector"]
-pub struct CLKFAIL_R(crate::FieldReader<bool, bool>);
-impl CLKFAIL_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        CLKFAIL_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for CLKFAIL_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type ClkfailR = crate::BitReader;
 #[doc = "Field `CLKFAIL` writer - XOSC32K Clock Failure Detector"]
-pub struct CLKFAIL_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> CLKFAIL_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 2)) | ((value as u32 & 0x01) << 2);
-        self.w
-    }
-}
+pub type ClkfailW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bit 0 - XOSC32K Ready"]
     #[inline(always)]
-    pub fn xosc32krdy(&self) -> XOSC32KRDY_R {
-        XOSC32KRDY_R::new((self.bits & 0x01) != 0)
+    pub fn xosc32krdy(&self) -> Xosc32krdyR {
+        Xosc32krdyR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - OSC32K Ready"]
     #[inline(always)]
-    pub fn osc32krdy(&self) -> OSC32KRDY_R {
-        OSC32KRDY_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn osc32krdy(&self) -> Osc32krdyR {
+        Osc32krdyR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 2 - XOSC32K Clock Failure Detector"]
     #[inline(always)]
-    pub fn clkfail(&self) -> CLKFAIL_R {
-        CLKFAIL_R::new(((self.bits >> 2) & 0x01) != 0)
+    pub fn clkfail(&self) -> ClkfailR {
+        ClkfailR::new(((self.bits >> 2) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bit 0 - XOSC32K Ready"]
     #[inline(always)]
-    pub fn xosc32krdy(&mut self) -> XOSC32KRDY_W {
-        XOSC32KRDY_W { w: self }
+    #[must_use]
+    pub fn xosc32krdy(&mut self) -> Xosc32krdyW<IntflagSpec> {
+        Xosc32krdyW::new(self, 0)
     }
     #[doc = "Bit 1 - OSC32K Ready"]
     #[inline(always)]
-    pub fn osc32krdy(&mut self) -> OSC32KRDY_W {
-        OSC32KRDY_W { w: self }
+    #[must_use]
+    pub fn osc32krdy(&mut self) -> Osc32krdyW<IntflagSpec> {
+        Osc32krdyW::new(self, 1)
     }
     #[doc = "Bit 2 - XOSC32K Clock Failure Detector"]
     #[inline(always)]
-    pub fn clkfail(&mut self) -> CLKFAIL_W {
-        CLKFAIL_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn clkfail(&mut self) -> ClkfailW<IntflagSpec> {
+        ClkfailW::new(self, 2)
     }
 }
-#[doc = "Interrupt Flag Status and Clear\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [intflag](index.html) module"]
-pub struct INTFLAG_SPEC;
-impl crate::RegisterSpec for INTFLAG_SPEC {
+#[doc = "Interrupt Flag Status and Clear\n\nYou can [`read`](crate::Reg::read) this register and get [`intflag::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`intflag::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct IntflagSpec;
+impl crate::RegisterSpec for IntflagSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [intflag::R](R) reader structure"]
-impl crate::Readable for INTFLAG_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [intflag::W](W) writer structure"]
-impl crate::Writable for INTFLAG_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`intflag::R`](R) reader structure"]
+impl crate::Readable for IntflagSpec {}
+#[doc = "`write(|w| ..)` method takes [`intflag::W`](W) writer structure"]
+impl crate::Writable for IntflagSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets INTFLAG to value 0"]
-impl crate::Resettable for INTFLAG_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for IntflagSpec {
+    const RESET_VALUE: u32 = 0;
 }

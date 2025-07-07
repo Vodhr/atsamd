@@ -1,104 +1,41 @@
 #[doc = "Register `DCC[%s]` reader"]
-pub struct R(crate::R<DCC_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<DCC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<DCC_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<DCC_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<DccSpec>;
 #[doc = "Register `DCC[%s]` writer"]
-pub struct W(crate::W<DCC_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<DCC_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<DCC_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<DCC_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<DccSpec>;
 #[doc = "Field `DATA` reader - Data"]
-pub struct DATA_R(crate::FieldReader<u32, u32>);
-impl DATA_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: u32) -> Self {
-        DATA_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for DATA_R {
-    type Target = crate::FieldReader<u32, u32>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type DataR = crate::FieldReader<u32>;
 #[doc = "Field `DATA` writer - Data"]
-pub struct DATA_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> DATA_W<'a> {
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub unsafe fn bits(self, value: u32) -> &'a mut W {
-        self.w.bits = value as u32;
-        self.w
-    }
-}
+pub type DataW<'a, REG> = crate::FieldWriter<'a, REG, 32, u32>;
 impl R {
     #[doc = "Bits 0:31 - Data"]
     #[inline(always)]
-    pub fn data(&self) -> DATA_R {
-        DATA_R::new(self.bits as u32)
+    pub fn data(&self) -> DataR {
+        DataR::new(self.bits)
     }
 }
 impl W {
     #[doc = "Bits 0:31 - Data"]
     #[inline(always)]
-    pub fn data(&mut self) -> DATA_W {
-        DATA_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u32) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn data(&mut self) -> DataW<DccSpec> {
+        DataW::new(self, 0)
     }
 }
-#[doc = "Debug Communication Channel n\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [dcc](index.html) module"]
-pub struct DCC_SPEC;
-impl crate::RegisterSpec for DCC_SPEC {
+#[doc = "Debug Communication Channel n\n\nYou can [`read`](crate::Reg::read) this register and get [`dcc::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`dcc::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct DccSpec;
+impl crate::RegisterSpec for DccSpec {
     type Ux = u32;
 }
-#[doc = "`read()` method returns [dcc::R](R) reader structure"]
-impl crate::Readable for DCC_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [dcc::W](W) writer structure"]
-impl crate::Writable for DCC_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`dcc::R`](R) reader structure"]
+impl crate::Readable for DccSpec {}
+#[doc = "`write(|w| ..)` method takes [`dcc::W`](W) writer structure"]
+impl crate::Writable for DccSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u32 = 0;
 }
 #[doc = "`reset()` method sets DCC[%s]
 to value 0"]
-impl crate::Resettable for DCC_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for DccSpec {
+    const RESET_VALUE: u32 = 0;
 }

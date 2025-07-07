@@ -1,207 +1,70 @@
 #[doc = "Register `EVCTRL` reader"]
-pub struct R(crate::R<EVCTRL_SPEC>);
-impl core::ops::Deref for R {
-    type Target = crate::R<EVCTRL_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl From<crate::R<EVCTRL_SPEC>> for R {
-    #[inline(always)]
-    fn from(reader: crate::R<EVCTRL_SPEC>) -> Self {
-        R(reader)
-    }
-}
+pub type R = crate::R<EvctrlSpec>;
 #[doc = "Register `EVCTRL` writer"]
-pub struct W(crate::W<EVCTRL_SPEC>);
-impl core::ops::Deref for W {
-    type Target = crate::W<EVCTRL_SPEC>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-impl core::ops::DerefMut for W {
-    #[inline(always)]
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
-    }
-}
-impl From<crate::W<EVCTRL_SPEC>> for W {
-    #[inline(always)]
-    fn from(writer: crate::W<EVCTRL_SPEC>) -> Self {
-        W(writer)
-    }
-}
+pub type W = crate::W<EvctrlSpec>;
 #[doc = "Field `STARTEI` reader - Start Conversion Event Input Enable"]
-pub struct STARTEI_R(crate::FieldReader<bool, bool>);
-impl STARTEI_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        STARTEI_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for STARTEI_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type StarteiR = crate::BitReader;
 #[doc = "Field `STARTEI` writer - Start Conversion Event Input Enable"]
-pub struct STARTEI_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> STARTEI_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !0x01) | (value as u8 & 0x01);
-        self.w
-    }
-}
+pub type StarteiW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `STARTINV` reader - Start Conversion Event Invert Enable"]
-pub struct STARTINV_R(crate::FieldReader<bool, bool>);
-impl STARTINV_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        STARTINV_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for STARTINV_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type StartinvR = crate::BitReader;
 #[doc = "Field `STARTINV` writer - Start Conversion Event Invert Enable"]
-pub struct STARTINV_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> STARTINV_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 1)) | ((value as u8 & 0x01) << 1);
-        self.w
-    }
-}
+pub type StartinvW<'a, REG> = crate::BitWriter<'a, REG>;
 #[doc = "Field `WINEO` reader - Window Monitor Event Out"]
-pub struct WINEO_R(crate::FieldReader<bool, bool>);
-impl WINEO_R {
-    #[inline(always)]
-    pub(crate) fn new(bits: bool) -> Self {
-        WINEO_R(crate::FieldReader::new(bits))
-    }
-}
-impl core::ops::Deref for WINEO_R {
-    type Target = crate::FieldReader<bool, bool>;
-    #[inline(always)]
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
+pub type WineoR = crate::BitReader;
 #[doc = "Field `WINEO` writer - Window Monitor Event Out"]
-pub struct WINEO_W<'a> {
-    w: &'a mut W,
-}
-impl<'a> WINEO_W<'a> {
-    #[doc = r"Sets the field bit"]
-    #[inline(always)]
-    pub fn set_bit(self) -> &'a mut W {
-        self.bit(true)
-    }
-    #[doc = r"Clears the field bit"]
-    #[inline(always)]
-    pub fn clear_bit(self) -> &'a mut W {
-        self.bit(false)
-    }
-    #[doc = r"Writes raw bits to the field"]
-    #[inline(always)]
-    pub fn bit(self, value: bool) -> &'a mut W {
-        self.w.bits = (self.w.bits & !(0x01 << 2)) | ((value as u8 & 0x01) << 2);
-        self.w
-    }
-}
+pub type WineoW<'a, REG> = crate::BitWriter<'a, REG>;
 impl R {
     #[doc = "Bit 0 - Start Conversion Event Input Enable"]
     #[inline(always)]
-    pub fn startei(&self) -> STARTEI_R {
-        STARTEI_R::new((self.bits & 0x01) != 0)
+    pub fn startei(&self) -> StarteiR {
+        StarteiR::new((self.bits & 1) != 0)
     }
     #[doc = "Bit 1 - Start Conversion Event Invert Enable"]
     #[inline(always)]
-    pub fn startinv(&self) -> STARTINV_R {
-        STARTINV_R::new(((self.bits >> 1) & 0x01) != 0)
+    pub fn startinv(&self) -> StartinvR {
+        StartinvR::new(((self.bits >> 1) & 1) != 0)
     }
     #[doc = "Bit 2 - Window Monitor Event Out"]
     #[inline(always)]
-    pub fn wineo(&self) -> WINEO_R {
-        WINEO_R::new(((self.bits >> 2) & 0x01) != 0)
+    pub fn wineo(&self) -> WineoR {
+        WineoR::new(((self.bits >> 2) & 1) != 0)
     }
 }
 impl W {
     #[doc = "Bit 0 - Start Conversion Event Input Enable"]
     #[inline(always)]
-    pub fn startei(&mut self) -> STARTEI_W {
-        STARTEI_W { w: self }
+    #[must_use]
+    pub fn startei(&mut self) -> StarteiW<EvctrlSpec> {
+        StarteiW::new(self, 0)
     }
     #[doc = "Bit 1 - Start Conversion Event Invert Enable"]
     #[inline(always)]
-    pub fn startinv(&mut self) -> STARTINV_W {
-        STARTINV_W { w: self }
+    #[must_use]
+    pub fn startinv(&mut self) -> StartinvW<EvctrlSpec> {
+        StartinvW::new(self, 1)
     }
     #[doc = "Bit 2 - Window Monitor Event Out"]
     #[inline(always)]
-    pub fn wineo(&mut self) -> WINEO_W {
-        WINEO_W { w: self }
-    }
-    #[doc = "Writes raw bits to the register."]
-    #[inline(always)]
-    pub unsafe fn bits(&mut self, bits: u8) -> &mut Self {
-        self.0.bits(bits);
-        self
+    #[must_use]
+    pub fn wineo(&mut self) -> WineoW<EvctrlSpec> {
+        WineoW::new(self, 2)
     }
 }
-#[doc = "Event Control Register\n\nThis register you can [`read`](crate::generic::Reg::read), [`write_with_zero`](crate::generic::Reg::write_with_zero), [`reset`](crate::generic::Reg::reset), [`write`](crate::generic::Reg::write), [`modify`](crate::generic::Reg::modify). See [API](https://docs.rs/svd2rust/#read--modify--write-api).\n\nFor information about available fields see [evctrl](index.html) module"]
-pub struct EVCTRL_SPEC;
-impl crate::RegisterSpec for EVCTRL_SPEC {
+#[doc = "Event Control Register\n\nYou can [`read`](crate::Reg::read) this register and get [`evctrl::R`](R). You can [`reset`](crate::Reg::reset), [`write`](crate::Reg::write), [`write_with_zero`](crate::Reg::write_with_zero) this register using [`evctrl::W`](W). You can also [`modify`](crate::Reg::modify) this register. See [API](https://docs.rs/svd2rust/#read--modify--write-api)."]
+pub struct EvctrlSpec;
+impl crate::RegisterSpec for EvctrlSpec {
     type Ux = u8;
 }
-#[doc = "`read()` method returns [evctrl::R](R) reader structure"]
-impl crate::Readable for EVCTRL_SPEC {
-    type Reader = R;
-}
-#[doc = "`write(|w| ..)` method takes [evctrl::W](W) writer structure"]
-impl crate::Writable for EVCTRL_SPEC {
-    type Writer = W;
+#[doc = "`read()` method returns [`evctrl::R`](R) reader structure"]
+impl crate::Readable for EvctrlSpec {}
+#[doc = "`write(|w| ..)` method takes [`evctrl::W`](W) writer structure"]
+impl crate::Writable for EvctrlSpec {
+    type Safety = crate::Unsafe;
+    const ZERO_TO_MODIFY_FIELDS_BITMAP: u8 = 0;
+    const ONE_TO_MODIFY_FIELDS_BITMAP: u8 = 0;
 }
 #[doc = "`reset()` method sets EVCTRL to value 0"]
-impl crate::Resettable for EVCTRL_SPEC {
-    #[inline(always)]
-    fn reset_value() -> Self::Ux {
-        0
-    }
+impl crate::Resettable for EvctrlSpec {
+    const RESET_VALUE: u8 = 0;
 }
