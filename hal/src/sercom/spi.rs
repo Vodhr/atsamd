@@ -448,10 +448,9 @@ use reg::Registers;
 
 #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
 use crate::pac::sercom0::spi::ctrla::Modeselect;
-#[hal_cfg("sercom0-d5x")]
+#[hal_cfg(any("port-d5x", "port-c2x"))]
 use crate::pac::sercom0::spim::ctrla::Modeselect;
 #[hal_cfg("sercom0-c2x")]
-use crate::pac::sercom0::spim::ctrla::MODE_A as Modeselect;
 
 #[hal_module(
     any("sercom0-d11", "sercom0-d21", "sercom0-c2x") => "spi/pads_thumbv6m.rs",
@@ -479,10 +478,10 @@ pub mod lengths {
 
 pub mod impl_ehal;
 
-#[cfg(feature = "async")]
-mod async_api;
-#[cfg(feature = "async")]
-pub use async_api::*;
+// #[cfg(feature = "async")]
+// mod async_api;
+// #[cfg(feature = "async")]
+// pub use async_api::*;
 
 //=============================================================================
 // BitOrder
@@ -619,26 +618,20 @@ impl Sealed for MasterHWSS {}
 impl Sealed for Slave {}
 
 impl OpMode for Master {
-    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
     const MODE: Modeselect = Modeselect::SpiMaster;
-    #[hal_cfg("sercom0-c2x")]
-    const MODE: Modeselect = Modeselect::SPI_MASTER;
     const MSSEN: bool = false;
 }
 
 impl OpMode for MasterHWSS {
-    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
     const MODE: Modeselect = Modeselect::SpiMaster;
-    #[hal_cfg("sercom0-c2x")]
-    const MODE: Modeselect = Modeselect::SPI_MASTER;
     const MSSEN: bool = true;
 }
 
 impl OpMode for Slave {
-    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
+    #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
     const MODE: Modeselect = Modeselect::SpiSlave;
-    #[hal_cfg("sercom0-c2x")]
-    const MODE: Modeselect = Modeselect::SPI_SLAVE;
     const MSSEN: bool = false;
 }
 

@@ -165,28 +165,28 @@ impl Apb {
         // registers, and it uses a shared reference to the register block. See
         // the notes on `Token` types and memory safety in the root of the
         // `clock` module for more details.
-        unsafe { &(*pac::MCLK::PTR) }
+        unsafe { &(*pac::Mclk::PTR) }
     }
 
     #[inline]
-    fn apbamask(&mut self) -> &pac::mclk::APBAMASK {
-        &self.mclk().apbamask
+    fn apbamask(&mut self) -> &pac::mclk::Apbamask {
+        &self.mclk().apbamask()
     }
 
     #[inline]
-    fn apbbmask(&mut self) -> &pac::mclk::APBBMASK {
-        &self.mclk().apbbmask
+    fn apbbmask(&mut self) -> &pac::mclk::Apbbmask {
+        &self.mclk().apbbmask()
     }
 
     #[inline]
-    fn apbcmask(&mut self) -> &pac::mclk::APBCMASK {
-        &self.mclk().apbcmask
+    fn apbcmask(&mut self) -> &pac::mclk::Apbcmask {
+        &self.mclk().apbcmask()
     }
 
     #[cfg(feature = "samc21n")]
     #[inline]
-    fn apbdmask(&mut self) -> &pac::mclk::APBDMASK {
-        &self.mclk().apbdmask
+    fn apbdmask(&mut self) -> &pac::mclk::Apbdmask {
+        &self.mclk().apbdmask()
     }
 
     #[cfg(feature = "samc21n")]

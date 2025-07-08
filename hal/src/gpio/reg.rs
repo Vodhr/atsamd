@@ -6,23 +6,13 @@ use crate::pac::port::{
     Pmux0_ as Pmux, Wrconfig,
 };
 
-#[hal_cfg("port-d5x")]
+#[hal_cfg(any("port-d5x", "port-c2x"))]
 use crate::pac::port::group::{
     Ctrl, Dir, Dirclr, Dirset, Dirtgl, In, Out, Outclr, Outset, Outtgl, Pincfg, Pmux, Wrconfig,
 };
 
-#[hal_cfg("port-d5x")]
+#[hal_cfg(any("port-d5x", "port-c2x"))]
 use crate::pac::Port;
-
-#[hal_cfg("port-c2x")]
-use crate::pac::port::group::{
-    CTRL as Ctrl, DIR as Dir, DIRCLR as Dirclr, DIRSET as Dirset, DIRTGL as Dirtgl, IN as In,
-    OUT as Out, OUTCLR as Outclr, OUTSET as Outset, OUTTGL as Outtgl, PINCFG as Pincfg,
-    PMUX as Pmux, WRCONFIG as Wrconfig,
-};
-
-#[hal_cfg("port-c2x")]
-use crate::pac::PORT as Port;
 
 use super::dynpin::*;
 

@@ -4,11 +4,7 @@
 
 use typenum::U1;
 
-use crate::pac::{GCLK as Gclk,
-                 MCLK as Mclk,
-                 NVMCTRL as Nvmctrl,
-                 OSC32KCTRL as Osc32kctrl,
-                 OSCCTRL as Oscctrl};
+use crate::pac::{ Gclk, Mclk, Nvmctrl, Osc32kctrl, Oscctrl };
 
 use super::*;
 
@@ -155,7 +151,7 @@ pub fn clock_system_at_reset(
         };
 
         // See Pages 441 and 1107 for NVM Read Wait States depending on voltage and CPU clock frequency
-        nvmctrl.ctrlb.write(|w| {
+        nvmctrl.ctrlb().write(|w| {
             w.rws().dual()
         });
 

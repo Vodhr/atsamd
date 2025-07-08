@@ -343,11 +343,11 @@ use seq_macro::seq;
 use typenum::{U0, U1};
 
 use crate::pac;
-use crate::pac::gclk::genctrl::DIVSEL_A;
+use crate::pac::gclk::genctrl::Divselselect;
 
 use crate::gpio::{self, AlternateH, AnyPin, Pin, PinId};
-use crate::pac::gclk::genctrl::SRC_A;
-use crate::pac::gclk::GENCTRL;
+use crate::pac::gclk::genctrl::Srcselect;
+use crate::pac::gclk::Genctrl;
 use crate::time::Hertz;
 use crate::typelevel::{Decrement, Increment, PrivateDecrement, PrivateIncrement, Sealed};
 
@@ -396,12 +396,12 @@ impl<G: GclkId> GclkToken<G> {
 
     /// Provide a reference to the corresponding [`Genctrl`] register
     #[inline]
-    fn genctrl(&self) -> &GENCTRL {
+    fn genctrl(&self) -> &Genctrl {
         // Safety: Each `GclkToken` only has access to a mutually exclusive set
         // of registers for the corresponding `GclkId`, and we use a shared
         // reference to the register block. See the notes on `Token` types and
         // memory safety in the root of the `clock` module for more details.
-        unsafe { &(*pac::GCLK::PTR).genctrl[G::NUM] }
+        unsafe { (*pac::Gclk::PTR).genctrl(G::NUM) }
     }
 
     /// Block until synchronization has completed
@@ -413,7 +413,7 @@ impl<G: GclkId> GclkToken<G> {
         // Safety: We are only reading from the `SYNCBUSY` register, and we are
         // only observing the bit corresponding to this particular `GclkId`, so
         // there is no risk of memory corruption.
-        let syncbusy = unsafe { &(*pac::GCLK::PTR).syncbusy };
+        let syncbusy = unsafe { (*pac::Gclk::PTR).syncbusy() };
 
         while match G::NUM {
             0 => syncbusy.read().genctrl0().bit_is_set(),
@@ -637,7 +637,7 @@ pub trait GclkDivider: Sealed + Default + Copy {
     /// Returns the actual clock divider value as a `u32`
     fn divider(&self) -> u32;
     /// Return the corresponding `DIVSEL` and and `DIV` register fields
-    fn divsel_div(&self) -> (DIVSEL_A, u16);
+    fn divsel_div(&self) -> (Divselselect, u16);
 }
 
 //==============================================================================
@@ -684,11 +684,11 @@ impl GclkDivider for GclkDiv8 {
     }
 
     #[inline]
-    fn divsel_div(&self) -> (DIVSEL_A, u16) {
+    fn divsel_div(&self) -> (Divselselect, u16) {
         match self {
-            GclkDiv8::Div(div) => (DIVSEL_A::DIV1, (*div).into()),
-            GclkDiv8::Div2Pow8 => (DIVSEL_A::DIV2, 7),
-            GclkDiv8::Div2Pow9 => (DIVSEL_A::DIV2, 8),
+            GclkDiv8::Div(div) => (Divselselect::Div1, (*div).into()),
+            GclkDiv8::Div2Pow8 => (Divselselect::Div2, 7),
+            GclkDiv8::Div2Pow9 => (Divselselect::Div2, 8),
         }
     }
 }
@@ -736,11 +736,11 @@ impl GclkDivider for GclkDiv16 {
     }
 
     #[inline]
-    fn divsel_div(&self) -> (DIVSEL_A, u16) {
+    fn divsel_div(&self) -> (Divselselect, u16) {
         match self {
-            GclkDiv16::Div(div) => (DIVSEL_A::DIV1, *div),
-            GclkDiv16::Div2Pow16 => (DIVSEL_A::DIV2, 15),
-            GclkDiv16::Div2Pow17 => (DIVSEL_A::DIV2, 16),
+            GclkDiv16::Div(div) => (Divselselect::Div1, *div),
+            GclkDiv16::Div2Pow16 => (Divselselect::Div2, 15),
+            GclkDiv16::Div2Pow17 => (Divselselect::Div2, 16),
         }
     }
 }
@@ -857,17 +857,17 @@ pub enum DynGclkSourceId {
     OscUlp32k,
 }
 
-impl From<DynGclkSourceId> for SRC_A {
+impl From<DynGclkSourceId> for Srcselect {
     fn from(source: DynGclkSourceId) -> Self {
         use DynGclkSourceId::*;
         match source {
-            Xosc => Self::XOSC,
-            GclkIn => Self::GCLKIN,
-            GclkGen1 => Self::GCLKGEN1,
-            Osc32k => Self::OSC32K,
-            Xosc32k => Self::XOSC32K,
-            Osc48m => Self::OSC48M,
-            OscUlp32k => Self::OSCULP32K,
+            Xosc => Self::Xosc,
+            GclkIn => Self::Gclkin,
+            GclkGen1 => Self::Gclkgen1,
+            Osc32k => Self::Osc32k,
+            Xosc32k => Self::Xosc32k,
+            Osc48m => Self::Osc48m,
+            OscUlp32k => Self::Osculp32k,
         }
     }
 }

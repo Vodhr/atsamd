@@ -203,10 +203,9 @@
 //! [DFLL]: super::dfll
 //! [`Dfll`]: super::dfll::Dfll
 //! [`EnabledDfll`]: super::dfll::EnabledDfll
-use core::marker::PhantomData;
 use typenum::U0;
 
-use crate::pac::oscctrl::{self, XOSCCTRL, CFDPRESC};
+use crate::pac::oscctrl::{self, Xoscctrl, Cfdpresc};
 
 use crate::gpio::{FloatingDisabled, Pin, PA14, PA15};
 use crate::time::Hertz;
@@ -239,19 +238,19 @@ impl XoscToken {
 
     /// Return a reference to the XOSCCTRL register
     #[inline]
-    fn xoscctrl(&self) -> &XOSCCTRL {
+    fn xoscctrl(&self) -> &Xoscctrl {
         // Safety: The `XoscToken` only has access to a mutually exclusive set
         // of registers, and we use a shared reference to the register block.
         // See the notes on `Token` types and memory safety in the root of the
         // `clock` module for more details.
-        unsafe { &(*crate::pac::OSCCTRL::PTR).xoscctrl }
+        unsafe { (*crate::pac::Oscctrl::PTR).xoscctrl() }
     }
 
     /// Return a reference to the CFDPRESC register
     #[inline]
-    fn cfdpresc(&self) -> &CFDPRESC {
+    fn cfdpresc(&self) -> &Cfdpresc {
         // Todo: Memory Safety
-        unsafe { &(*crate::pac::OSCCTRL::PTR).cfdpresc }
+        unsafe { (*crate::pac::Oscctrl::PTR).cfdpresc() }
     }
 
     /// Read the STATUS register
@@ -259,7 +258,7 @@ impl XoscToken {
     fn status(&self) -> oscctrl::status::R {
         // Safety: We are only reading from the `STATUS` register, so there is
         // no risk of memory corruption.
-        unsafe { (*crate::pac::OSCCTRL::PTR).status.read() }
+        unsafe { (*crate::pac::Oscctrl::PTR).status().read() }
     }
 
     /// Check whether the XOSC is stable and ready
@@ -328,7 +327,7 @@ impl XoscToken {
     fn set_xoscctrl(&mut self, settings: Settings) {
         let xtalen = settings.mode == DynMode::CrystalMode;
 
-        self.xoscctrl().modify(|_, w| {
+        self.xoscctrl().modify(|_, w| unsafe {
             w.startup().bits(settings.start_up as u8);
             w.ampgc().bit(settings.auto_gain_control);
             w.ondemand().bit(settings.on_demand);

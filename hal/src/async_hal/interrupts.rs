@@ -214,6 +214,10 @@ declare_multiple_interrupts!(ADC0: [ADC0_RESRDY, ADC0_OTHER]);
 declare_multiple_interrupts!(ADC1: [ADC1_RESRDY, ADC1_OTHER]);
 #[hal_cfg(any("adc-d11", "adc-d21"))]
 declare_interrupts!(ADC);
+#[hal_cfg("adc0-c2x")]
+declare_interrupts!(ADC0);
+#[hal_cfg("adc1-c2x")]
+declare_interrupts!(ADC1);
 /// An interrupt source that may have one or many interrupt bindings.
 ///
 /// This trait may implemented directly when multiple interrupt sources are

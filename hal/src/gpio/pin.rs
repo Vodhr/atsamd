@@ -106,11 +106,8 @@ use core::mem::transmute;
 use crate::ehal::digital::{ErrorType, InputPin, OutputPin, StatefulOutputPin};
 use paste::paste;
 
-#[hal_cfg("port-d5x")]
+#[hal_cfg(any("port-d5x", "port-c2x"))]
 use crate::pac::Port;
-
-#[hal_cfg("port-c2x")]
-use crate::pac::PORT;
 
 use crate::typelevel::{NoneT, Sealed};
 
@@ -1087,7 +1084,7 @@ macro_rules! pins{
         paste! {
             /// Collection of all the individual [`Pin`]s
             pub struct Pins {
-                port: Option<PORT>,
+                port: Option<Port>,
                 $(
                     #[doc = "Pin " $Id]
                     #[$cfg]
@@ -1099,7 +1096,7 @@ macro_rules! pins{
                 /// [`Port`](crate::pac::Port) and split it into
                 /// discrete [`Pin`]s
                 #[inline]
-                pub fn new(port: PORT) -> Pins {
+                pub fn new(port: Port) -> Pins {
                     Pins {
                         port: Some(port),
                         // Safe because we only create one `Pin` per `PinId`
@@ -1121,7 +1118,7 @@ macro_rules! pins{
                 ///
                 /// [`Port`](crate::pac::Port)
                 #[inline]
-                pub unsafe fn port(&mut self) -> PORT {
+                pub unsafe fn port(&mut self) -> Port {
                     self.port.take().unwrap()
                 }
             }

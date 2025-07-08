@@ -14,37 +14,37 @@ impl Osc48mToken {
 
     #[inline]
     fn oscctrl(&self) -> &crate::pac::oscctrl::RegisterBlock {
-        unsafe { &*crate::pac::OSCCTRL::PTR }
+        unsafe { &*crate::pac::Oscctrl::PTR }
     }
 
     #[inline]
-    fn osc48mctrl(&self) -> &crate::pac::oscctrl::OSC48MCTRL {
-        &self.oscctrl().osc48mctrl
+    fn osc48mctrl(&self) -> &crate::pac::oscctrl::Osc48mctrl {
+        self.oscctrl().osc48mctrl()
     }
 
     #[inline]
-    fn osc48mdiv(&self) -> &crate::pac::oscctrl::OSC48MDIV {
-        &self.oscctrl().osc48mdiv
+    fn osc48mdiv(&self) -> &crate::pac::oscctrl::Osc48mdiv {
+        self.oscctrl().osc48mdiv()
     }
 
     #[inline]
-    fn osc48mstup(&self) -> &crate::pac::oscctrl::OSC48MSTUP {
-        &self.oscctrl().osc48mstup
+    fn osc48mstup(&self) -> &crate::pac::oscctrl::Osc48mstup {
+        self.oscctrl().osc48mstup()
     }
 
     #[inline]
-    fn osc48msyncbusy(&self) -> &crate::pac::oscctrl::OSC48MSYNCBUSY {
-        &self.oscctrl().osc48msyncbusy
+    fn osc48msyncbusy(&self) -> &crate::pac::oscctrl::Osc48msyncbusy {
+        self.oscctrl().osc48msyncbusy()
     }
 
     #[inline]
-    fn status(&self) -> &crate::pac::oscctrl::STATUS {
-        &self.oscctrl().status
+    fn status(&self) -> &crate::pac::oscctrl::Status {
+        self.oscctrl().status()
     }
 
     #[inline]
-    fn cal48m(&self) -> &crate::pac::oscctrl::CAL48M {
-        &self.oscctrl().cal48m
+    fn cal48m(&self) -> &crate::pac::oscctrl::Cal48m {
+        self.oscctrl().cal48m()
     }
 
     #[inline]

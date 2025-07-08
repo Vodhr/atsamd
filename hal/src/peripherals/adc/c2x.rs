@@ -7,7 +7,7 @@ use atsamd_hal_macros::hal_cfg;
 use crate::gpio::*;
 use crate::ehal_02::adc::{Channel, OneShot};
 
-use crate::pac::{adc0, ADC0, ADC1};
+use crate::pac::{adc0, Adc0, Adc1};
 use crate::clock::pclk;
 use crate::clock::apb;
 use crate::clock::types::{Adc0 as Adc0Id, Adc1 as Adc1Id};
@@ -15,13 +15,13 @@ use crate::clock::types::{Adc0 as Adc0Id, Adc1 as Adc1Id};
 use crate::calibration;
 
 /// Samples per reading
-pub use adc0::avgctrl::SAMPLENUM_A as SampleNumber;
+pub use adc0::avgctrl::Samplenumselect as SampleNumber;
 /// Clock frequency relative to the system clock
-pub use adc0::ctrlb::PRESCALER_A as Prescaler;
+pub use adc0::ctrlb::Prescalerselect as Prescaler;
 /// Reading resolution in bits
-pub use adc0::ctrlc::RESSEL_A as Resolution;
+pub use adc0::ctrlc::Resselselect as Resolution;
 /// Reference voltage (or its source)
-pub use adc0::refctrl::REFSEL_A as Reference;
+pub use adc0::refctrl::Refselselect as Reference;
 
 seq!(N in 1..=64 {
     /// sampling time in clock cycles
@@ -88,10 +88,10 @@ impl<S: pclk::PclkSourceId> $Adc<S> {
     pub fn new(adc: $ADC, pclk: pclk::Pclk<$pclk_id, S>, apbclk: apb::ApbClk<$apb_id>) -> Self {
         adc.ctrlb.modify(|_, w| w.prescaler().div32());
         adc.ctrlc.modify(|_, w| w.ressel()._12bit());
-        while adc.syncbusy.read().ctrlc().bit_is_set() {}
+        while adc.syncbusy().read().ctrlc().bit_is_set() {}
 
         adc.inputctrl.modify(|_, w| w.muxneg().gnd()); // No negative input (internal gnd)
-        while adc.syncbusy.read().inputctrl().bit_is_set() {}
+        while adc.syncbusy().read().inputctrl().bit_is_set() {}
 
         adc.calib.write(|w| unsafe {
             w.biascomp().bits(calibration::$compcal());
@@ -111,7 +111,7 @@ impl<S: pclk::PclkSourceId> $Adc<S> {
         self.adc.sampctrl.write(|w| unsafe {
             w.samplen().bits(sampleLength as u8)
         });
-        while self.adc.syncbusy.read().sampctrl().bit_is_set() {}
+        while self.adc.syncbusy().read().sampctrl().bit_is_set() {}
     }
 
     pub fn samples(&mut self, samples: SampleNumber) {
@@ -129,7 +129,7 @@ impl<S: pclk::PclkSourceId> $Adc<S> {
                 })
             }
         });
-        while self.adc.syncbusy.read().avgctrl().bit_is_set() {}
+        while self.adc.syncbusy().read().avgctrl().bit_is_set() {}
     }
 
     /// Set the voltage reference
@@ -153,37 +153,37 @@ impl<S: pclk::PclkSourceId> $Adc<S> {
         self.adc
             .ctrlc
             .modify(|_, w| w.ressel().variant(resolution));
-        while self.adc.syncbusy.read().ctrlc().bit_is_set() {}
+        while self.adc.syncbusy().read().ctrlc().bit_is_set() {}
     }
 }
 
 impl<S: pclk::PclkSourceId> Adc for $Adc<S> {
     fn power_up(&mut self) {
-        while self.adc.syncbusy.read().enable().bit_is_set() {}
+        while self.adc.syncbusy().read().enable().bit_is_set() {}
         self.adc.ctrla.modify(|_, w| w.enable().set_bit());
-        while self.adc.syncbusy.read().enable().bit_is_set() {}
+        while self.adc.syncbusy().read().enable().bit_is_set() {}
     }
 
     fn power_down(&mut self) {
-        while self.adc.syncbusy.read().enable().bit_is_set() {}
+        while self.adc.syncbusy().read().enable().bit_is_set() {}
         self.adc.ctrla.modify(|_, w| w.enable().clear_bit());
-        while self.adc.syncbusy.read().enable().bit_is_set() {}
+        while self.adc.syncbusy().read().enable().bit_is_set() {}
     }
 
     #[inline(always)]
     fn start_conversion(&mut self) {
         self.adc.swtrig.modify(|_, w| w.start().set_bit());
-        while self.adc.syncbusy.read().swtrig().bit_is_set() {}
+        while self.adc.syncbusy().read().swtrig().bit_is_set() {}
     }
 
     fn enable_freerunning(&mut self) {
         self.adc.ctrlc.modify(|_, w| w.freerun().set_bit());
-        while self.adc.syncbusy.read().ctrlc().bit_is_set() {}
+        while self.adc.syncbusy().read().ctrlc().bit_is_set() {}
     }
 
     fn disable_freerunning(&mut self) {
         self.adc.ctrlc.modify(|_, w| w.freerun().set_bit());
-        while self.adc.syncbusy.read().ctrlc().bit_is_set() {}
+        while self.adc.syncbusy().read().ctrlc().bit_is_set() {}
     }
 
     #[inline]
@@ -228,7 +228,7 @@ impl<S: pclk::PclkSourceId> Adc for $Adc<S> {
     /// so must be called while the peripheral is disabled.
     fn mux<PIN: Channel<$Adc<S>, ID=u8>>(&mut self, _pin: &mut PIN) {
         let chan = PIN::channel();
-        while self.adc.syncbusy.read().inputctrl().bit_is_set() {}
+        while self.adc.syncbusy().read().inputctrl().bit_is_set() {}
         self.adc.inputctrl.modify(|_, w| unsafe{ w.muxpos().bits(chan) });
     }
 }
