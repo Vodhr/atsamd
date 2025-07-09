@@ -35,8 +35,7 @@ impl AdcInstance for Adc0 {
     fn calibrate(instance: &Self::Instance) {
         instance.calib().write(|w| unsafe {
             w.biascomp().bits(calibration::adc0_biascomp_scale_cal());
-            w.biasrefbuf().bits(calibration::adc0_biasref_scale_cal());
-            w.biasr2r().bits(calibration::adc0_biasr2r_scale_cal())
+            w.biasrefbuf().bits(calibration::adc0_biasref_scale_cal())
         });
     }
 
@@ -46,20 +45,6 @@ impl AdcInstance for Adc0 {
         use super::async_api;
         &async_api::ADC_WAKERS[0]
     }
-}
-
-#[inline]
-/// Convert TP and TC values to degrees C for CPU temperature
-fn tp_tc_to_temp(tp: f32, tc: f32) -> f32 {
-    let tl = calibration::tl();
-    let th = calibration::th();
-    let vpl = calibration::vpl() as f32;
-    let vph = calibration::vph() as f32;
-    let vcl = calibration::vcl() as f32;
-    let vch = calibration::vch() as f32;
-
-    ((tl * vph * tc) - (vpl * th * tc) - (tl * vch * tp) + (th * vcl * tp))
-        / ((vcl * tp) - (vch * tp) - (vpl * tc) + (vph * tc))
 }
 
 /// ADC instance 0
@@ -84,8 +69,7 @@ impl AdcInstance for Adc1 {
     fn calibrate(instance: &Self::Instance) {
         instance.calib().write(|w| unsafe {
             w.biascomp().bits(calibration::adc1_biascomp_scale_cal());
-            w.biasrefbuf().bits(calibration::adc1_biasref_scale_cal());
-            w.biasr2r().bits(calibration::adc1_biasr2r_scale_cal())
+            w.biasrefbuf().bits(calibration::adc1_biasref_scale_cal())
         });
     }
 
@@ -111,11 +95,11 @@ impl<I: AdcInstance> Adc<I> {
         I::calibrate(&self.adc);
         self.sync();
         self.adc
-            .ctrla()
+            .ctrlb()
             .modify(|_, w| w.prescaler().variant(cfg.clk_divider));
         self.sync();
         self.adc
-            .ctrlb()
+            .ctrlc()
             .modify(|_, w| w.ressel().variant(cfg.accumulation.resolution()));
         self.sync();
 
@@ -123,11 +107,13 @@ impl<I: AdcInstance> Adc<I> {
             .sampctrl()
             .modify(|_, w| unsafe { w.samplen().bits(cfg.sample_clock_cycles.saturating_sub(1)) }); // sample length
         self.sync();
-        self.adc.inputctrl().modify(|_, w| {
-            w.muxneg().gnd();
-            w.diffmode().clear_bit()
-        }); // No negative input (internal gnd)
+        self.adc.inputctrl().modify(|_, w| w.muxneg().gnd()); // No negative input (internal gnd)
         self.sync();
+
+        self.adc
+            .ctrlc().modify(|_, w| w.diffmode().clear_bit());
+        self.sync();
+
         let (sample_cnt, adjres) = match cfg.accumulation {
             // 1 sample to be used as is
             Accumulation::Single(_) => (SampleCount::_1, 0),
@@ -154,31 +140,6 @@ impl<I: AdcInstance> Adc<I> {
 }
 
 impl<I: AdcInstance + PrimaryAdc> Adc<I> {
-    #[inline]
-    /// Reads the CPU temperature in degrees C.
-    ///
-    /// n.b. Microchip's errata document for SAM D5x/E5x states:
-    /// > Both internal temperature sensors, TSENSP and TSENSC, are not
-    /// > supported and should not be used.
-    pub fn read_cpu_temperature(&mut self, supc: &mut Supc) -> f32 {
-        let old_state = supc.vref().read().bits();
-        supc.vref().modify(|_, w| {
-            w.ondemand().set_bit();
-            w.tsen().set_bit()
-        });
-
-        let (tp, tc) = self.with_specific_settings(ADC_SETTINGS_INTERNAL_READ, |adc| {
-            (
-                adc.read_channel(0x1C) as f32, // Tp
-                adc.read_channel(0x1D) as f32, // Tc
-            )
-        });
-        // Restore vrefs old state
-        supc.vref().write(|w| unsafe { w.bits(old_state) });
-
-        tp_tc_to_temp(tp, tc)
-    }
-
     #[inline]
     pub fn read_cpu_voltage(&mut self, src: CpuVoltageSource) -> u16 {
         let voltage = self.with_specific_settings(ADC_SETTINGS_INTERNAL_READ, |adc| {
@@ -219,13 +180,13 @@ impl<I: AdcInstance> Adc<I> {
 
     #[inline]
     pub(super) fn enable_freerunning(&mut self) {
-        self.adc.ctrlb().modify(|_, w| w.freerun().set_bit());
+        self.adc.ctrlc().modify(|_, w| w.freerun().set_bit());
         self.sync();
     }
 
     #[inline]
     pub(super) fn disable_freerunning(&mut self) {
-        self.adc.ctrlb().modify(|_, w| w.freerun().clear_bit());
+        self.adc.ctrlc().modify(|_, w| w.freerun().clear_bit());
         self.sync();
     }
 

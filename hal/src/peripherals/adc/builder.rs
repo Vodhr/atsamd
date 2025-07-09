@@ -1,6 +1,6 @@
 use atsamd_hal_macros::hal_cfg;
 
-#[hal_cfg("adc-d5x")]
+#[hal_cfg(any("adc-d5x", "adc0-c2x"))]
 use crate::pac::adc0;
 
 #[hal_cfg(any("adc-d21", "adc-d11"))]
@@ -12,9 +12,16 @@ pub use adc0::ctrlb::Prescalerselect as Prescaler;
 #[hal_cfg("adc-d5x")]
 pub use adc0::ctrla::Prescalerselect as Prescaler;
 
+#[hal_cfg("adc0-c2x")]
+pub use adc0::ctrlb::Prescalerselect as Prescaler;
+
 pub use adc0::avgctrl::Samplenumselect as SampleCount;
 
+#[hal_cfg(any("adc-d21", "adc-d11", "adc-d5x"))]
 pub use adc0::ctrlb::Resselselect as Resolution;
+
+#[hal_cfg("adc0-c2x")]
+pub use adc0::ctrlc::Resselselect as Resolution;
 
 pub use adc0::refctrl::Refselselect as Reference;
 
