@@ -128,7 +128,15 @@ atsame54p = { version = "0.14.2", path = "../pac/atsame54p", optional = true}
 # to change. But all implied features are considered implementation details and
 # subject to change without notice.
 
+samc21e = ["device", "dep:atsamc21e"]
+samc21g = ["device", "dep:atsamc21g"]
 samc21j = ["device", "dep:atsamc21j"]
+samc21n = ["device", "dep:atsamc21n"]
+
+samc20e = ["device", "dep:atsamc20e"]
+samc20g = ["device", "dep:atsamc20g"]
+samc20j = ["device", "dep:atsamc20j"]
+samc20n = ["device", "dep:atsamc20n"]
 
 samd11c = ["device", "dep:atsamd11c"]
 samd11d = ["device", "dep:atsamd11d"]

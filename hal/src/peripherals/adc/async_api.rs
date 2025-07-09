@@ -13,9 +13,9 @@ use super::FutureAdc;
 #[allow(clippy::declare_interior_mutable_const)]
 const NEW_WAKER: AtomicWaker = AtomicWaker::new();
 
-#[hal_module(any("adc-d11", "adc-d21"))]
+#[hal_module(any("adc-d11", "adc-d21", all("adc0-c2x", not("adc1-c2x"))))]
 pub static ADC_WAKERS: [AtomicWaker; 1] = [NEW_WAKER; 1];
-#[hal_module("adc-d5x")]
+#[hal_module(any("adc-d5x", "adc1-c2x"))]
 pub static ADC_WAKERS: [AtomicWaker; 2] = [NEW_WAKER; 2];
 
 /// Interrupt handler for the ADC peripheral.

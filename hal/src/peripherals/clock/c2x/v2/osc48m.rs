@@ -67,7 +67,7 @@ impl Osc48mToken {
     fn enable(&self) {
         self.osc48mctrl().modify(|_, w| w.enable().set_bit());
     }
-
+    
     #[inline]
     fn disable(&self) {
         self.osc48mctrl().modify(|_, w| w.enable().clear_bit());

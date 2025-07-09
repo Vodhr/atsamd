@@ -1,5 +1,3 @@
-use embedded_hal_02::prelude::_embedded_hal_blocking_spi_Write;
-// use futures::task::Spawn;
 use atsamd_hal_macros::{hal_cfg, hal_macro_helper};
 
 use crate::ehal;

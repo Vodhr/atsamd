@@ -3,7 +3,6 @@
 use atsamd_hal_macros::hal_cfg;
 
 use crate::clock::{pclk, apb};
-use crate::clock::pclk::PclkSourceId;
 use crate::clock::types::{Tc0Tc1, Tc2Tc3, Tc4, Tcc0Tcc1, Tcc2};
 use crate::clock::types;
 use crate::gpio::*;

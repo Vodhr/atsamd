@@ -252,7 +252,7 @@ impl AdcBuilder {
     }
 
     /// Turn the builder into an ADC
-    #[hal_cfg("adc-d5x")]
+    #[hal_cfg(any("adc-d5x", "adc0-c2x"))]
     #[inline]
     pub fn enable<I: AdcInstance, PS: crate::clock::v2::pclk::PclkSourceId>(
         self,

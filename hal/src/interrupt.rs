@@ -150,7 +150,7 @@ pub trait InterruptExt: cortex_m::interrupt::InterruptNumber + Copy {
             let mut nvic = steal_nvic();
 
             // On thumbv6, set_priority must do a RMW to change 8bit in a 32bit reg.
-            #[hal_cfg(any("nvic-d11", "nvic-d21"))]
+            #[hal_cfg(any("nvic-d11", "nvic-d21", "nvic-c2x"))]
             critical_section::with(|_| nvic.set_priority(self, prio.logical2hw()));
             // On thumbv7+, set_priority does an atomic 8bit write, so no CS needed.
             #[hal_cfg("nvic-d5x")]

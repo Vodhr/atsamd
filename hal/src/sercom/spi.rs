@@ -450,7 +450,6 @@ use reg::Registers;
 use crate::pac::sercom0::spi::ctrla::Modeselect;
 #[hal_cfg(any("port-d5x", "port-c2x"))]
 use crate::pac::sercom0::spim::ctrla::Modeselect;
-#[hal_cfg("sercom0-c2x")]
 
 #[hal_module(
     any("sercom0-d11", "sercom0-d21", "sercom0-c2x") => "spi/pads_thumbv6m.rs",
@@ -478,6 +477,7 @@ pub mod lengths {
 
 pub mod impl_ehal;
 
+// TODO
 // #[cfg(feature = "async")]
 // mod async_api;
 // #[cfg(feature = "async")]

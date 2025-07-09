@@ -1417,8 +1417,10 @@ seq!(N in 1..=8 {
             /// upheld here as well.
             #[inline]
             pub(super) unsafe fn new() -> Self {
-                GclkTokens {
-                    #( gclk~N: GclkToken::new(), )*
+                unsafe {
+                    GclkTokens {
+                        #( gclk~N: GclkToken::new(), )*
+                    }
                 }
             }
         }
