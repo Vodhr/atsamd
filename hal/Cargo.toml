@@ -170,7 +170,15 @@ same54p = ["device", "dep:atsame54p"]
 # Instead of selecting a variant feature above, users can optionally select an
 # `-rt` feature, which enables the `rt` feature of the corresponding PAC.
 
+samc20e-rt = ["samc21j", "atsamc20e/rt"]
+samc20g-rt = ["samc21j", "atsamc20g/rt"]
+samc20j-rt = ["samc21j", "atsamc20j/rt"]
+samc20n-rt = ["samc21j", "atsamc20n/rt"]
+
+samc21e-rt = ["samc21j", "atsamc21e/rt"]
+samc21g-rt = ["samc21j", "atsamc21g/rt"]
 samc21j-rt = ["samc21j", "atsamc21j/rt"]
+samc21n-rt = ["samc21j", "atsamc21n/rt"]
 
 samd11c-rt = ["samd11c", "atsamd11c/rt"]
 samd11d-rt = ["samd11d", "atsamd11d/rt"]
