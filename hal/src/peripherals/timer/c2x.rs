@@ -2,13 +2,14 @@
 use atsamd_hal_macros::hal_cfg;
 
 use crate::pac::tc0::Count16 as Count16Reg;
-use crate::pac::{Mclk, Tc2, Tc3};
-#[hal_cfg(all("tc4", "tc5"))]
-use crate::pac::{Tc4, Tc5};
-#[hal_cfg(all("tc6", "tc7"))]
-use crate::pac::{Tc6, Tc7};
+use crate::pac;
 
-use crate::clock;
+use crate::clock::types;
+use crate::clock::types::{Tc0, Tc0Tc1, Tc2Tc3, Tc4};
+#[hal_cfg("tc7")]
+use crate::clock::types::{Tc5, Tc6, Tc7};
+
+use crate::clock::pclk;
 use crate::time::Hertz;
 
 mod common;
@@ -19,7 +20,9 @@ mod async_api;
 
 #[cfg(feature = "async")]
 pub use async_api::*;
-
+use crate::clock::apb;
+use crate::clock::apb::ApbId;
+use crate::clock::pclk::Pclk;
 // Note:
 // TC3 + TC4 can be paired to make a 32-bit counter
 // TC5 + TC6 can be paired to make a 32-bit counter
@@ -35,8 +38,9 @@ pub use async_api::*;
 /// the `CountDown` embedded_hal timer traits.
 /// Before a hardware timer can be used, it must first
 /// have a clock configured.
-pub struct TimerCounter<TC> {
+pub struct TimerCounter<TC, A: ApbId = Tc0> {
     freq: Hertz,
+    apb_clk: apb::ApbClk<A>,
     tc: TC,
 }
 impl<TC> TimerCounter<TC>
@@ -95,27 +99,20 @@ where
 }
 
 macro_rules! tc {
-    ($($TYPE:ident: ($TC:ident, $mclk:ident, $clock:ident, $apmask:ident),)+) => {
+    ($($TYPE:ident: ($TC:ident, $pclk_id:ident, $apb_id:ident),)+) => {
         $(
-pub type $TYPE = TimerCounter<$TC>;
+pub type $TYPE = TimerCounter<pac::$TC>;
 
-impl Count16 for $TC {
+impl Count16 for pac::$TC {
     fn count_16(&self) -> &Count16Reg {
         self.count16()
     }
 }
 
-impl TimerCounter<$TC>
-{
-    /// Configure this timer counter instance.
-    /// The clock is obtained from the `GenericClockController` instance
-    /// and its frequency impacts the resolution and maximum range of
-    /// the timeout values that can be passed to the `start` method.
-    /// Note that some hardware timer instances share the same clock
-    /// generator instance and thus will be clocked at the same rate.
-    pub fn $mclk(clock: &clock::$clock, tc: $TC, mclk: &mut Mclk) -> Self {
+impl TimerCounter<pac::$TC, types::$TC> {
+    pub fn new<S: pclk::PclkSourceId>(
+        apb_clk: apb::ApbClk<types::$apb_id>, tc: pac::$TC, pclk: &Pclk<$pclk_id, S>) -> Self {
         // this is safe because we're constrained to just the tc3 bit
-        mclk.$apmask().modify(|_, w| w.$mclk().set_bit());
         {
             let count = tc.count16();
 
@@ -124,7 +121,8 @@ impl TimerCounter<$TC>
             while count.syncbusy().read().enable().bit_is_set()  {}
         }
         Self {
-            freq: clock.freq(),
+            freq: pclk.freq(),
+            apb_clk,
             tc,
         }
     }
@@ -134,18 +132,16 @@ impl TimerCounter<$TC>
 }
 
 tc! {
-    TimerCounter2: (Tc2, tc2_, Tc2Tc3Clock, apbbmask),
-    TimerCounter3: (Tc3, tc3_, Tc2Tc3Clock, apbbmask),
+    TimerCounter0: (Tc0, Tc0Tc1, Tc0),
+    TimerCounter1: (Tc1, Tc0Tc1, Tc1),
+    TimerCounter2: (Tc2, Tc2Tc3, Tc2),
+    TimerCounter3: (Tc3, Tc2Tc3, Tc3),
+    TimerCounter4: (Tc4, Tc4, Tc4),
 }
 
-#[hal_cfg(all("tc4", "tc5"))]
+#[hal_cfg("tc7")]
 tc! {
-    TimerCounter4: (Tc4, tc4_, Tc4Tc5Clock, apbcmask),
-    TimerCounter5: (Tc5, tc5_, Tc4Tc5Clock, apbcmask),
-}
-
-#[hal_cfg(all("tc6", "tc7"))]
-tc! {
-    TimerCounter6: (Tc6, tc6_, Tc6Tc7Clock, apbdmask),
-    TimerCounter7: (Tc7, tc7_, Tc6Tc7Clock, apbdmask),
+    TimerCounter3: (Tc5, Tc5, Tc5),
+    TimerCounter4: (Tc6, Tc6, Tc6),
+    TimerCounter4: (Tc7, Tc7, Tc7),
 }

@@ -155,7 +155,8 @@ families:
       - sercom: {count: 8, only: ["samc21n", "samc20n"]}
       - sercom: {count: 6, only: ["samc21j", "samc21g"]}
       - sercom: {count: 4, only: ["samc21e", "samc20j", "samc20g", "samc20e"]}
-      - tc: {count: 5}
+      - tc: {count: 5, only: ["samc21e", "samc21g", "samc21j", "samc20j", "samc20e", "samc20g", "samc20j"]}
+      - tc: {count: 8, only: ["samc21n", "samc20n"]}
       - tcc: {count: 3}
       - adc: {count: 2, only: ["samc21n", "samc21e", "samc21g", "samc21j"]}
       - adc: {count: 1, only: ["samc20n", "samc20e", "samc20g", "samc20j"]}

@@ -22,6 +22,10 @@ use portable_atomic::AtomicBool;
 
 use crate::peripherals::timer;
 
+#[hal_cfg("tc0")]
+#[allow(unused_imports)]
+use crate::pac::Tc0;
+
 #[hal_cfg("tc1")]
 #[allow(unused_imports)]
 use crate::pac::Tc1;
@@ -42,6 +46,14 @@ use crate::pac::Tc4;
 #[allow(unused_imports)]
 use crate::pac::Tc5;
 
+#[hal_cfg("tc6")]
+#[allow(unused_imports)]
+use crate::pac::Tc6;
+
+#[hal_cfg("tc7")]
+#[allow(unused_imports)]
+use crate::pac::Tc7;
+
 use timer::{Count16, TimerCounter};
 
 #[hal_cfg("tc1-d11")]
@@ -51,6 +63,9 @@ type RegBlock = pac::tc1::RegisterBlock;
 type RegBlock = pac::tc3::RegisterBlock;
 
 #[hal_cfg("tc1-d5x")]
+type RegBlock = pac::tc0::RegisterBlock;
+
+#[hal_cfg("tc0-c2x")]
 type RegBlock = pac::tc0::RegisterBlock;
 
 /// Trait enabling the use of a Timer/Counter in async mode. Specifically, this
@@ -142,6 +157,30 @@ impl_async_count16!(Tc4, 2);
 #[hal_cfg("tc5-d5x")]
 impl_async_count16!(Tc5, 3);
 
+#[hal_cfg("tc0-c2x")]
+impl_async_count16!(Tc0, 0);
+
+#[hal_cfg("tc1-c2x")]
+impl_async_count16!(Tc1, 1);
+
+#[hal_cfg("tc2-c2x")]
+impl_async_count16!(Tc2, 2);
+
+#[hal_cfg("tc3-c2x")]
+impl_async_count16!(Tc3, 3);
+
+#[hal_cfg("tc4-c2x")]
+impl_async_count16!(Tc4, 4);
+
+#[hal_cfg("tc5-c2x")]
+impl_async_count16!(Tc5, 5);
+
+#[hal_cfg("tc6-c2x")]
+impl_async_count16!(Tc6, 6);
+
+#[hal_cfg("tc7-c2x")]
+impl_async_count16!(Tc7, 7);
+
 // Reserve space for the max number of timer peripherals based on chip type,
 // even though some wakers may not be used on some chips if they actually don't
 // exist on variant's hardware
@@ -153,6 +192,12 @@ const NUM_TIMERS: usize = 3;
 
 #[hal_cfg("tc3-d5x")]
 const NUM_TIMERS: usize = 4;
+
+#[hal_cfg(all("tc0-c2x", not("tc7-c2x")))]
+const NUM_TIMERS: usize = 5;
+
+#[hal_cfg("tc7-c2x")]
+const NUM_TIMERS: usize = 8;
 
 impl<T> TimerCounter<T>
 where

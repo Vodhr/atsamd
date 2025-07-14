@@ -13,6 +13,7 @@ pub mod calibration {}
 #[hal_module(
     any("clock-d11", "clock-d21") => "timer/d11.rs",
     "clock-d5x" => "timer/d5x.rs",
+    "clock-c2x" => "timer/c2x.rs",
 )]
 pub mod timer {}
 
