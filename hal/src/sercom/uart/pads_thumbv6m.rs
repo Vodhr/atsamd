@@ -9,7 +9,7 @@ use crate::{
 };
 use core::marker::PhantomData;
 
-#[hal_cfg("sercom0-d21")]
+#[hal_cfg(any("sercom0-d21", "sercom0-c2x"))]
 use crate::gpio::AnyPin;
 
 //=============================================================================
@@ -269,7 +269,7 @@ where
     }
 }
 
-#[hal_cfg("sercom0-d21")]
+#[hal_cfg(any("sercom0-d21", "sercom0-c2x"))]
 impl<S, RX, TX, RTS, CTS> Pads<S, RX, TX, RTS, CTS>
 where
     S: Sercom,
@@ -491,4 +491,4 @@ where
 /// [`Pad`].
 pub trait ValidConfig: AnyConfig {}
 
-impl<P: ValidPads, C: CharSize> ValidConfig for Config<P, C> {}
+impl<P: ValidPads, S: pclk::PclkSourceId, C: CharSize> ValidConfig for Config<P, S, C> {}

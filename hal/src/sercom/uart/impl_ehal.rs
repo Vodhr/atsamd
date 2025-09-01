@@ -13,6 +13,7 @@ use crate::{
 };
 use nb::Error::WouldBlock;
 use num_traits::AsPrimitive;
+use crate::clock::pclk;
 
 impl<C, D> Read<C::Word> for Uart<C, D>
 where
@@ -72,9 +73,10 @@ where
     type Error = UartError;
 }
 
-impl<P, D, R> embedded_io::Write for Uart<Config<P, EightBit>, D, R, NoneT>
+impl<P, S, D, R> embedded_io::Write for Uart<Config<P, S, EightBit>, D, R, NoneT>
 where
     P: ValidPads,
+    S: pclk::PclkSourceId,
     D: Transmit,
 {
     #[inline]
@@ -96,9 +98,10 @@ where
     }
 }
 
-impl<P, D, T> embedded_io::Read for Uart<Config<P, EightBit>, D, NoneT, T>
+impl<P, S, D, T> embedded_io::Read for Uart<Config<P, S, EightBit>, D, NoneT, T>
 where
     P: ValidPads,
+    S: pclk::PclkSourceId,
     D: Receive,
 {
     #[inline]

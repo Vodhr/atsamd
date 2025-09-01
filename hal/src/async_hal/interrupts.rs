@@ -125,23 +125,29 @@ declare_multiple_interrupts!(DMAC: [DMAC_0, DMAC_1, DMAC_2, DMAC_OTHER]);
 declare_interrupts!(DMAC);
 
 // ----------  SERCOM Interrupts ---------- //
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+#[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
 declare_interrupts!(SERCOM0);
 
-#[hal_cfg(any("sercom1-d11", "sercom1-d21"))]
+#[hal_cfg(any("sercom1-d11", "sercom1-d21", "sercom1-c2x"))]
 declare_interrupts!(SERCOM1);
 
-#[hal_cfg(any("sercom2-d11", "sercom2-d21"))]
+#[hal_cfg(any("sercom2-d11", "sercom2-d21", "sercom2-c2x"))]
 declare_interrupts!(SERCOM2);
 
-#[hal_cfg("sercom3-d21")]
+#[hal_cfg(any("sercom3-d21", "sercom3-c2x"))]
 declare_interrupts!(SERCOM3);
 
-#[hal_cfg("sercom4-d21")]
+#[hal_cfg(any("sercom4-d21", "sercom4-c2x"))]
 declare_interrupts!(SERCOM4);
 
-#[hal_cfg("sercom5-d21")]
+#[hal_cfg(any("sercom5-d21", "sercom5-c2x"))]
 declare_interrupts!(SERCOM5);
+
+#[hal_cfg("sercom6-c2x")]
+declare_interrupts!(SERCOM6);
+
+#[hal_cfg("sercom7-c2x")]
+declare_interrupts!(SERCOM7);
 
 #[hal_cfg("sercom0-d5x")]
 declare_multiple_interrupts!(SERCOM0: [SERCOM0_0, SERCOM0_1, SERCOM0_2, SERCOM0_OTHER ]);

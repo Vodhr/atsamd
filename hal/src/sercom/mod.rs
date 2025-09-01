@@ -62,7 +62,7 @@ pub mod spi;
 //     note = "spi_future is deprecated and will be removed in a later version of atsamd_hal. Consider using the `async` APIs available in the `spi` module as a replacement."
 // )]
 // pub mod spi_future;
-// pub mod uart;
+pub mod uart;
 
 #[cfg(feature = "dma")]
 pub mod dma;
@@ -84,14 +84,14 @@ pub trait Sercom: Sealed + Deref<Target = sercom0::RegisterBlock> {
     #[cfg(feature = "dma")]
     const DMA_TX_TRIGGER: TriggerSource;
 
-    // #[cfg(feature = "async")]
-    // type Interrupt: crate::async_hal::interrupts::InterruptSource;
+    #[cfg(feature = "async")]
+    type Interrupt: crate::async_hal::interrupts::InterruptSource;
 
     #[hal_cfg("sercom0-c2x")]
     type ApbClk;
 
     #[hal_cfg("sercom0-c2x")]
-    type Pclk<S: pclk::PclkSourceId>;
+    type PclkId: pclk::PclkId;
 
     /// Enable the corresponding APB clock
     #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
@@ -101,19 +101,19 @@ pub trait Sercom: Sealed + Deref<Target = sercom0::RegisterBlock> {
     /// [`Peripherals`] block
     fn reg_block(peripherals: &mut Peripherals) -> &crate::pac::sercom0::RegisterBlock;
 
-    // /// Get a reference to this [`Sercom`]'s associated RX Waker
-    // #[cfg(feature = "async")]
-    // #[inline]
-    // fn rx_waker() -> &'static embassy_sync::waitqueue::AtomicWaker {
-    //     &crate::sercom::async_api::RX_WAKERS[Self::NUM]
-    // }
+    /// Get a reference to this [`Sercom`]'s associated RX Waker
+    #[cfg(feature = "async")]
+    #[inline]
+    fn rx_waker() -> &'static embassy_sync::waitqueue::AtomicWaker {
+        &crate::sercom::async_api::RX_WAKERS[Self::NUM]
+    }
 
-    // /// Get a reference to this [`Sercom`]'s associated TX Waker
-    // #[cfg(feature = "async")]
-    // #[inline]
-    // fn tx_waker() -> &'static embassy_sync::waitqueue::AtomicWaker {
-    //     &crate::sercom::async_api::TX_WAKERS[Self::NUM]
-    // }
+    /// Get a reference to this [`Sercom`]'s associated TX Waker
+    #[cfg(feature = "async")]
+    #[inline]
+    fn tx_waker() -> &'static embassy_sync::waitqueue::AtomicWaker {
+        &crate::sercom::async_api::TX_WAKERS[Self::NUM]
+    }
 }
 
 macro_rules! sercom {
@@ -132,13 +132,13 @@ macro_rules! sercom {
                 #[cfg(feature = "dma")]
                 const DMA_TX_TRIGGER: TriggerSource = TriggerSource::[< Sercom $N Tx >];
 
-                // #[cfg(feature = "async")]
-                // #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
-                // type Interrupt = $crate::async_hal::interrupts::[< SERCOM $N >];
+                #[cfg(feature = "async")]
+                #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
+                type Interrupt = $crate::async_hal::interrupts::[< SERCOM $N >];
 
-                // #[cfg(feature = "async")]
-                // #[hal_cfg("sercom0-d5x")]
-                // type Interrupt = $crate::async_hal::interrupts::[< SERCOM $N >];
+                #[cfg(feature = "async")]
+                #[hal_cfg("sercom0-d5x")]
+                type Interrupt = $crate::async_hal::interrupts::[< SERCOM $N >];
 
                 #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x"))]
                 #[inline]
@@ -150,7 +150,7 @@ macro_rules! sercom {
                 type ApbClk = apb::ApbClk<types::[< Sercom $N >]>;
 
                 #[hal_cfg("sercom0-c2x")]
-                type Pclk<S: pclk::PclkSourceId> = pclk::Pclk<types::[< Sercom $N >], S>;
+                type PclkId = types::[< Sercom $N >];
 
                 #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-d5x", "sercom0-c2x"))]
                 #[inline]
@@ -229,15 +229,19 @@ const NUM_SERCOM: usize = 6;
 #[cfg(feature = "async")]
 const NUM_SERCOM: usize = 8;
 
-// #[cfg(feature = "async")]
-// pub(super) mod async_api {
-//     use embassy_sync::waitqueue::AtomicWaker;
-//
-//     #[allow(clippy::declare_interior_mutable_const)]
-//     const NEW_WAKER: AtomicWaker = AtomicWaker::new();
-//     /// Waker for a RX event. By convention, if a SERCOM has only one type of
-//     /// event (ie, I2C), this the waker to be used.
-//     pub(super) static RX_WAKERS: [AtomicWaker; super::NUM_SERCOM] = [NEW_WAKER; super::NUM_SERCOM];
-//     /// Waker for a TX event.
-//     pub(super) static TX_WAKERS: [AtomicWaker; super::NUM_SERCOM] = [NEW_WAKER; super::NUM_SERCOM];
-// }
+#[hal_cfg("sercom0-c2x")]
+#[cfg(feature = "async")]
+const NUM_SERCOM: usize = 8;
+
+#[cfg(feature = "async")]
+pub(super) mod async_api {
+    use embassy_sync::waitqueue::AtomicWaker;
+
+    #[allow(clippy::declare_interior_mutable_const)]
+    const NEW_WAKER: AtomicWaker = AtomicWaker::new();
+    /// Waker for a RX event. By convention, if a SERCOM has only one type of
+    /// event (ie, I2C), this the waker to be used.
+    pub(super) static RX_WAKERS: [AtomicWaker; super::NUM_SERCOM] = [NEW_WAKER; super::NUM_SERCOM];
+    /// Waker for a TX event.
+    pub(super) static TX_WAKERS: [AtomicWaker; super::NUM_SERCOM] = [NEW_WAKER; super::NUM_SERCOM];
+}

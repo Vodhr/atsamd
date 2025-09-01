@@ -466,6 +466,7 @@ pub use pads::*;
 pub mod size {}
 
 pub use size::*;
+use crate::clock::pclk::Pclk;
 
 /// Valid transaction [`Length`]s from the [`typenum`] crate
 #[hal_cfg("sercom0-d5x")]
@@ -790,10 +791,9 @@ where
     pads: P,
     mode: PhantomData<M>,
     size: PhantomData<Z>,
-    freq: Hertz,
     nop_word: DataWidth,
     apbclk: <P::Sercom as Sercom>::ApbClk,
-    pclk: <P::Sercom as Sercom>::Pclk<S>,
+    pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
 }
 
 impl<P, M, Z, S> Config<P, M, Z, S>
@@ -806,7 +806,9 @@ where
     /// Create a new [`Config`] in the default configuration.
     #[inline]
     #[hal_macro_helper]
-    fn default(pclk: <P::Sercom as Sercom>::Pclk<S>, apbclk: <P::Sercom as Sercom>::ApbClk, sercom: P::Sercom, pads: P, freq: impl Into<Hertz>) -> Self {
+    fn default(pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
+               apbclk: <P::Sercom as Sercom>::ApbClk, sercom: P::Sercom,
+               pads: P) -> Self {
         let mut regs = Registers { sercom };
         regs.reset();
         regs.set_op_mode(Master::MODE, Master::MSSEN);
@@ -820,7 +822,6 @@ where
             pads,
             mode: PhantomData,
             size: PhantomData,
-            freq: freq.into(),
             nop_word: 0x00.as_(),
             apbclk,
             pclk,
@@ -861,13 +862,12 @@ where
     )]
     #[inline]
     pub fn new(
-        pclk: <P::Sercom as Sercom>::Pclk<S>,
+        pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
         apbclk: <P::Sercom as Sercom>::ApbClk,
         mut sercom: P::Sercom,
         pads: P,
-        freq: impl Into<Hertz>,
     ) -> Self {
-        Self::default(pclk, apbclk, sercom, pads, freq)
+        Self::default(pclk, apbclk, sercom, pads)
     }
 
     /// Change the [`OpMode`] or [`Size`]
@@ -882,7 +882,6 @@ where
             pads: self.pads,
             mode: PhantomData,
             size: PhantomData,
-            freq: self.freq,
             nop_word: self.nop_word,
             apbclk: self.apbclk,
             pclk: self.pclk,
@@ -904,13 +903,15 @@ where
     /// default configuration.
     #[inline]
     pub fn reset(self) -> Config<P, M, Z, S> {
-        Config::default(self.pclk, self.apbclk, self.regs.sercom, self.pads, self.freq)
+        Config::default(self.pclk, self.apbclk, self.regs.sercom, self.pads)
     }
 
     /// Consume the [`Config`], reset the peripheral, and return the [`Sercom`]
     /// and [`Pads`]
     #[inline]
-    pub fn free(mut self) -> (<P::Sercom as Sercom>::Pclk<S>, <P::Sercom as Sercom>::ApbClk, P::Sercom, P) {
+    pub fn free(mut self) -> (Pclk<<P::Sercom as Sercom>::PclkId, S>,
+                              <P::Sercom as Sercom>::ApbClk,
+                              P::Sercom, P) {
         self.regs.reset();
         (self.pclk, self.apbclk, self.regs.sercom, self.pads)
     }
@@ -1060,7 +1061,7 @@ where
     /// The returned baud rate may not exactly match what was set.
     #[inline]
     pub fn get_baud(&mut self) -> Hertz {
-        self.regs.get_baud(self.freq)
+        self.regs.get_baud(self.pclk.freq())
     }
 
     /// Set the baud rate
@@ -1071,7 +1072,7 @@ where
     /// 512. Values outside this range will saturate at the extremes.
     #[inline]
     pub fn set_baud(&mut self, baud: Hertz) {
-        self.regs.set_baud(self.freq, baud);
+        self.regs.set_baud(self.pclk.freq(), baud);
     }
 
     /// Set the baud rate using the builder API

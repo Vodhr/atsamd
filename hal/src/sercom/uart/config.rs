@@ -14,7 +14,12 @@ use crate::{
 };
 use core::marker::PhantomData;
 use num_traits::{AsPrimitive, PrimInt};
-
+use crate::clock::{
+    gclk, pclk,
+    pclk::{
+        Pclk, PclkSourceId
+    }
+};
 //=============================================================================
 // Config
 //=============================================================================
@@ -39,15 +44,17 @@ use num_traits::{AsPrimitive, PrimInt};
 ///
 /// [`enable`]: Config::enable
 /// [`Pads`]: super::Pads
-pub struct Config<P, C = EightBit>
+pub struct Config<P, S = gclk::Gclk0Id, C = EightBit>
 where
     P: ValidPads,
     C: CharSize,
+    S: PclkSourceId,
 {
     pub(super) registers: Registers<P::Sercom>,
     pads: P,
     chsize: PhantomData<C>,
-    freq: Hertz,
+    apbclk: <P::Sercom as Sercom>::ApbClk,
+    pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
 }
 
 /// Clock type needed to create a new [`Config`]. [`Pm`](pac::Pm) for thumbv6m
@@ -60,7 +67,7 @@ pub type Clock = pac::Pm;
 #[hal_cfg("sercom0-d5x")]
 pub type Clock = pac::Mclk;
 
-impl<P: ValidPads> Config<P> {
+impl<P: ValidPads, S: pclk::PclkSourceId> Config<P, S> {
     /// Create a new [`Config`] in the default configuration
     ///
     /// This function will enable the corresponding APB clock, reset the
@@ -77,14 +84,17 @@ impl<P: ValidPads> Config<P> {
     /// Users must configure GCLK manually. The `freq` parameter represents the
     /// GCLK frequency for this [`Sercom`] instance.
     #[inline]
-    pub fn new(clk: &Clock, mut sercom: P::Sercom, pads: P, freq: impl Into<Hertz>) -> Self {
-        sercom.enable_apb_clock(clk);
-        Self::default(sercom, pads, freq).bit_order(BitOrder::LsbFirst)
+    pub fn new(pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
+               apbclk: <P::Sercom as Sercom>::ApbClk,
+               mut sercom: P::Sercom, pads: P) -> Self {
+        Self::default(pclk, apbclk, sercom, pads).bit_order(BitOrder::LsbFirst)
     }
 
     /// Create a new [`Config`] in the default configuration
     #[inline]
-    fn default(sercom: P::Sercom, pads: P, freq: impl Into<Hertz>) -> Self {
+    fn default(pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
+               apbclk: <P::Sercom as Sercom>::ApbClk,
+               sercom: P::Sercom, pads: P) -> Self {
         let mut registers = Registers::new(sercom);
         registers.swrst();
 
@@ -97,19 +107,31 @@ impl<P: ValidPads> Config<P> {
             registers,
             pads,
             chsize: PhantomData,
-            freq: freq.into(),
+            apbclk,
+            pclk,
         }
+    }
+
+    /// Consume the [`Config`], reset the peripheral, and return the [`Sercom`]
+    /// and [`Pads`](super::Pads)
+    #[inline]
+    pub fn free(mut self) -> (Pclk<<P::Sercom as Sercom>::PclkId, S>,
+                              <P::Sercom as Sercom>::ApbClk,
+                              P::Sercom, P) {
+        self.registers.swrst();
+        (self.pclk, self.apbclk, self.registers.free(), self.pads)
     }
 }
 
-impl<P, C> Config<P, C>
+impl<P, S, C> Config<P, S, C>
 where
     P: ValidPads,
+    S: pclk::PclkSourceId,
     C: CharSize,
 {
     /// Change the [`Config`] [`CharSize`]
     #[inline]
-    fn change<C2>(self) -> Config<P, C2>
+    fn change<C2>(self) -> Config<P, S, C2>
     where
         C2: CharSize,
     {
@@ -117,28 +139,21 @@ where
             registers: self.registers,
             pads: self.pads,
             chsize: PhantomData,
-            freq: self.freq,
+            apbclk: self.apbclk,
+            pclk: self.pclk,
         }
     }
 
     /// Trigger the [`Sercom`]'s SWRST and return a [`Config`] in the
     /// default configuration.
     #[inline]
-    pub fn reset(self) -> Config<P> {
-        Config::default(self.registers.free(), self.pads, self.freq)
-    }
-
-    /// Consume the [`Config`], reset the peripheral, and return the [`Sercom`]
-    /// and [`Pads`](super::Pads)
-    #[inline]
-    pub fn free(mut self) -> (P::Sercom, P) {
-        self.registers.swrst();
-        (self.registers.free(), self.pads)
+    pub fn reset(self) -> Config<P, S> {
+        Config::default(self.pclk, self.apbclk, self.registers.free(), self.pads)
     }
 
     /// Change the [`CharSize`].
     #[inline]
-    pub fn char_size<C2: FixedCharSize>(mut self) -> Config<P, C2> {
+    pub fn char_size<C2: FixedCharSize>(mut self) -> Config<P, S, C2> {
         self.registers.set_char_size(C2::SIZE);
         self.change()
     }
@@ -149,7 +164,7 @@ where
     /// the underlying [`Config`]'s type through the
     /// [`reconfigure`](Uart::reconfigure) method.
     #[inline]
-    pub fn dyn_char_size(mut self) -> Config<P, DynCharSize> {
+    pub fn dyn_char_size(mut self) -> Config<P, S, DynCharSize> {
         self.registers.set_char_size(CharSizeEnum::EightBit);
         self.change()
     }
@@ -285,7 +300,7 @@ where
     /// Note that 3x oversampling is not supported.
     #[inline]
     pub fn set_baud(&mut self, baud: Hertz, mode: BaudMode) {
-        self.registers.set_baud(self.freq, baud, mode);
+        self.registers.set_baud(self.pclk.freq(), baud, mode);
     }
 
     /// Get the contents of the `BAUD` register and the current baud mode. Note
@@ -378,7 +393,7 @@ where
     }
 }
 
-impl<P: ValidPads> Config<P, DynCharSize> {
+impl<P: ValidPads, S: pclk::PclkSourceId,> Config<P, S, DynCharSize> {
     /// Dynamically change the character size
     #[inline]
     pub fn set_dyn_char_size(&mut self, char_size: CharSizeEnum) {
@@ -391,11 +406,12 @@ impl<P: ValidPads> Config<P, DynCharSize> {
     }
 }
 
-impl<P, C> Config<P, C>
+impl<P, S, C> Config<P, S, C>
 where
     P: ValidPads,
     C: CharSize,
     Self: ValidConfig,
+    S: pclk::PclkSourceId,
 {
     /// Enable the UART peripheral and return a [`Uart`] struct.
     ///
@@ -434,19 +450,21 @@ pub trait AnyConfig: Sealed + Is<Type = SpecificConfig<Self>> {
     type Pads: ValidPads<Sercom = Self::Sercom>;
     type Word: 'static + PrimInt + AsPrimitive<DataReg>;
     type CharSize: CharSize<Word = Self::Word>;
+    type PclkSourceId: pclk::PclkSourceId;
 }
 
 /// Type alias to recover the specific [`Config`] type from an implementation of
 /// [`AnyConfig`]
-pub type SpecificConfig<C> = Config<<C as AnyConfig>::Pads, <C as AnyConfig>::CharSize>;
+pub type SpecificConfig<C> = Config<<C as AnyConfig>::Pads, <C as AnyConfig>::PclkSourceId, <C as AnyConfig>::CharSize>;
 
 /// Type alias to recover the specific [`Sercom`] type from an implementation of
 /// [`AnyConfig`]
 pub type ConfigSercom<C> = <C as AnyConfig>::Sercom;
 
-impl<P, C> AsRef<Self> for Config<P, C>
+impl<P, S, C> AsRef<Self> for Config<P, S, C>
 where
     P: ValidPads,
+    S: pclk::PclkSourceId,
     C: CharSize,
 {
     #[inline]
@@ -455,9 +473,10 @@ where
     }
 }
 
-impl<P, C> AsMut<Self> for Config<P, C>
+impl<P, S, C> AsMut<Self> for Config<P, S, C>
 where
     P: ValidPads,
+    S: pclk::PclkSourceId,
     C: CharSize,
 {
     #[inline]
@@ -466,20 +485,23 @@ where
     }
 }
 
-impl<P, C> Sealed for Config<P, C>
+impl<P, S, C> Sealed for Config<P, S, C>
 where
     P: ValidPads,
+    S: pclk::PclkSourceId,
     C: CharSize,
 {
 }
 
-impl<P, C> AnyConfig for Config<P, C>
+impl<P, S, C> AnyConfig for Config<P, S, C>
 where
     P: ValidPads,
+    S: pclk::PclkSourceId,
     C: CharSize,
 {
     type Sercom = P::Sercom;
-    type Word = C::Word;
     type Pads = P;
+    type Word = C::Word;
     type CharSize = C;
+    type PclkSourceId = S;
 }
