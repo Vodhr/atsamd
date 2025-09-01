@@ -478,11 +478,10 @@ pub mod lengths {
 
 pub mod impl_ehal;
 
-// TODO
-// #[cfg(feature = "async")]
-// mod async_api;
-// #[cfg(feature = "async")]
-// pub use async_api::*;
+#[cfg(feature = "async")]
+mod async_api;
+#[cfg(feature = "async")]
+pub use async_api::*;
 
 //=============================================================================
 // BitOrder
