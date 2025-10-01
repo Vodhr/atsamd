@@ -653,8 +653,9 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
     ) -> Self {
         let params = TimerParams::new(freq.convert(), pclk.freq());
 
-        tcc.ctrla().write(|w| w.swrst().set_bit());
-        while tcc.syncbusy().read().swrst().bit_is_set() {}
+        // TODO Disabled due to previous configuration actions
+        // tcc.ctrla().write(|w| w.swrst().set_bit());
+        // while tcc.syncbusy().read().swrst().bit_is_set() {}
         tcc.ctrlbclr().write(|w| w.dir().set_bit() );
         while tcc.syncbusy().read().ctrlb().bit_is_set() {}
         tcc.ctrla().modify(|_, w| w.enable().clear_bit());
@@ -676,6 +677,9 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
         while tcc.syncbusy().read().wave().bit_is_set() {}
         tcc.per().write(|w| unsafe { w.bits(params.cycles as u32) });
         while tcc.syncbusy().read().per().bit_is_set() {}
+
+        tcc.ctrlbclr().write(|w| w.lupd().set_bit());
+
         tcc.ctrla().modify(|_, w| w.enable().set_bit());
         while tcc.syncbusy().read().enable().bit_is_set() {}
 
@@ -685,6 +689,13 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
             tcc,
             pinout,
         }
+    }
+
+    #[inline]
+    pub fn set_duty_3x(&mut self, channel0: Channel, channel1: Channel, channel2: Channel, duty0: u32, duty1: u32, duty2: u32) {
+        self.tcc.ccbuf(channel0 as usize).write(|w| unsafe { w.ccbuf().bits(duty0) });
+        self.tcc.ccbuf(channel1 as usize).write(|w| unsafe { w.ccbuf().bits(duty1) });
+        self.tcc.ccbuf(channel2 as usize).write(|w| unsafe { w.ccbuf().bits(duty2) });
     }
 }
 
@@ -727,8 +738,8 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $crate::ehal_02::Pwm for $TYPE
 
     #[inline]
     fn set_duty(&mut self, channel: Self::Channel, duty: Self::Duty) {
-        let cc = &self.tcc.cc(channel as usize);
-        cc.write(|w| unsafe { w.cc().bits(duty) });
+        self.tcc.cc(channel as usize).write(|w| unsafe { w.cc().bits(duty) });
+        while self.tcc.syncbusy().read().bits() != 0 {}
     }
 
     #[inline]

@@ -130,6 +130,12 @@ impl<I: AdcInstance> Adc<I> {
         self.sync();
         self.set_reference(cfg.vref);
         self.sync();
+        self.adc.refctrl().modify(|_, w| w.refcomp().set_bit());
+        self.sync();
+        self.adc.ctrla().modify(|_, w| w.runstdby().set_bit());
+        self.sync();
+        self.adc.evctrl().modify(|_, w| w.startei().set_bit());
+        self.sync();
         self.adc.ctrla().modify(|_, w| w.enable().set_bit());
         self.sync();
         self.cfg = cfg;
@@ -156,6 +162,11 @@ impl<I: AdcInstance> Adc<I> {
         while self.adc.syncbusy().read().bits() != 0 {
             core::hint::spin_loop();
         }
+    }
+
+    #[inline]
+    pub(super) fn flush(&mut self) {
+        self.adc.swtrig().modify(|_, w| w.flush().set_bit());
     }
 
     #[inline]
@@ -234,6 +245,14 @@ impl<I: AdcInstance> Adc<I> {
         unsafe { self.adc.intenclr().write(|w| w.bits(flags.bits())) };
     }
 
+    pub(super) fn enable_start_event(&mut self) {
+        self.adc.evctrl().modify(|_, w| w.startei().set_bit());
+    }
+
+    pub(super) fn disable_start_event(&mut self) {
+        self.adc.evctrl().modify(|_, w| w.startei().clear_bit());
+    }
+
     #[inline]
     pub(super) fn conversion_result(&self) -> u16 {
         self.adc.result().read().result().bits()
@@ -248,6 +267,28 @@ impl<I: AdcInstance> Adc<I> {
             unsafe { w.muxpos().bits(ch) }
         });
         self.sync()
+    }
+
+    #[inline]
+    pub(super) fn add_channel_to_sequence(&mut self, ch: u8) {
+        self.adc.seqctrl().modify(|r, w| unsafe {
+            w.seqen().bits(r.seqen().bits() | (1 << ch.min(31)))
+        })
+    }
+
+    #[inline]
+    pub(super) fn get_current_sequence_channel(&self) -> u8 {
+        self.adc.seqstatus().read().seqstate().bits()
+    }
+
+    #[inline]
+    pub(super) fn is_sequence_busy(&self) -> bool {
+        self.adc.seqstatus().read().seqbusy().bit_is_set()
+    }
+
+    #[inline]
+    pub(super) fn reset_sequence(&mut self) {
+        self.adc.seqctrl().reset();
     }
 }
 

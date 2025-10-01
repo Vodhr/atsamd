@@ -22,7 +22,7 @@
 //! adc.read_buffer(&mut adc_pin, &mut _buffer).unwrap();
 //! ```
 
-use core::ops::Deref;
+use core::ops::{Deref, Not};
 
 use atsamd_hal_macros::{hal_cfg, hal_module};
 use pac::Peripherals;
@@ -336,18 +336,28 @@ impl<I: AdcInstance> Adc<I> {
     /// Read a single value from the provided channel, in a blocking fashion
     #[inline]
     fn read_channel(&mut self, ch: u8) -> u16 {
-        // Clear overrun errors that might've occured before we try to read anything
-        self.clear_all_flags();
-        self.disable_interrupts(Flags::all());
+        // self.disable_interrupts(Flags::all());
         self.disable_freerunning();
-        self.sync();
+        // self.sync();
+        self.power_down();
+        // self.flush();
+        // Clear overrun errors that might've occured before we try to read anything
         self.mux(ch);
+        self.enable_start_event();
+        self.power_up();
         self.check_read_discard();
-        self.start_conversion();
+        self.clear_all_flags();
+        // self.flush();
+        // self.start_conversion();
         while !self.read_flags().contains(Flags::RESRDY) {
             core::hint::spin_loop();
         }
-        self.conversion_result()
+        let output = self.conversion_result();
+
+        self.power_down();
+        self.disable_start_event();
+
+        output
     }
 
     // If the ADC has to discard the next value, then we try to read it
@@ -355,7 +365,7 @@ impl<I: AdcInstance> Adc<I> {
     #[inline]
     pub fn check_read_discard(&mut self) {
         if self.discard {
-            self.start_conversion();
+            // self.start_conversion();
             while !self.read_flags().contains(Flags::RESRDY) {
                 core::hint::spin_loop();
             }
@@ -462,22 +472,27 @@ where
     async fn read_channel(&mut self, ch: u8) -> u16 {
         // Clear overrun errors that might've occured before we try to read anything
         self.inner.clear_all_flags();
-        self.inner.disable_freerunning();
+        // self.inner.disable_freerunning();
+
         self.inner.mux(ch);
         if self.inner.discard {
             // Read and discard if something was changed
-            self.inner.start_conversion();
+            // self.inner.start_conversion();
             let _ = self.wait_flags(Flags::RESRDY).await;
             self.inner.discard = false;
             let _ = self.inner.conversion_result();
+            // self.inner.flush();
         }
-        self.inner.start_conversion();
+        // TODO commented out due to conversion being triggered by event system
+        // self.inner.start_conversion();
+        // self.inner.enable_start_event();
         // Here we explicitly ignore the result, because we know that
         // overrun errors are impossible since the ADC is configured in one-shot mode.
         let _ = self.wait_flags(Flags::RESRDY).await;
+        // self.inner.disable_start_event();
         let res = self.inner.conversion_result();
         //self.inner.power_down();
-        self.inner.sync();
+        // self.inner.sync();
         res
     }
 
@@ -521,6 +536,41 @@ where
         //self.inner.power_down();
         self.inner.disable_freerunning();
 
+        Ok(())
+    }
+
+    #[inline]
+    pub async fn read_buffer_sequence(&mut self, sequence: &[u8], dst: &mut [u16]) -> Result<(), Error> {
+        let mut channels_read = [false; 32];
+
+        // while self.inner.is_sequence_busy() {
+        //     core::hint::spin_loop();
+        // }
+        //
+        // self.inner.reset_sequence();
+
+        for channel in sequence {
+            self.inner.add_channel_to_sequence(*channel);
+        }
+
+        // self.inner.clear_all_flags();
+
+        // self.inner.enable_start_event();
+        // self.inner.enable_freerunning();
+
+        while sequence.iter().all(|i| channels_read[*i as usize]).not() {
+            let _ = self.wait_flags(Flags::RESRDY).await;
+
+            // save the conversion at the correct buffer position
+            let current_channel = self.inner.get_current_sequence_channel();
+            if let Some(index) = sequence.iter().position(|x| x.eq(&current_channel)) {
+                dst[index] = self.inner.conversion_result();
+                channels_read[current_channel as usize] = true;
+            }
+        }
+
+        // self.inner.disable_freerunning();
+        // self.inner.disable_start_event();
         Ok(())
     }
 }
