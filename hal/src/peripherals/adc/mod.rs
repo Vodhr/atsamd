@@ -336,19 +336,16 @@ impl<I: AdcInstance> Adc<I> {
     /// Read a single value from the provided channel, in a blocking fashion
     #[inline]
     fn read_channel(&mut self, ch: u8) -> u16 {
-        // self.disable_interrupts(Flags::all());
-        self.disable_freerunning();
-        // self.sync();
-        self.power_down();
-        // self.flush();
-        // Clear overrun errors that might've occured before we try to read anything
+        self.power_up();
+
+        self.clear_all_flags();
         self.mux(ch);
+        let _ = self.conversion_result();
+
+        self.power_down();
         self.enable_start_event();
         self.power_up();
-        self.check_read_discard();
-        self.clear_all_flags();
-        // self.flush();
-        // self.start_conversion();
+
         while !self.read_flags().contains(Flags::RESRDY) {
             core::hint::spin_loop();
         }

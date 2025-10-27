@@ -121,7 +121,7 @@ macro_rules! declare_multiple_interrupts {
 declare_multiple_interrupts!(DMAC: [DMAC_0, DMAC_1, DMAC_2, DMAC_OTHER]);
 
 #[cfg(feature = "dma")]
-#[hal_cfg(any("dmac-d11", "dmac-d21"))]
+#[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
 declare_interrupts!(DMAC);
 
 // ----------  SERCOM Interrupts ---------- //

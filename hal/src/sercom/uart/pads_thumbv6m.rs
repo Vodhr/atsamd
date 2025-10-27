@@ -372,7 +372,7 @@ where
 /// [`PinId`]: crate::gpio::PinId
 /// [`OptionalPinId`]: crate::gpio::OptionalPinId
 
-#[hal_cfg("sercom0-d21")]
+#[hal_cfg(any("sercom0-d21", "sercom0-c2x"))]
 pub type PadsFromIds<S, RX = NoneT, TX = NoneT, RTS = NoneT, CTS = NoneT> = Pads<
     S,
     <RX as GetOptionalPad<S>>::Pad,

@@ -15,7 +15,7 @@ pub struct InterruptHandler {
 
 impl crate::typelevel::Sealed for InterruptHandler {}
 
-#[hal_cfg(any("dmac-d11", "dmac-d21"))]
+#[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
 impl Handler<DMAC> for InterruptHandler {
     unsafe fn on_interrupt() {
         // SAFETY: Here we can't go through the `with_chid` method to safely access

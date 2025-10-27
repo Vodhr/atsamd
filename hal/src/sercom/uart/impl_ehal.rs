@@ -210,12 +210,13 @@ mod dma {
         }
     }
 
-    impl<P, D, R, T, S> embedded_io::Write for Uart<Config<P, EightBit>, D, R, T>
+    impl<P, D, R, T, S, C> embedded_io::Write for Uart<Config<P, C, EightBit>, D, R, T>
     where
         P: ValidPads<Sercom = S>,
         D: Transmit,
         T: AnyChannel<Status = Ready>,
         S: Sercom,
+        C: pclk::PclkSourceId,
     {
         #[inline]
         fn write(&mut self, bytes: &[u8]) -> Result<usize, Self::Error> {
@@ -246,12 +247,13 @@ mod dma {
         }
     }
 
-    impl<P, D, R, T, S> embedded_io::Read for Uart<Config<P, EightBit>, D, R, T>
+    impl<P, D, R, T, S, C> embedded_io::Read for Uart<Config<P, C, EightBit>, D, R, T>
     where
         P: ValidPads<Sercom = S>,
         D: Receive,
         R: AnyChannel<Status = Ready>,
         S: Sercom,
+        C: pclk::PclkSourceId,
     {
         #[inline]
         fn read(&mut self, mut buffer: &mut [u8]) -> Result<usize, Self::Error> {

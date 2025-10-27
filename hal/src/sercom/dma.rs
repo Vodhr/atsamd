@@ -198,7 +198,7 @@ where
         #[hal_cfg("sercom0-d5x")]
         let trigger_action = TriggerAction::Burst;
 
-        #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+        #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
         let trigger_action = TriggerAction::Beat;
 
         // SAFETY: This is safe because the of the `'static` bound check
@@ -240,7 +240,7 @@ where
         #[hal_cfg("sercom0-d5x")]
         let trigger_action = TriggerAction::Burst;
 
-        #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+        #[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
         let trigger_action = TriggerAction::Beat;
 
         // SAFETY: This is safe because the of the `'static` bound check
@@ -292,7 +292,7 @@ pub(super) unsafe fn read_dma_linked<T, B, S>(
     #[hal_cfg("dmac-d5x")]
     let trigger_action = TriggerAction::Burst;
 
-    #[hal_cfg(any("dmac-d11", "dmac-d21"))]
+    #[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
     let trigger_action = TriggerAction::Beat;
 
     // Safety: It is safe to bypass the buffer length check because `SercomPtr`
@@ -350,7 +350,7 @@ pub(super) unsafe fn write_dma_linked<T, B, S>(
     #[hal_cfg("dmac-d5x")]
     let trigger_action = TriggerAction::Burst;
 
-    #[hal_cfg(any("dmac-d11", "dmac-d21"))]
+    #[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
     let trigger_action = TriggerAction::Beat;
 
     // Safety: It is safe to bypass the buffer length check because `SercomPtr`
@@ -416,7 +416,7 @@ pub(crate) mod async_dma {
         #[hal_cfg("dmac-d5x")]
         let trigger_action = TriggerAction::Burst;
 
-        #[hal_cfg(any("dmac-d11", "dmac-d21"))]
+        #[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
         let trigger_action = TriggerAction::Beat;
 
         // Safety: It is safe to bypass the buffer length check because `SercomPtr`
@@ -474,7 +474,7 @@ pub(crate) mod async_dma {
         #[hal_cfg("dmac-d5x")]
         let trigger_action = TriggerAction::Burst;
 
-        #[hal_cfg(any("dmac-d11", "dmac-d21"))]
+        #[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
         let trigger_action = TriggerAction::Beat;
 
         // Safety: It is safe to bypass the buffer length check because `SercomPtr`

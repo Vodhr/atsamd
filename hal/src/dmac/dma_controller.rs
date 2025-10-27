@@ -22,11 +22,12 @@
 
 use atsamd_hal_macros::{hal_cfg, hal_macro_helper};
 use core::marker::PhantomData;
+use crate::clock::v2::{types, ahb};
 
 use modular_bitfield::prelude::*;
 use seq_macro::seq;
 
-#[hal_cfg(any("dmac-d11", "dmac-d21"))]
+#[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
 pub use crate::pac::dmac::chctrlb::{
     Lvlselect as PriorityLevel, Trigactselect as TriggerAction, Trigsrcselect as TriggerSource,
 };
@@ -150,9 +151,12 @@ macro_rules! define_channels_struct_future {
 with_num_channels!(define_channels_struct_future);
 
 /// Initialized DMA Controller
+#[hal_macro_helper]
 pub struct DmaController<I = NoneT> {
     dmac: Dmac,
     _irqs: PhantomData<I>,
+    #[hal_cfg("dmac-c2x")]
+    clk: ahb::AhbClk<types::Dmac>
 }
 
 impl DmaController {
@@ -160,9 +164,10 @@ impl DmaController {
     /// [`Transfer`](super::transfer::Transfer)'s. By default, all
     /// priority levels are enabled unless subsequently disabled using the
     /// `level_x_enabled` methods.
+    #[hal_cfg(not("dmac-c2x"))]
     #[inline]
     #[hal_macro_helper]
-    pub fn init(mut dmac: Dmac, _pm: &mut Pm) -> Self {
+        pub fn init(mut dmac: Dmac, _pm: &mut Pm) -> Self {
         // ----- Initialize clocking ----- //
         #[hal_cfg(any("dmac-d11", "dmac-d21"))]
         {
@@ -203,12 +208,51 @@ impl DmaController {
         }
     }
 
+    #[hal_cfg("dmac-c2x")]
+    pub fn init(mut dmac: Dmac, clk: ahb::AhbClk<types::Dmac>) -> Self {
+        // ----- Initialize clocking ----- //
+
+        Self::swreset(&mut dmac);
+
+        // SAFETY:
+        //
+        // This is safe because we write a whole u32 to 32-bit registers,
+        // and the descriptor array addesses will never change since they are static.
+        // We just need to ensure the writeback and descriptor_section addresses
+        // are valid.
+        unsafe {
+            dmac.baseaddr()
+                .write(|w| w.baseaddr().bits(sram::descriptor_section_addr() as u32));
+            dmac.wrbaddr()
+                .write(|w| w.wrbaddr().bits(sram::writeback_addr() as u32));
+        }
+
+        // ----- Select priority levels ----- //
+        dmac.ctrl().modify(|_, w| {
+            w.lvlen3().set_bit();
+            w.lvlen2().set_bit();
+            w.lvlen1().set_bit();
+            w.lvlen0().set_bit()
+        });
+
+        // Enable DMA controller
+        dmac.ctrl().modify(|_, w| w.dmaenable().set_bit());
+
+        Self {
+            dmac,
+            _irqs: PhantomData,
+            clk,
+        }
+    }
+
+
     /// Release the DMAC and return the register block.
     ///
     /// **Note**: The [`Channels`] struct is consumed by this method. This means
     /// that any [`Channel`] obtained by [`split`](DmaController::split) must be
     /// moved back into the [`Channels`] struct before being able to pass it
     /// into [`free`](DmaController::free).
+    #[hal_cfg(not("dmac-c2x"))]
     #[inline]
     #[hal_macro_helper]
     pub fn free(mut self, _channels: Channels, _pm: &mut Pm) -> Dmac {
@@ -225,6 +269,17 @@ impl DmaController {
 
         // Release the DMAC
         self.dmac
+    }
+
+    #[hal_cfg("dmac-c2x")]
+    #[inline]
+    pub fn free(mut self, _channels: Channels) -> (Dmac, ahb::AhbClk<types::Dmac>) {
+        self.dmac.ctrl().modify(|_, w| w.dmaenable().clear_bit());
+
+        Self::swreset(&mut self.dmac);
+
+        // Release the DMAC
+        (self.dmac, self.clk)
     }
 }
 
@@ -289,6 +344,7 @@ impl<T> DmaController<T> {
     /// module-level documentation for more information.
     /// [`bind_interrupts`](crate::bind_interrupts).
     #[cfg(feature = "async")]
+    #[hal_macro_helper]
     #[inline]
     pub fn into_future<I>(self, _interrupts: I) -> DmaController<I>
     where
@@ -305,6 +361,8 @@ impl<T> DmaController<T> {
         DmaController {
             dmac: self.dmac,
             _irqs: PhantomData,
+            #[hal_cfg("dmac-c2x")]
+            clk: self.clk,
         }
     }
 
@@ -330,6 +388,7 @@ where
     /// that any [`Channel`] obtained by [`split`](DmaController::split) must be
     /// moved back into the [`Channels`] struct before being able to pass it
     /// into [`free`](DmaController::free).
+    #[hal_cfg(not("dmac-c2x"))]
     #[inline]
     #[hal_macro_helper]
     pub fn free(mut self, _channels: FutureChannels, _pm: &mut Pm) -> Dmac {
@@ -346,6 +405,16 @@ where
 
         // Release the DMAC
         self.dmac
+    }
+
+    #[hal_cfg("dmac-c2x")]
+    pub fn free(mut self, _channels: FutureChannels) -> (Dmac, ahb::AhbClk<types::Dmac>) {
+        self.dmac.ctrl().modify(|_, w| w.dmaenable().clear_bit());
+
+        Self::swreset(&mut self.dmac);
+
+        // Release the DMAC
+        (self.dmac, self.clk)
     }
 }
 

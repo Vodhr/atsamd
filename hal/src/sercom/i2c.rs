@@ -363,7 +363,7 @@
 use atsamd_hal_macros::hal_module;
 
 #[hal_module(
-    any("sercom0-d11", "sercom0-d21") => "i2c/pads_thumbv6m.rs",
+    any("sercom0-d11", "sercom0-d21", "sercom0-c2x") => "i2c/pads_thumbv6m.rs",
     "sercom0-d5x" => "i2c/pads_thumbv7em.rs",
 )]
 mod pads {}

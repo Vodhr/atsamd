@@ -40,11 +40,7 @@ use pac::Mclk as ApbClkCtrl;
 #[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
 use pac::Pm as ApbClkCtrl;
 #[hal_cfg("sercom0-c2x")]
-use crate::peripherals::clock::pclk;
-#[hal_cfg("sercom0-c2x")]
-use crate::peripherals::clock::apb;
-#[hal_cfg("sercom0-c2x")]
-use crate::peripherals::clock::types;
+use crate::peripherals::clock::{pclk, apb, types};
 
 #[cfg(feature = "dma")]
 use crate::dmac::TriggerSource;
@@ -54,7 +50,7 @@ use crate::typelevel::Sealed;
 pub mod pad;
 pub use pad::*;
 
-// pub mod i2c;
+pub mod i2c;
 pub mod spi;
 
 // #[deprecated(

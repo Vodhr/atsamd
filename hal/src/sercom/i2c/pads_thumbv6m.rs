@@ -44,7 +44,7 @@ where
     }
 }
 
-#[hal_cfg("sercom0-d21")]
+#[hal_cfg(any("sercom0-d21", "sercom0-c2x"))]
 impl<S, DI, CI> PadsFromIds<S, DI, CI>
 where
     S: Sercom,
@@ -138,7 +138,7 @@ pub type PadsFromIds<S, SDA, SCL> = Pads<S, Pad<S, Pad0, SDA>, Pad<S, Pad1, SCL>
 ///
 /// [`Pin`]: crate::gpio::Pin
 /// [`PinId`]: crate::gpio::PinId
-#[hal_cfg("sercom0-d21")]
+#[hal_cfg(any("sercom0-d21", "sercom0-c2x"))]
 pub type PadsFromIds<S, SDA, SCL> = Pads<S, Pad<S, SDA>, Pad<S, SCL>>;
 
 //=============================================================================

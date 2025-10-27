@@ -147,6 +147,7 @@ families:
     peripherals:
       - nvic
       - clock
+      - dmac
       - nvmctrl
       - pac
       - oscctrl

@@ -25,7 +25,7 @@ use crate::pac::{
     },
 };
 
-#[hal_cfg(any("dmac-d11", "dmac-d21"))]
+#[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
 use pac::dmac as channel_regs;
 
 #[hal_cfg("dmac-d5x")]
@@ -54,7 +54,7 @@ pub(super) trait Register<Id: ChId> {
     /// the CHID register, then access the channel control registers.
     /// If an interrupt were to change the CHID register and not reset it
     /// to the expected value, we would be faced with undefined behaviour.
-    #[hal_cfg(any("dmac-d11", "dmac-d21"))]
+    #[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
     #[inline]
     fn with_chid<F: FnOnce(&Dmac) -> R, R>(&mut self, fun: F) -> R {
         // SAFETY: This method is ONLY safe if the individual channels are GUARANTEED

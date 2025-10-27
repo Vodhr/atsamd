@@ -1,11 +1,20 @@
 //! I2C [`Config`] definition and implementation
 
+use atsamd_hal_macros::hal_cfg;
 use super::{I2c, InactiveTimeout, PadSet, Registers};
 use crate::{
     pac::sercom0::i2cm::ctrla::Modeselect,
-    sercom::{ApbClkCtrl, Sercom},
+    sercom::Sercom,
     time::Hertz,
     typelevel::{Is, NoneT, Sealed},
+};
+
+#[hal_cfg("sercom0-c2x")]
+use crate::clock::{
+    gclk,
+    pclk::{
+        Pclk, PclkSourceId
+    }
 };
 
 //=============================================================================
@@ -26,26 +35,32 @@ use crate::{
 ///
 /// [`enable`]: Config::enable
 /// [`Pads`]: super::Pads
-pub struct Config<P>
+pub struct Config<P, S = gclk::Gclk0Id>
 where
     P: PadSet,
+    S: PclkSourceId,
 {
     pub(in super::super) registers: Registers<P::Sercom>,
     pads: P,
-    freq: Hertz,
+    apbclk: <P::Sercom as Sercom>::ApbClk,
+    pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
 }
 
-impl<P: PadSet> Config<P> {
+impl<P: PadSet, S: PclkSourceId> Config<P, S> {
     /// Create a new [`Config`] in the default configuration.
     #[inline]
-    fn default(sercom: P::Sercom, pads: P, freq: impl Into<Hertz>) -> Self {
+    fn default(sercom: P::Sercom,
+               pads: P,
+               apbclk: <P::Sercom as Sercom>::ApbClk,
+               pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>) -> Self {
         let mut registers = Registers::new(sercom);
         registers.swrst();
         registers.set_op_mode(Modeselect::I2cMaster);
         Self {
             registers,
             pads,
-            freq: freq.into(),
+            apbclk,
+            pclk,
         }
     }
 
@@ -61,14 +76,11 @@ impl<P: PadSet> Config<P> {
     /// Users must configure GCLK manually. The `freq` parameter represents the
     /// GCLK frequency for this [`Sercom`] instance.
     #[inline]
-    pub fn new(
-        apb_clk_ctrl: &ApbClkCtrl,
-        mut sercom: P::Sercom,
-        pads: P,
-        freq: impl Into<Hertz>,
-    ) -> Self {
-        sercom.enable_apb_clock(apb_clk_ctrl);
-        Self::default(sercom, pads, freq)
+    pub fn new(sercom: P::Sercom,
+               pads: P,
+               pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
+               apbclk: <P::Sercom as Sercom>::ApbClk) -> Self {
+        Self::default(sercom, pads, apbclk, pclk)
     }
 }
 
@@ -88,7 +100,7 @@ impl<P: PadSet> Config<P> {
     /// default configuration.
     #[inline]
     pub fn reset(self) -> Config<P> {
-        Config::default(self.registers.sercom, self.pads, self.freq)
+        Config::default(self.registers.sercom, self.pads, self.apbclk, self.pclk)
     }
 
     /// Consume the [`Config`], reset the peripheral, and return the [`Sercom`]
@@ -146,7 +158,7 @@ impl<P: PadSet> Config<P> {
     /// the maximum supported baud rate.
     #[inline]
     pub fn set_baud(&mut self, baud: impl Into<Hertz>) {
-        self.registers.set_baud(self.freq, baud);
+        self.registers.set_baud(self.pclk.freq(), baud);
     }
 
     /// Get the contents of the `BAUD` register and the current baud mode. Note

@@ -1,13 +1,10 @@
 //! UART [`Config`] definition and implementation\
 
-use atsamd_hal_macros::hal_cfg;
-
 use super::{
     BaudMode, BitOrder, Capability, CharSize, CharSizeEnum, DataReg, DynCharSize, EightBit,
     FixedCharSize, Parity, Registers, StopBits, Uart, ValidConfig, ValidPads,
 };
 use crate::{
-    pac,
     sercom::Sercom,
     time::Hertz,
     typelevel::{Is, NoneT, Sealed},
@@ -57,17 +54,7 @@ where
     pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
 }
 
-/// Clock type needed to create a new [`Config`]. [`Pm`](pac::Pm) for thumbv6m
-/// targets.
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
-pub type Clock = pac::Pm;
-
-/// Clock type needed to create a new [`Config`]. [`Mclk`](pac::Mclk) for
-/// thumbv7em targets.
-#[hal_cfg("sercom0-d5x")]
-pub type Clock = pac::Mclk;
-
-impl<P: ValidPads, S: pclk::PclkSourceId> Config<P, S> {
+impl<P: ValidPads, S: PclkSourceId> Config<P, S> {
     /// Create a new [`Config`] in the default configuration
     ///
     /// This function will enable the corresponding APB clock, reset the
@@ -86,7 +73,7 @@ impl<P: ValidPads, S: pclk::PclkSourceId> Config<P, S> {
     #[inline]
     pub fn new(pclk: Pclk<<P::Sercom as Sercom>::PclkId, S>,
                apbclk: <P::Sercom as Sercom>::ApbClk,
-               mut sercom: P::Sercom, pads: P) -> Self {
+               sercom: P::Sercom, pads: P) -> Self {
         Self::default(pclk, apbclk, sercom, pads).bit_order(BitOrder::LsbFirst)
     }
 

@@ -322,6 +322,15 @@ macro_rules! with_num_channels {
     };
 }
 
+#[cfg(feature = "max-channels")]
+#[hal_cfg("dmac-c2x")]
+#[macro_export]
+macro_rules! with_num_channels {
+    ($some_macro:ident) => {
+        $some_macro! {12}
+    };
+}
+
 #[cfg(not(feature = "max-channels"))]
 #[hal_cfg("dmac-d11")]
 #[macro_export]
@@ -346,6 +355,15 @@ macro_rules! with_num_channels {
 macro_rules! with_num_channels {
     ($some_macro:ident) => {
         $some_macro! {16}
+    };
+}
+
+#[cfg(not(feature = "max-channels"))]
+#[hal_cfg("dmac-c2x")]
+#[macro_export]
+macro_rules! with_num_channels {
+    ($some_macro:ident) => {
+        $some_macro! {6}
     };
 }
 

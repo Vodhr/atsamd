@@ -19,7 +19,7 @@ impl PrimaryAdc for Adc0 {}
 impl AdcInstance for Adc0 {
     type Instance = pac::Adc0;
 
-    type ClockId = crate::clock::v2::pclk::ids::Adc0;
+    type ClockId = crate::clock::v2::types::Adc0;
 
     #[cfg(feature = "async")]
     type Interrupt = crate::async_hal::interrupts::ADC0;
@@ -134,8 +134,8 @@ impl<I: AdcInstance> Adc<I> {
         self.sync();
         self.adc.ctrla().modify(|_, w| w.runstdby().set_bit());
         self.sync();
-        self.adc.evctrl().modify(|_, w| w.startei().set_bit());
-        self.sync();
+        // self.adc.evctrl().modify(|_, w| w.startei().set_bit());
+        // self.sync();
         self.adc.ctrla().modify(|_, w| w.enable().set_bit());
         self.sync();
         self.cfg = cfg;

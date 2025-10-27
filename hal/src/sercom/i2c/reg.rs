@@ -12,7 +12,7 @@ const MASTER_ACT_READ: u8 = 2;
 const MASTER_ACT_STOP: u8 = 3;
 const MASTER_ACT_REPEATED_START: u8 = 1;
 
-#[hal_cfg(any("sercom0-d11", "sercom0-d21"))]
+#[hal_cfg(any("sercom0-d11", "sercom0-d21", "sercom0-c2x"))]
 type DataReg = u8;
 
 #[hal_cfg("sercom0-d5x")]
