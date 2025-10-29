@@ -53,7 +53,7 @@ impl Pac {
 /// [`AhbClk`]: super::ahb::AhbClk
 /// [`ApbClk`]: super::apb::ApbClk
 pub struct Buses {
-    //pub ahb: ahb::Ahb,
+    pub ahb: ahb::Ahb,
     pub apb: apb::Apb,
 }
 
@@ -79,7 +79,7 @@ pub struct Clocks {
     /// Wrapper providing `unsafe` access to low-level PAC structs
     pub pac: Pac,
     /// Enabled AHB clocks
-    //pub ahbs: ahb::AhbClks,
+    pub ahbs: ahb::AhbClks,
     /// Enabled APB clocks
     pub apbs: apb::ApbClks,
     /// Main system clock, driven at 48 MHz by the Osc48m
@@ -140,7 +140,7 @@ pub fn clock_system_at_reset(
     // Safety: No bus, clock or token is instantiated more than once
     unsafe {
         let buses = Buses {
-            //ahb: ahb::Ahb::new(),
+            ahb: ahb::Ahb::new(),
             apb: apb::Apb::new(),
         };
         let pac = Pac {
@@ -160,7 +160,7 @@ pub fn clock_system_at_reset(
         let gclk0 = Enabled::new(gclk0);
         let clocks = Clocks {
             pac,
-            // ahbs: ahb::AhbClks::new(),
+            ahbs: ahb::AhbClks::new(),
             apbs: apb::ApbClks::new(),
             gclk0,
             osc48m,

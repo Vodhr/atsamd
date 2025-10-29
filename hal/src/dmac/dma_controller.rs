@@ -210,8 +210,6 @@ impl DmaController {
 
     #[hal_cfg("dmac-c2x")]
     pub fn init(mut dmac: Dmac, clk: ahb::AhbClk<types::Dmac>) -> Self {
-        // ----- Initialize clocking ----- //
-
         Self::swreset(&mut dmac);
 
         // SAFETY:

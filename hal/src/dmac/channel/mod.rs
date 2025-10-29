@@ -206,7 +206,7 @@ impl<Id: ChId, S: Status> Channel<Id, S> {
         // Software reset the channel for good measure
         self._reset_private();
 
-        #[hal_cfg(any("dmac-d11", "dmac-d21"))]
+        #[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
         // Setup priority level
         self.regs.chctrlb.modify(|_, w| w.lvl().variant(lvl));
 
@@ -457,7 +457,7 @@ where
     #[hal_macro_helper]
     pub(super) fn configure_trigger(&mut self, trig_src: TriggerSource, trig_act: TriggerAction) {
         // Configure the trigger source and trigger action
-        #[hal_cfg(any("dmac-d11", "dmac-d21"))]
+        #[hal_cfg(any("dmac-d11", "dmac-d21", "dmac-c2x"))]
         self.regs.chctrlb.modify(|_, w| {
             w.trigsrc().variant(trig_src);
             w.trigact().variant(trig_act)
