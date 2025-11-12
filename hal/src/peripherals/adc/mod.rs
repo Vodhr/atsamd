@@ -333,9 +333,33 @@ impl<I: AdcInstance> Adc<I> {
         self.read_channel(P::CHANNEL)
     }
 
+    /// Read a single value from the provided ADC pin, conversion being triggered by an event
+    #[inline]
+    pub fn read_event<P: AdcPin<I>>(&mut self, _pin: &mut P) -> u16 {
+        self.read_channel_event(P::CHANNEL)
+    }
+
     /// Read a single value from the provided channel, in a blocking fashion
     #[inline]
     fn read_channel(&mut self, ch: u8) -> u16 {
+        // Clear overrun errors that might've occured before we try to read anything
+        self.clear_all_flags();
+        self.disable_interrupts(Flags::all());
+        self.disable_freerunning();
+        self.sync();
+        self.mux(ch);
+        self.check_read_discard();
+        self.start_conversion();
+        while !self.read_flags().contains(Flags::RESRDY) {
+            core::hint::spin_loop();
+        }
+        self.conversion_result()
+    }
+
+    /// Read a single value from the provided channel, in a blocking fashion, waiting for an event
+    /// to start conversion
+    #[inline]
+    fn read_channel_event(&mut self, ch: u8) -> u16 {
         self.power_up();
 
         self.clear_all_flags();
@@ -362,7 +386,7 @@ impl<I: AdcInstance> Adc<I> {
     #[inline]
     pub fn check_read_discard(&mut self) {
         if self.discard {
-            // self.start_conversion();
+            self.start_conversion();
             while !self.read_flags().contains(Flags::RESRDY) {
                 core::hint::spin_loop();
             }
