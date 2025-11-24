@@ -340,61 +340,99 @@ macro_rules! define_ahb_types {
                     const DYN: DynAhbId = DynAhbId::$Type;
                 }
             )+
-
-            /// Set of all [`AhbClk`]s
-            ///
-            /// All [`AhbClk`]s are enabled at power-on reset.
-            pub struct AhbClks {
-                $(
-                    $( #[$( $cfg )+] )?
-                    pub [<$Type:snake>]: AhbClk<$Type>,
-                )+
-            }
-            impl AhbClks {
-                /// Create the set of [`AhbClk`]s
-                ///
-                /// # Safety
-                ///
-                /// All invariants of `AhbToken::new` must be upheld here.
-                #[inline]
-                pub(super) unsafe fn new() -> Self {
-                    AhbClks {
-                        $(
-                            $( #[$( $cfg )+] )?
-                            [<$Type:snake>]: AhbClk::new(AhbToken::new()),
-                        )+
-                    }
-                }
-            }
         }
     };
 }
 
 #[hal_macro_helper]
 define_ahb_types!(
-    Hpb0 = 0,
-    Hpb1 = 1,
-    Hpb2 = 2,
-    Hpb3 = 3,
-    Dsu = 4,
-    NvmCtrl = 6,
-    Cmcc = 8,
-    Dmac = 9,
-    Usb = 10,
-    Pac = 12,
-    Qspi = 13,
-    #[hal_cfg("gmac")]
-    Gmac = 14,
-    Sdhc0 = 15,
-    #[hal_cfg("sdhc1")]
-    Sdhc1 = 16,
+    Apba = 0,
+    Apbb = 1,
+    Apbc = 2,
+    Dsu = 3,
+    HMatrixHS = 4,
+    NvmCtrl = 5,
+    HSRam = 6,
+    Dmac = 7,
     #[hal_cfg("can0")]
-    Can0 = 17,
+    Can0 = 8,
     #[hal_cfg("can1")]
-    Can1 = 18,
-    Icm = 19,
-    Pukcc = 20,
-    Qspi2x = 21,
-    NvmCtrlSmeeProm = 22,
-    NvmCtrlCache = 23,
+    Can1 = 9,
+    Pac = 10,
+
+    Divas = 12,
+    Apbd = 13,
 );
+
+//==============================================================================
+// AhbTokens
+//==============================================================================
+
+/// Set of [`AhbToken`]s for APB clocks that are disabled at power-on reset
+#[hal_macro_helper]
+pub struct AhbTokens {
+    #[hal_cfg("can0")]
+    pub can0: AhbToken<Can0>,
+    #[hal_cfg("can1")]
+    pub can1: AhbToken<Can1>,
+}
+
+impl AhbTokens {
+    /// Create the set of [`AhbToken`]s
+    ///
+    /// # Safety
+    ///
+    /// All invariants required by `AhbToken::new` must be upheld here as well.
+    #[inline]
+    #[hal_macro_helper]
+    pub(super) unsafe fn new() -> Self {
+        unsafe {
+            Self {
+                #[hal_cfg("can0")]
+                can0: AhbToken::new(),
+                #[hal_cfg("can1")]
+                can1: AhbToken::new(),
+            }
+        }
+    }
+}
+
+/// Set of all [`AhbClk`]s enabled at power-on reset.
+pub struct AhbClks {
+    pub apba: AhbClk<Apba>,
+    pub apbb: AhbClk<Apbb>,
+    pub apbc: AhbClk<Apbc>,
+    pub dsu: AhbClk<Dsu>,
+    pub hmatrixhs: AhbClk<HMatrixHS>,
+    pub nvmctrl: AhbClk<NvmCtrl>,
+    pub hsram: AhbClk<HSRam>,
+    pub dmac: AhbClk<Dmac>,
+    pub pac: AhbClk<Pac>,
+    pub divas: AhbClk<Divas>,
+    pub apbd: AhbClk<Apbd>,
+}
+impl AhbClks {
+    /// Create the set of [`AhbClk`]s
+    ///
+    /// # Safety
+    ///
+    /// All invariants of `AhbToken::new` must be upheld here.
+    #[inline]
+    pub(super) unsafe fn new() -> Self {
+        unsafe {
+            AhbClks {
+                apba: AhbClk::new(AhbToken::new()),
+                apbb: AhbClk::new(AhbToken::new()),
+                apbc: AhbClk::new(AhbToken::new()),
+                dsu: AhbClk::new(AhbToken::new()),
+                hmatrixhs: AhbClk::new(AhbToken::new()),
+                nvmctrl: AhbClk::new(AhbToken::new()),
+                hsram: AhbClk::new(AhbToken::new()),
+                dmac: AhbClk::new(AhbToken::new()),
+                pac: AhbClk::new(AhbToken::new()),
+                divas: AhbClk::new(AhbToken::new()),
+                apbd: AhbClk::new(AhbToken::new()),
+            }
+        }
+    }
+}

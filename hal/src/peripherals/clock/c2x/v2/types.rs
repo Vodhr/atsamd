@@ -66,15 +66,15 @@ macro_rules! create_types {
 // todo
 create_types!(Ac);
 create_types!(Adc0, Adc1);
-create_types!(Aes);
+create_types!(Apba, Apbb, Apbc, Apbd);
 #[hal_cfg("can0")]
 create_types!(Can0);
 #[hal_cfg("can1")]
 create_types!(Can1);
 create_types!(Ccl);
-create_types!(Cmcc);
 create_types!(CM4Trace);
 create_types!(Dac);
+create_types!(Divas);
 create_types!(Dmac);
 create_types!(Dsu);
 create_types!(Eic);
@@ -88,8 +88,8 @@ create_types!(FreqMReference);
 create_types!(Gclk);
 #[hal_cfg("gmac")]
 create_types!(Gmac);
-create_types!(Hpb0, Hpb1, Hpb2, Hpb3);
 create_types!(HMatrixHS);
+create_types!(HSRam);
 create_types!(Icm);
 create_types!(Mclk);
 create_types!(NvmCtrl, NvmCtrlSmeeProm, NvmCtrlCache);

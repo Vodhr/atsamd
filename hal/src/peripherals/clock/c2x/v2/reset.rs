@@ -101,6 +101,8 @@ pub struct Clocks {
 /// module, token types are used to guanrantee the uniqueness of each clock. To
 /// configure or enable a clock, you must provide the corresponding token.
 pub struct Tokens {
+    /// Tokens to create [`ahb::AhbClk`]s
+    pub ahbs: ahb::AhbTokens,
     /// Tokens to create [`apb::ApbClk`]s
     pub apbs: apb::ApbTokens,
     /// Token to create [`dpll::Dpll0`]
@@ -167,6 +169,7 @@ pub fn clock_system_at_reset(
             // osculp32k_base: osculp32k::OscUlp32kBase::new(),
         };
         let tokens = Tokens {
+            ahbs: ahb::AhbTokens::new(),
             apbs: apb::ApbTokens::new(),
             // dpll0: dpll::DpllToken::new(),
             // dpll1: dpll::DpllToken::new(),

@@ -161,3 +161,5 @@ families:
       - tcc: {count: 3}
       - adc: {count: 2, only: ["samc21n", "samc21e", "samc21g", "samc21j"]}
       - adc: {count: 1, only: ["samc20n", "samc20e", "samc20g", "samc20j"]}
+      - can: { count: 1, only: [ "samc21e" ] }
+      - can: { count: 2, only: [ "samc21n", "samc21j", "samc21g"] }

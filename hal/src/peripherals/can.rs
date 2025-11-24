@@ -147,38 +147,111 @@ pub trait TxPin: Sealed {
     type ValidFor: CanId;
 }
 
+#[hal_cfg("can0-d5x")]
 impl RxPin for Pin<PA23, AlternateI> {
     type ValidFor = Can0;
 }
 
+#[hal_cfg("can0-d5x")]
 impl RxPin for Pin<PA25, AlternateI> {
     type ValidFor = Can0;
 }
 
+#[hal_cfg("can0-d5x")]
 impl TxPin for Pin<PA22, AlternateI> {
     type ValidFor = Can0;
 }
 
+#[hal_cfg("can0-d5x")]
 impl TxPin for Pin<PA24, AlternateI> {
     type ValidFor = Can0;
 }
 
-#[hal_cfg("can1")]
+#[hal_cfg("can1-d5x")]
 impl RxPin for Pin<PB13, AlternateH> {
     type ValidFor = Can1;
 }
 
-#[hal_cfg("can1")]
+#[hal_cfg("can1-d5x")]
 impl RxPin for Pin<PB15, AlternateH> {
     type ValidFor = Can1;
 }
 
-#[hal_cfg("can1")]
+#[hal_cfg("can1-d5x")]
 impl TxPin for Pin<PB12, AlternateH> {
     type ValidFor = Can1;
 }
 
-#[hal_cfg("can1")]
+#[hal_cfg("can1-d5x")]
 impl TxPin for Pin<PB14, AlternateH> {
     type ValidFor = Can1;
 }
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("can1-c2x")]
+impl TxPin for Pin<PB12, AlternateG> {
+    type ValidFor = Can1;
+}
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("can1-c2x")]
+impl RxPin for Pin<PB13, AlternateG> {
+    type ValidFor = Can1;
+}
+
+#[hal_cfg("can1-c2x")]
+impl TxPin for Pin<PB14, AlternateG> {
+    type ValidFor = Can1;
+}
+
+#[hal_cfg("can1-c2x")]
+impl RxPin for Pin<PB15, AlternateG> {
+    type ValidFor = Can1;
+}
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("can0-c2x")]
+impl TxPin for Pin<PA22, AlternateG> {
+    type ValidFor = Can0;
+}
+
+#[cfg(feature = "samc21n")]
+#[hal_cfg("can0-c2x")]
+impl RxPin for Pin<PA23, AlternateG> {
+    type ValidFor = Can0;
+}
+
+#[hal_cfg("can0-c2x")]
+impl TxPin for Pin<PA24, AlternateG> {
+    type ValidFor = Can0;
+}
+
+#[hal_cfg("can0-c2x")]
+impl RxPin for Pin<PA25, AlternateG> {
+    type ValidFor = Can0;
+}
+
+#[cfg(not(feature = "samc21n"))]
+#[hal_cfg("can1-c2x")]
+impl TxPin for Pin<PB10, AlternateG> {
+    type ValidFor = Can1;
+}
+
+#[cfg(not(feature = "samc21n"))]
+#[hal_cfg("can1-c2x")]
+impl RxPin for Pin<PB11, AlternateG> {
+    type ValidFor = Can1;
+}
+
+#[cfg(not(feature = "samc21n"))]
+#[hal_cfg("can0-c2x")]
+impl TxPin for Pin<PB22, AlternateG> {
+    type ValidFor = Can0;
+}
+
+#[cfg(not(feature = "samc21n"))]
+#[hal_cfg("can0-c2x")]
+impl RxPin for Pin<PB23, AlternateG> {
+    type ValidFor = Can0;
+}
+
