@@ -22,7 +22,7 @@ mod async_api;
 pub use async_api::*;
 use crate::clock::apb;
 use crate::clock::apb::ApbId;
-use crate::clock::pclk::Pclk;
+use crate::clock::pclk::{Pclk, PclkId};
 // Note:
 // TC3 + TC4 can be paired to make a 32-bit counter
 // TC5 + TC6 can be paired to make a 32-bit counter
@@ -38,15 +38,29 @@ use crate::clock::pclk::Pclk;
 /// the `CountDown` embedded_hal timer traits.
 /// Before a hardware timer can be used, it must first
 /// have a clock configured.
-pub struct TimerCounter<TC, A: ApbId = Tc0> {
+pub struct TimerCounter<TC: Count16> {
     freq: Hertz,
-    apb_clk: apb::ApbClk<A>,
+    apb_clk: apb::ApbClk<TC::ApbId>,
     tc: TC,
 }
-impl<TC> TimerCounter<TC>
-where
-    TC: Count16,
-{
+impl<TC: Count16> TimerCounter<TC> {
+    pub fn new<S: pclk::PclkSourceId>(
+        apb_clk: apb::ApbClk<TC::ApbId>, tc: TC, pclk: &Pclk<TC::PclkId, S>) -> Self {
+        // this is safe because we're constrained to just the tc3 bit
+        {
+            let count = tc.count_16();
+
+            // Disable the timer while we reconfigure it
+            count.ctrla().modify(|_, w| w.enable().clear_bit());
+            while count.syncbusy().read().enable().bit_is_set()  {}
+        }
+        Self {
+            freq: pclk.freq(),
+            apb_clk,
+            tc,
+        }
+    }
+
     /// Starts the 16-bit timer, counting up in periodic mode.
     fn start_timer(&mut self, divider: u16, cycles: u16) {
         // Disable the timer while we reconfigure it
@@ -104,27 +118,11 @@ macro_rules! tc {
 pub type $TYPE = TimerCounter<pac::$TC>;
 
 impl Count16 for pac::$TC {
+    type ApbId = types::$apb_id;
+    type PclkId = types::$pclk_id;
+
     fn count_16(&self) -> &Count16Reg {
         self.count16()
-    }
-}
-
-impl TimerCounter<pac::$TC, types::$TC> {
-    pub fn new<S: pclk::PclkSourceId>(
-        apb_clk: apb::ApbClk<types::$apb_id>, tc: pac::$TC, pclk: &Pclk<$pclk_id, S>) -> Self {
-        // this is safe because we're constrained to just the tc3 bit
-        {
-            let count = tc.count16();
-
-            // Disable the timer while we reconfigure it
-            count.ctrla().modify(|_, w| w.enable().clear_bit());
-            while count.syncbusy().read().enable().bit_is_set()  {}
-        }
-        Self {
-            freq: pclk.freq(),
-            apb_clk,
-            tc,
-        }
     }
 }
         )+

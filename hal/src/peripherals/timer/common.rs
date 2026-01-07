@@ -1,7 +1,8 @@
 //! Common items for timer hardware for all chips.
 use core::convert::Infallible;
 use fugit::NanosDurationU32;
-
+use crate::clock::apb::ApbId;
+use crate::clock::pclk::PclkId;
 use crate::ehal::delay::DelayNs;
 use crate::ehal_02::timer::{CountDown, Periodic};
 use crate::time::Nanoseconds;
@@ -14,6 +15,8 @@ use super::{Count16Reg, TimerCounter};
 /// TimerCounter impl generic.  It doesn't make too much sense to
 /// to try to implement this trait outside of this module.
 pub trait Count16 {
+    type ApbId: ApbId;
+    type PclkId: PclkId;
     fn count_16(&self) -> &Count16Reg;
 }
 
@@ -57,7 +60,7 @@ where
     }
 }
 
-impl<TC> Periodic for TimerCounter<TC> {}
+impl<TC: Count16> Periodic for TimerCounter<TC> {}
 impl<TC> CountDown for TimerCounter<TC>
 where
     TC: Count16,
