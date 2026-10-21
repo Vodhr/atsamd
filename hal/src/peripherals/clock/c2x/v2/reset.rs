@@ -105,10 +105,8 @@ pub struct Tokens {
     pub ahbs: ahb::AhbTokens,
     /// Tokens to create [`apb::ApbClk`]s
     pub apbs: apb::ApbTokens,
-    /// Token to create [`dpll::Dpll0`]
-    //pub dpll0: dpll::DpllToken<dpll::Dpll0Id>,
-    /// Token to create [`dpll::Dpll1`]
-    //pub dpll1: dpll::DpllToken<dpll::Dpll1Id>,
+    /// Token to create [`dpll::Dpll`]
+    pub dpll: dpll::DpllToken,
     /// Tokens to create [`gclk::Gclk`]
     pub gclks: gclk::GclkTokens,
     /// Tokens to create [`pclk::Pclk`]s
@@ -171,8 +169,7 @@ pub fn clock_system_at_reset(
         let tokens = Tokens {
             ahbs: ahb::AhbTokens::new(),
             apbs: apb::ApbTokens::new(),
-            // dpll0: dpll::DpllToken::new(),
-            // dpll1: dpll::DpllToken::new(),
+            dpll: dpll::DpllToken::new(),
             gclks: gclk::GclkTokens::new(),
             pclks: pclk::PclkTokens::new(),
             // rtcosc: rtcosc::RtcOscToken::new(),

@@ -673,10 +673,22 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
                 _ => unreachable!(),
             }
         });
+
+        tcc.ctrla().modify(|_, w| w.resolution().dith6());
+
         tcc.wave().write(|w| w.wavegen().npwm());
         while tcc.syncbusy().read().wave().bit_is_set() {}
-        tcc.per().write(|w| unsafe { w.bits(params.cycles as u32) });
+        // tcc.per().write(|w| unsafe { w.bits(((params.cycles as u32) << 6) + 0x1Fu32) });    // Add some dithering
+        tcc.per().write(|w| unsafe { w.bits((params.cycles as u32) << 6) });
         while tcc.syncbusy().read().per().bit_is_set() {}
+
+        // Dead time of 54.3 ns
+        tcc.wexctrl().modify(|_, w| unsafe { w.dths().bits(5) });
+        tcc.wexctrl().modify(|_, w| unsafe { w.dtls().bits(5) });
+
+        tcc.wexctrl().modify(|_, w| w.dtien0().set_bit());
+        tcc.wexctrl().modify(|_, w| w.dtien1().set_bit());
+        tcc.wexctrl().modify(|_, w| w.dtien2().set_bit());
 
         tcc.ctrlbclr().write(|w| w.lupd().set_bit());
 
@@ -692,10 +704,11 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
     }
 
     #[inline]
-    pub fn set_duty_3x(&mut self, channel0: Channel, channel1: Channel, channel2: Channel, duty0: u32, duty1: u32, duty2: u32) {
+    pub fn set_duty_3x(&mut self, channel0: Channel, channel1: Channel, channel2: Channel, channel3: Channel, duty0: u32, duty1: u32, duty2: u32, duty3: u32) {
         self.tcc.ccbuf(channel0 as usize).write(|w| unsafe { w.ccbuf().bits(duty0) });
         self.tcc.ccbuf(channel1 as usize).write(|w| unsafe { w.ccbuf().bits(duty1) });
         self.tcc.ccbuf(channel2 as usize).write(|w| unsafe { w.ccbuf().bits(duty2) });
+        self.tcc.ccbuf(channel3 as usize).write(|w| unsafe { w.ccbuf().bits(duty3) });
     }
 }
 
@@ -732,14 +745,13 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $crate::ehal_02::Pwm for $TYPE
 
     #[inline]
     fn get_max_duty(&self) -> Self::Duty {
-        let top = self.tcc.per().read().bits();
-        top
+        self.tcc.per().read().bits()
     }
 
     #[inline]
     fn set_duty(&mut self, channel: Self::Channel, duty: Self::Duty) {
-        self.tcc.cc(channel as usize).write(|w| unsafe { w.cc().bits(duty) });
-        while self.tcc.syncbusy().read().bits() != 0 {}
+        self.tcc.ccbuf(channel as usize).write(|w| unsafe { w.ccbuf().bits(duty) });
+        // while self.tcc.syncbusy().read().bits() != 0 {}
     }
 
     #[inline]

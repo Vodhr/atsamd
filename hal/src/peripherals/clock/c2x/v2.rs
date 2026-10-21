@@ -862,7 +862,7 @@ use crate::typelevel::{PrivateDecrement, PrivateIncrement, Sealed};
 
 pub mod ahb;
 pub mod apb;
-// pub mod dpll;
+pub mod dpll;
 pub mod gclk;
 // pub mod osculp32k;
 pub mod pclk;

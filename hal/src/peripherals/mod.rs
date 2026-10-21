@@ -10,6 +10,9 @@ pub mod adc;
 )]
 pub mod calibration {}
 
+#[hal_module("divas")]
+pub mod divas {}
+
 #[hal_module(
     any("clock-d11", "clock-d21") => "timer/d11.rs",
     "clock-d5x" => "timer/d5x.rs",

@@ -564,7 +564,7 @@ impl<Id: ChId> Channel<Id, Ready> {
         D: Buffer<Beat = S::Beat>,
     {
         unsafe {
-            self.fill_descriptor(source, dest, false);
+            self.fill_descriptor(source, dest, true);
 
             if let Some(next) = linked_descriptor {
                 self.link_next(next as *mut _);

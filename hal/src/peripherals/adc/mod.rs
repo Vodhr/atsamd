@@ -23,11 +23,11 @@
 //! ```
 
 use core::ops::{Deref, Not};
-
+use embedded_hal_02::digital::v2::OutputPin;
 use atsamd_hal_macros::{hal_cfg, hal_module};
 use pac::Peripherals;
 
-use crate::{gpio::AnyPin, pac, typelevel::Sealed};
+use crate::{dmac, gpio::AnyPin, pac, typelevel::Sealed};
 
 #[hal_module(
     any("adc-d11", "adc-d21") => "d11/mod.rs",
@@ -52,6 +52,8 @@ use crate::pac::adc as adc0;
 use crate::pac::adc0;
 
 pub use adc0::refctrl::Refselselect as Reference;
+use crate::clock::{apb, pclk};
+use crate::clock::pclk::PclkSourceId;
 
 /// ADC Settings when reading Internal sensors (Like VREF and Temperatures)
 /// These settings are based on the minimums suggested in the datasheet
@@ -151,6 +153,8 @@ pub trait AdcInstance {
 
     fn calibrate(instance: &Self::Instance);
 
+    const DMA_TRIGGER_SOURCE: dmac::TriggerSource;
+
     #[cfg(feature = "async")]
     fn waker() -> &'static embassy_sync::waitqueue::AtomicWaker;
 }
@@ -219,6 +223,7 @@ impl<I: AdcInstance> Adc<I> {
         // at the time of creation of the Adc struct; however we can't guarantee
         // that the clock will stay enabled for the duration of its lifetime.
 
+        // TODO limit to 48_000_000 for ATSAMC
         if pclk.freq() > fugit::HertzU32::from_raw(100_000_000) {
             // Clock source is too fast
             return Err(Error::ClockTooFast);
@@ -333,53 +338,33 @@ impl<I: AdcInstance> Adc<I> {
         self.read_channel(P::CHANNEL)
     }
 
-    /// Read a single value from the provided ADC pin, conversion being triggered by an event
-    #[inline]
-    pub fn read_event<P: AdcPin<I>>(&mut self, _pin: &mut P) -> u16 {
-        self.read_channel_event(P::CHANNEL)
-    }
-
     /// Read a single value from the provided channel, in a blocking fashion
     #[inline]
     fn read_channel(&mut self, ch: u8) -> u16 {
         // Clear overrun errors that might've occured before we try to read anything
         self.clear_all_flags();
-        self.disable_interrupts(Flags::all());
-        self.disable_freerunning();
-        self.sync();
+        // self.disable_interrupts(Flags::all());
+        // self.disable_freerunning();
+        // self.power_up();
+        // self.sync();
         self.mux(ch);
-        self.check_read_discard();
+        // self.check_read_discard();
         self.start_conversion();
         while !self.read_flags().contains(Flags::RESRDY) {
             core::hint::spin_loop();
         }
-        self.conversion_result()
+        let r = self.conversion_result();
+        // self.power_down();
+        r
+    }
+
+    pub fn add_sequence_channel<P: AdcPin<I>>(&mut self, _pin: P) {
+        self.add_channel_to_sequence(P::CHANNEL);
+        self.sync();
     }
 
     /// Read a single value from the provided channel, in a blocking fashion, waiting for an event
     /// to start conversion
-    #[inline]
-    fn read_channel_event(&mut self, ch: u8) -> u16 {
-        self.power_up();
-
-        self.clear_all_flags();
-        self.mux(ch);
-        let _ = self.conversion_result();
-
-        self.power_down();
-        self.enable_start_event();
-        self.power_up();
-
-        while !self.read_flags().contains(Flags::RESRDY) {
-            core::hint::spin_loop();
-        }
-        let output = self.conversion_result();
-
-        self.power_down();
-        self.disable_start_event();
-
-        output
-    }
 
     // If the ADC has to discard the next value, then we try to read it
     // and then discard it
@@ -557,41 +542,6 @@ where
         //self.inner.power_down();
         self.inner.disable_freerunning();
 
-        Ok(())
-    }
-
-    #[inline]
-    pub async fn read_buffer_sequence(&mut self, sequence: &[u8], dst: &mut [u16]) -> Result<(), Error> {
-        let mut channels_read = [false; 32];
-
-        // while self.inner.is_sequence_busy() {
-        //     core::hint::spin_loop();
-        // }
-        //
-        // self.inner.reset_sequence();
-
-        for channel in sequence {
-            self.inner.add_channel_to_sequence(*channel);
-        }
-
-        // self.inner.clear_all_flags();
-
-        // self.inner.enable_start_event();
-        // self.inner.enable_freerunning();
-
-        while sequence.iter().all(|i| channels_read[*i as usize]).not() {
-            let _ = self.wait_flags(Flags::RESRDY).await;
-
-            // save the conversion at the correct buffer position
-            let current_channel = self.inner.get_current_sequence_channel();
-            if let Some(index) = sequence.iter().position(|x| x.eq(&current_channel)) {
-                dst[index] = self.inner.conversion_result();
-                channels_read[current_channel as usize] = true;
-            }
-        }
-
-        // self.inner.disable_freerunning();
-        // self.inner.disable_start_event();
         Ok(())
     }
 }

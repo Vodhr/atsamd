@@ -341,7 +341,8 @@ use core::marker::PhantomData;
 use paste::paste;
 use seq_macro::seq;
 use typenum::{U0, U1};
-
+use crate::clock::dpll::DpllId;
+use crate::clock::gclk::DynGclkSourceId::OscUlp32k;
 use crate::pac;
 use crate::pac::gclk::genctrl::Divselselect;
 
@@ -842,7 +843,7 @@ impl<I: GclkIo<GclkId = Gclk0Id>> Gclk0Io for I {}
 
 /// Value-level enum of possible clock sources for a [`Gclk`]
 ///
-/// The variants of this enum identify one of nine possible clock sources for
+/// The variants of this enum identify one of eight possible clock sources for
 /// a given [`Gclk`].
 ///
 /// `DynGclkSourceId` is the value-level equivalent of [`GclkSourceId`].
@@ -851,10 +852,11 @@ pub enum DynGclkSourceId {
     Xosc,
     GclkIn,
     GclkGen1,
+    OscUlp32k,
     Osc32k,
     Xosc32k,
     Osc48m,
-    OscUlp32k,
+    Dpll96m,
 }
 
 impl From<DynGclkSourceId> for Srcselect {
@@ -864,10 +866,11 @@ impl From<DynGclkSourceId> for Srcselect {
             Xosc => Self::Xosc,
             GclkIn => Self::Gclkin,
             GclkGen1 => Self::Gclkgen1,
+            OscUlp32k => Self::Osculp32k,
             Osc32k => Self::Osc32k,
             Xosc32k => Self::Xosc32k,
             Osc48m => Self::Osc48m,
-            OscUlp32k => Self::Osculp32k,
+            Dpll96m => Self::Dpll96m,
         }
     }
 }
@@ -905,6 +908,12 @@ impl GclkSourceId for Osc48mId {
     const DYN: DynGclkSourceId = DynGclkSourceId::Osc48m;
     type Resource = ();
 }
+
+impl GclkSourceId for DpllId {
+    const DYN: DynGclkSourceId = DynGclkSourceId::Dpll96m;
+    type Resource = ();
+}
+
 impl GclkSourceId for Gclk1Id {
     const DYN: DynGclkSourceId = DynGclkSourceId::GclkGen1;
     type Resource = ();

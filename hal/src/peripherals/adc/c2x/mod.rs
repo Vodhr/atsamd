@@ -1,5 +1,6 @@
 pub mod pin;
 
+use embedded_hal_02::prelude::_embedded_hal_blocking_spi_Write;
 #[cfg(feature = "async")]
 use super::{FutureAdc, async_api};
 
@@ -7,7 +8,8 @@ use super::{
     ADC_SETTINGS_INTERNAL_READ, Accumulation, Adc, AdcInstance, AdcSettings, CpuVoltageSource,
     Error, Flags, PrimaryAdc, SampleCount,
 };
-use crate::{calibration, pac};
+use crate::{calibration, dmac, pac};
+use crate::dmac::{TriggerAction, TriggerSource};
 
 /// ADC instance 0
 pub struct Adc0 {
@@ -43,6 +45,8 @@ impl AdcInstance for Adc0 {
         use super::async_api;
         &async_api::ADC_WAKERS[0]
     }
+
+    const DMA_TRIGGER_SOURCE: TriggerSource = TriggerSource::Adc0Resrdy;
 }
 
 /// ADC instance 0
@@ -77,6 +81,8 @@ impl AdcInstance for Adc1 {
         use super::async_api;
         &async_api::ADC_WAKERS[1]
     }
+
+    const DMA_TRIGGER_SOURCE: TriggerSource = TriggerSource::Adc1Resrdy;
 }
 
 impl<I: AdcInstance> Adc<I> {
@@ -90,6 +96,10 @@ impl<I: AdcInstance> Adc<I> {
         // Stop ADC
         self.power_down();
         self.sync();
+
+        self.adc.ctrla().write(|w| w.swrst().set_bit());
+        self.sync();
+
         I::calibrate(&self.adc);
         self.sync();
         self.adc
@@ -130,14 +140,24 @@ impl<I: AdcInstance> Adc<I> {
         self.sync();
         self.set_reference(cfg.vref);
         self.sync();
-        self.adc.refctrl().modify(|_, w| w.refcomp().set_bit());
-        self.sync();
+        // self.adc.refctrl().modify(|_, w| w.refcomp().set_bit());
+        // self.sync();
+
+        // self.adc.sampctrl().modify(|_, w| w.offcomp().set_bit());
+        // self.sync();
+
         self.adc.ctrla().modify(|_, w| w.runstdby().set_bit());
         self.sync();
-        // self.adc.evctrl().modify(|_, w| w.startei().set_bit());
-        // self.sync();
-        self.adc.ctrla().modify(|_, w| w.enable().set_bit());
+        self.adc.evctrl().modify(|_, w| w.startei().set_bit());
         self.sync();
+        self.adc.evctrl().modify(|_, w| w.resrdyeo().set_bit());
+        self.sync();
+        // self.enable_freerunning();
+        // self.adc.ctrla().modify(|_, w| w.enable().set_bit());
+        // self.sync();
+
+        self.reset_sequence();
+
         self.cfg = cfg;
         self.power_up();
     }
@@ -183,7 +203,7 @@ impl<I: AdcInstance> Adc<I> {
     }
 
     #[inline]
-    pub(super) fn start_conversion(&mut self) {
+    pub fn start_conversion(&mut self) {
         self.adc.swtrig().modify(|_, w| w.start().set_bit());
     }
 
@@ -273,7 +293,7 @@ impl<I: AdcInstance> Adc<I> {
     pub(super) fn add_channel_to_sequence(&mut self, ch: u8) {
         self.adc.seqctrl().modify(|r, w| unsafe {
             w.seqen().bits(r.seqen().bits() | (1 << ch.min(31)))
-        })
+        });
     }
 
     #[inline]
@@ -289,6 +309,57 @@ impl<I: AdcInstance> Adc<I> {
     #[inline]
     pub(super) fn reset_sequence(&mut self) {
         self.adc.seqctrl().reset();
+    }
+
+    pub fn enable_dma<Id: dmac::ChId, const N: usize>(&mut self,
+                                             mut channel: &mut dmac::Channel<Id, dmac::Ready>,
+                                             mut buffer: &'static mut [u16; N]) {
+        unsafe {
+            channel.transfer(
+                self,
+                &mut buffer,
+                I::DMA_TRIGGER_SOURCE,
+                TriggerAction::Beat,
+                None
+            ).unwrap();
+        }
+    }
+
+    pub fn dma_ready<Id: dmac::ChId>(&self, channel: &mut dmac::Channel<Id, dmac::Ready>) -> bool {
+        channel.xfer_complete()
+    }
+}
+
+unsafe impl<I: AdcInstance> dmac::Buffer for Adc<I> {
+    type Beat = u16;
+
+    fn dma_ptr(&mut self) -> *mut Self::Beat {
+        self.adc.result().as_ptr()
+    }
+
+    fn incrementing(&self) -> bool {
+        false
+    }
+
+    fn buffer_len(&self) -> usize {
+        1
+    }
+}
+
+struct AdcMuxBuffer(*mut u16);
+
+unsafe impl dmac::Buffer for AdcMuxBuffer {
+    type Beat = u16;
+    fn dma_ptr(&mut self) -> *mut Self::Beat {
+        self.0
+    }
+
+    fn incrementing(&self) -> bool {
+        false
+    }
+
+    fn buffer_len(&self) -> usize {
+        1
     }
 }
 

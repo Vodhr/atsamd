@@ -166,8 +166,7 @@ pub mod ids {
     pub use crate::sercom::Sercom7;
 
     pub use super::super::osc48m::Osc48mId;
-    // todo
-    // pub use super::super::dpll::{Dpll0Id, Dpll1Id};
+    pub use super::super::dpll::DpllId;
 
     pub use super::super::types::{
         Ac, Adc0, Adc1, CM4Trace, Ccl, Dac, Eic, EvSys0, EvSys1, EvSys10, EvSys11, EvSys2, EvSys3,
@@ -234,6 +233,8 @@ macro_rules! with_pclk_types_ids {
     ( $some_macro:ident ! ( $( $args:tt )* ) ) => {
         $some_macro!(
             $( $args )*
+            (DpllId = 0, dpll)
+
             (Eic = 2, eic)
             (FreqMMeasure = 3, freq_m_measure)
             (FreqMReference = 4, freq_m_reference)

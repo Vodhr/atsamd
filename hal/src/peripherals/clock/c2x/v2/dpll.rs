@@ -243,17 +243,15 @@ use fugit::RateExtU32;
 use typenum::U0;
 
 use crate::pac::oscctrl;
-use crate::pac::oscctrl::dpll::{dpllstatus, dpllsyncbusy, Dpllctrla, Dpllctrlb, Dpllratio};
-
-use crate::pac::oscctrl::dpll::dpllctrlb::Refclkselect;
+use crate::pac::oscctrl::{dpllstatus, dpllsyncbusy, Dpllctrla, Dpllctrlb, Dpllratio};
+use crate::pac::Oscctrl;
+use crate::pac::oscctrl::dpllctrlb::Refclkselect;
 
 use crate::time::Hertz;
 use crate::typelevel::{Decrement, Increment, Sealed};
 
 use super::gclk::GclkId;
 use super::pclk::{Pclk, PclkId};
-use super::xosc::{Xosc0Id, Xosc1Id, XoscId};
-use super::xosc32k::Xosc32kId;
 use super::{Enabled, Source};
 
 //==============================================================================
@@ -273,11 +271,11 @@ use super::{Enabled, Source};
 ///
 /// [`DpllToken`] is generic over the [`DpllId`], where each corresponding token
 /// represents one of the two respective [`Dpll`]s.
-pub struct DpllToken<D: DpllId> {
-    dpll: PhantomData<D>,
+pub struct DpllToken {
+
 }
 
-impl<D: DpllId> DpllToken<D> {
+impl DpllToken {
     /// Create a new instance of [`DpllToken`]
     ///
     /// # Safety
@@ -287,54 +285,54 @@ impl<D: DpllId> DpllToken<D> {
     /// memory safety in the root of the `clock` module for more details.
     #[inline]
     pub(super) unsafe fn new() -> Self {
-        Self { dpll: PhantomData }
+        Self {  }
     }
 
     /// Access the corresponding PAC `DPLL` struct
     #[inline]
-    fn dpll(&self) -> &oscctrl::Dpll {
+    fn oscctrl(&self) -> &oscctrl::RegisterBlock {
         // Safety: Each `DpllToken` only has access to a mutually exclusive set
         // of registers for the corresponding `DpllId`, and we use a shared
         // reference to the register block. See the notes on `Token` types and
         // memory safety in the root of the `clock` module for more details.
-        unsafe { (*crate::pac::Oscctrl::PTR).dpll(D::NUM) }
+        unsafe { &*Oscctrl::PTR }
     }
 
     /// Access the corresponding Dpllctrla register
     #[inline]
     fn ctrla(&self) -> &Dpllctrla {
-        self.dpll().dpllctrla()
+        self.oscctrl().dpllctrla()
     }
 
     /// Access the corresponding Dpllctrlb register
     #[inline]
     fn ctrlb(&self) -> &Dpllctrlb {
-        self.dpll().dpllctrlb()
+        self.oscctrl().dpllctrlb()
     }
 
     /// Access the corresponding Dpllratio register
     #[inline]
     fn ratio(&self) -> &Dpllratio {
-        self.dpll().dpllratio()
+        self.oscctrl().dpllratio()
     }
 
     /// Access the corresponding DPLLSYNCBUSY register for reading only
     #[inline]
     fn syncbusy(&self) -> dpllsyncbusy::R {
-        self.dpll().dpllsyncbusy().read()
+        self.oscctrl().dpllsyncbusy().read()
     }
 
     /// Access the corresponding DPLLSTATUS register for reading only
     #[inline]
     fn status(&self) -> dpllstatus::R {
-        self.dpll().dpllstatus().read()
+        self.oscctrl().dpllstatus().read()
     }
 
     #[inline]
     fn configure(&mut self, id: DynDpllSourceId, settings: Settings, prediv: u16) {
         // Convert the actual predivider to the `div` register field value
         let div = match id {
-            DynDpllSourceId::Xosc0 | DynDpllSourceId::Xosc1 => prediv / 2 - 1,
+            DynDpllSourceId::Xosc => prediv / 2 - 1,
             _ => 0,
         };
         self.ctrlb().modify(|_, w| {
@@ -388,76 +386,6 @@ impl<D: DpllId> DpllToken<D> {
 }
 
 //==============================================================================
-// DynDpllId
-//==============================================================================
-
-/// Value-level enum identifying one of two possible [`Dpll`]s
-///
-/// The variants of this enum identify one of the two possible digital
-/// phase-locked loops.
-///
-/// `DynDpllId` is the value-level equivalent of [`DpllId`].
-pub enum DynDpllId {
-    Dpll0,
-    Dpll1,
-}
-
-//==============================================================================
-// DpllId
-//==============================================================================
-
-/// Type-level enum identifying one of two possible [`Dpll`]s
-///
-/// The types implementing this trait, i.e. [`Dpll0Id`] and [`Dpll1Id`], are
-/// type-level variants of `DpllId`, and they identify one of the two possible
-/// digital phase-locked loops.
-///
-/// `DpllId` is the type-level equivalent of [`DynDpllId`]. See the
-/// documentation on [type-level programming] and specifically
-/// [type-level enums] for more details.
-///
-/// [type-level programming]: crate::typelevel
-/// [type-level enums]: crate::typelevel#type-level-enums
-pub trait DpllId: Sealed + PclkId {
-    /// Corresponding variant of [`DynDpllId`]
-    const DYN: DynDpllId;
-    /// Corresponding numeric index
-    const NUM: usize;
-}
-
-/// Type-level variant of [`DpllId`] representing the identity of DPLL0
-///
-/// See the documentation on [type-level programming] and specifically
-/// [type-level enums] for more details.
-///
-/// [type-level programming]: crate::typelevel
-/// [type-level enums]: crate::typelevel#type-level-enums
-pub enum Dpll0Id {}
-
-impl Sealed for Dpll0Id {}
-
-impl DpllId for Dpll0Id {
-    const DYN: DynDpllId = DynDpllId::Dpll0;
-    const NUM: usize = 0;
-}
-
-/// Type-level variant of [`DpllId`] representing the identity of DPLL1
-///
-/// See the documentation on [type-level programming] and specifically
-/// [type-level enums] for more details.
-///
-/// [type-level programming]: crate::typelevel
-/// [type-level enums]: crate::typelevel#type-level-enums
-pub enum Dpll1Id {}
-
-impl Sealed for Dpll1Id {}
-
-impl DpllId for Dpll1Id {
-    const DYN: DynDpllId = DynDpllId::Dpll1;
-    const NUM: usize = 1;
-}
-
-//==============================================================================
 // DynDpllSourceId
 //==============================================================================
 
@@ -471,10 +399,8 @@ impl DpllId for Dpll1Id {
 pub enum DynDpllSourceId {
     /// The DPLL is driven by a [`Pclk`]
     Pclk,
-    /// The DPLL is driven by [`Xosc0`](super::xosc::Xosc0)
-    Xosc0,
-    /// The DPLL is driven by [`Xosc1`](super::xosc::Xosc1)
-    Xosc1,
+    /// The DPLL is driven by [`Xosc`](super::xosc::Xosc)
+    Xosc,
     /// The DPLL is driven by [`Xosc32k`](super::xosc32k::Xosc32k)
     Xosc32k,
 }
@@ -483,9 +409,8 @@ impl From<DynDpllSourceId> for Refclkselect {
     fn from(source: DynDpllSourceId) -> Self {
         match source {
             DynDpllSourceId::Pclk => Refclkselect::Gclk,
-            DynDpllSourceId::Xosc0 => Refclkselect::Xosc0,
-            DynDpllSourceId::Xosc1 => Refclkselect::Xosc1,
-            DynDpllSourceId::Xosc32k => Refclkselect::Xosc32,
+            DynDpllSourceId::Xosc => Refclkselect::Xosc,
+            DynDpllSourceId::Xosc32k => Refclkselect::Xosc32k,
         }
     }
 }
@@ -497,7 +422,7 @@ impl From<DynDpllSourceId> for Refclkselect {
 /// Type-level enum of possible clock [`Source`]s for a [`Dpll`]
 ///
 /// The types implementing this trait are type-level variants of `DpllSourceId`,
-/// and they identify one of four possible clock [`Source`]s for a given
+/// and they identify one of three possible clock [`Source`]s for a given
 /// [`Dpll`]. All implementers of this trait are `Id` types, which are described
 /// in more detail in the [`clock` module documentation](super).
 ///
@@ -513,25 +438,22 @@ pub trait DpllSourceId {
 
     /// Reference-specific settings type
     #[doc(hidden)]
-    type Reference<D: DpllId>: settings::Reference;
+    type Reference: settings::Reference;
 }
 
 impl<G: GclkId> DpllSourceId for G {
     const DYN: DynDpllSourceId = DynDpllSourceId::Pclk;
-    type Reference<D: DpllId> = settings::Pclk<D, G>;
+    type Reference = settings::Pclk<G>;
 }
-impl DpllSourceId for Xosc0Id {
-    const DYN: DynDpllSourceId = DynDpllSourceId::Xosc0;
-    type Reference<D: DpllId> = settings::Xosc;
-}
-impl DpllSourceId for Xosc1Id {
-    const DYN: DynDpllSourceId = DynDpllSourceId::Xosc1;
-    type Reference<D: DpllId> = settings::Xosc;
-}
-impl DpllSourceId for Xosc32kId {
-    const DYN: DynDpllSourceId = DynDpllSourceId::Xosc32k;
-    type Reference<D: DpllId> = settings::Xosc32k;
-}
+// impl DpllSourceId for XoscId {
+//     const DYN: DynDpllSourceId = DynDpllSourceId::Xosc;
+//     type Reference = settings::Xosc;
+// }
+//
+// impl DpllSourceId for Xosc32kId {
+//     const DYN: DynDpllSourceId = DynDpllSourceId::Xosc32k;
+//     type Reference = settings::Xosc32k;
+// }
 
 //==============================================================================
 // Settings
@@ -550,16 +472,17 @@ struct Settings {
 
 /// Store and retrieve [`Dpll`] settings for different reference clocks
 mod settings {
+    use crate::clock::dpll::{Dpll, DpllId};
     use super::super::pclk;
     use super::RateExtU32;
-    use super::{DpllId, GclkId, Hertz};
+    use super::{PclkId, GclkId, Hertz};
 
     /// [`Dpll`] settings when referenced to a [`Pclk`]
     ///
     /// [`Dpll`]: super::Dpll
     /// [`Pclk`]: pclk::Pclk
-    pub struct Pclk<D: DpllId, G: GclkId> {
-        pub pclk: pclk::Pclk<D, G>,
+    pub struct Pclk<G: GclkId> {
+        pub pclk: pclk::Pclk<DpllId, G>,
     }
 
     /// [`Dpll`] settings when referenced to an [`Xosc`]
@@ -583,7 +506,7 @@ mod settings {
         fn prediv(&self) -> u16;
     }
 
-    impl<D: DpllId, G: GclkId> Reference for Pclk<D, G> {
+    impl<G: GclkId> Reference for Pclk<G> {
         #[inline]
         fn freq(&self) -> Hertz {
             self.pclk.freq()
@@ -626,9 +549,7 @@ mod settings {
 /// A DPLL is used to multiply clock frequencies, taking a lower-frequency input
 /// clock and producing a higher-frequency output clock.
 ///
-/// The type parameter `D` is a [`DpllId`] that determines which of the two
-/// instances this `Dpll` represents ([`Dpll0`] or [`Dpll1`]). The type
-/// parameter `I` represents the `Id` type for the clock [`Source`] driving this
+/// The type parameter `I` represents the `Id` type for the clock [`Source`] driving this
 /// `Dpll`. It must be one of the valid [`DpllSourceId`]s. See the
 /// [`clock` module documentation](super) for more detail on
 /// [`Id` types](super#id-types).
@@ -646,28 +567,20 @@ mod settings {
 /// configuring and using a `Dpll`.
 ///
 /// [`enable`]: Dpll::enable
-pub struct Dpll<D, I>
+pub struct Dpll<I>
 where
-    D: DpllId,
     I: DpllSourceId,
 {
-    token: DpllToken<D>,
-    reference: I::Reference<D>,
+    token: DpllToken,
+    reference: I::Reference,
     settings: Settings,
 }
 
-/// Type alias for the corresponding [`Dpll`]
-pub type Dpll0<M> = Dpll<Dpll0Id, M>;
-
-/// Type alias for the corresponding [`Dpll`]
-pub type Dpll1<M> = Dpll<Dpll1Id, M>;
-
-impl<D, I> Dpll<D, I>
+impl<I> Dpll<I>
 where
-    D: DpllId,
     I: DpllSourceId,
 {
-    fn new(token: DpllToken<D>, reference: I::Reference<D>) -> Self {
+    fn new(token: DpllToken, reference: I::Reference) -> Self {
         let settings = Settings {
             mult: 1,
             frac: 0,
@@ -684,9 +597,8 @@ where
     }
 }
 
-impl<D, G> Dpll<D, G>
+impl<G> Dpll<G>
 where
-    D: DpllId,
     G: GclkId,
 {
     /// Create a [`Dpll`] from a [`Pclk`]
@@ -702,128 +614,126 @@ where
     ///
     /// [`enable`]: Dpll::enable
     #[inline]
-    pub fn from_pclk(token: DpllToken<D>, pclk: Pclk<D, G>) -> Self {
+    pub fn from_pclk(token: DpllToken, pclk: Pclk<DpllId, G>) -> Self {
         let reference = settings::Pclk { pclk };
         Dpll::new(token, reference)
     }
 
     /// Consume the [`Dpll`], release the [`DpllToken`], and return the [`Pclk`]
     #[inline]
-    pub fn free_pclk(self) -> (DpllToken<D>, Pclk<D, G>) {
+    pub fn free_pclk(self) -> (DpllToken, Pclk<DpllId, G>) {
         (self.token, self.reference.pclk)
     }
 }
 
-impl<D, X> Dpll<D, X>
+// impl<X> Dpll<X>
+// where
+//     X: XoscId + DpllSourceId<Reference = settings::Xosc>,
+// {
+//     /// Create a [`Dpll`] from an [`Xosc`]
+//     ///
+//     /// Note that, when the [`Dpll`] is driven by an [`Xosc`], there is an extra
+//     /// clock divider between the `Xosc` output and the input to the actual
+//     /// phase-locked loop. This allows the [`Xosc`] frequency to be above the
+//     /// maximum DPLL input frequency of 3.2 MHz.
+//     ///
+//     /// The `Xosc` pre-divider can be set to any *even* value in the range
+//     /// `[2, 4096]`. It defaults to the minimum value of 2, but it can be
+//     /// changed with the [`Dpll::prediv`] method.
+//     ///
+//     /// Creating a [`Dpll`] does not modify any of the hardware registers. It
+//     /// only creates a struct to track the DPLL configuration and [`Increment`]s
+//     /// the [`Source`] [`Enabled`] counter.
+//     ///
+//     /// The configuration data is stored until the user calls [`enable`]. At
+//     /// that point, all of the registers are written according to the
+//     /// initialization procedures specified in the datasheet, and an
+//     /// [`EnabledDpll`] is returned. The `Dpll` is not active or useful until
+//     /// that point.
+//     ///
+//     /// [`Xosc`]: super::xosc::Xosc
+//     /// [`enable`]: Dpll::enable
+//     #[inline]
+//     pub fn from_xosc<S>(token: DpllToken, source: S) -> (Self, S::Inc)
+//     where
+//         S: Source<Id = X> + Increment,
+//     {
+//         let reference = settings::Xosc {
+//             freq: source.freq(),
+//             prediv: 2,
+//         };
+//         let dpll = Dpll::new(token, reference);
+//         (dpll, source.inc())
+//     }
+//
+//     /// Consume the [`Dpll`], release the [`DpllToken`], and [`Decrement`] the
+//     /// [`EnabledXosc`] consumer count
+//     ///
+//     /// [`EnabledXosc`]: super::xosc::EnabledXosc
+//     #[inline]
+//     pub fn free_xosc<S>(self, source: S) -> (DpllToken, S::Dec)
+//     where
+//         S: Source<Id = X> + Decrement,
+//     {
+//         (self.token, source.dec())
+//     }
+//
+//     /// Set the [`Xosc`] pre-division factor
+//     ///
+//     /// The [`Xosc`] output frequency is divided down before it enters the
+//     /// actual phase-locked loop. This function will panic if the pre-division
+//     /// factor is not an *even* number in the range `[2, 4096]`.
+//     ///
+//     /// [`Xosc`]: super::xosc::Xosc
+//     #[inline]
+//     pub fn prediv(mut self, prediv: u16) -> Self {
+//         if prediv % 2 != 0 || prediv < 2 || prediv > 4096 {
+//             panic!("DPLL prediv must be an even integer in the range [2, 4096]")
+//         }
+//         self.reference.prediv = prediv;
+//         self
+//     }
+// }
+
+// impl Dpll<Xosc32kId> {
+//     /// Create a [`Dpll`] from an [`Xosc32k`]
+//     ///
+//     /// Creating a [`Dpll`] does not modify any of the hardware registers. It
+//     /// only creates a struct to track the DPLL configuration and [`Increment`]s
+//     /// the [`Source`] [`Enabled`] counter.
+//     ///
+//     /// The configuration data is stored until the user calls [`enable`]. At
+//     /// that point, all of the registers are written according to the
+//     /// initialization procedures specified in the datasheet, and an
+//     /// [`EnabledDpll`] is returned. The `Dpll` is not active or useful until
+//     /// that point.
+//     ///
+//     /// [`Xosc32k`]: super::xosc32k::Xosc32k
+//     /// [`enable`]: Dpll::enable
+//     #[inline]
+//     pub fn from_xosc32k<S>(token: DpllToken, source: S) -> (Self, S::Inc)
+//     where
+//         S: Source<Id = Xosc32kId> + Increment,
+//     {
+//         let dpll = Dpll::new(token, settings::Xosc32k);
+//         (dpll, source.inc())
+//     }
+//
+//     /// Consume the [`Dpll`], release the [`DpllToken`], and [`Decrement`] the
+//     /// [`EnabledXosc32k`] consumer count
+//     ///
+//     /// [`EnabledXosc32k`]: super::xosc32k::EnabledXosc32k
+//     /// d`] consumer count
+//     pub fn free_xosc32k<S>(self, source: S) -> (DpllToken, S::Dec)
+//     where
+//         S: Source<Id = Xosc32kId> + Decrement,
+//     {
+//         (self.token, source.dec())
+//     }
+// }
+
+impl<I> Dpll<I>
 where
-    D: DpllId,
-    X: XoscId + DpllSourceId<Reference<D> = settings::Xosc>,
-{
-    /// Create a [`Dpll`] from an [`Xosc`]
-    ///
-    /// Note that, when the [`Dpll`] is driven by an [`Xosc`], there is an extra
-    /// clock divider between the `Xosc` output and the input to the actual
-    /// phase-locked loop. This allows the [`Xosc`] frequency to be above the
-    /// maximum DPLL input frequency of 3.2 MHz.
-    ///
-    /// The `Xosc` pre-divider can be set to any *even* value in the range
-    /// `[2, 4096]`. It defaults to the minimum value of 2, but it can be
-    /// changed with the [`Dpll::prediv`] method.
-    ///
-    /// Creating a [`Dpll`] does not modify any of the hardware registers. It
-    /// only creates a struct to track the DPLL configuration and [`Increment`]s
-    /// the [`Source`] [`Enabled`] counter.
-    ///
-    /// The configuration data is stored until the user calls [`enable`]. At
-    /// that point, all of the registers are written according to the
-    /// initialization procedures specified in the datasheet, and an
-    /// [`EnabledDpll`] is returned. The `Dpll` is not active or useful until
-    /// that point.
-    ///
-    /// [`Xosc`]: super::xosc::Xosc
-    /// [`enable`]: Dpll::enable
-    #[inline]
-    pub fn from_xosc<S>(token: DpllToken<D>, source: S) -> (Self, S::Inc)
-    where
-        S: Source<Id = X> + Increment,
-    {
-        let reference = settings::Xosc {
-            freq: source.freq(),
-            prediv: 2,
-        };
-        let dpll = Dpll::new(token, reference);
-        (dpll, source.inc())
-    }
-
-    /// Consume the [`Dpll`], release the [`DpllToken`], and [`Decrement`] the
-    /// [`EnabledXosc`] consumer count
-    ///
-    /// [`EnabledXosc`]: super::xosc::EnabledXosc
-    #[inline]
-    pub fn free_xosc<S>(self, source: S) -> (DpllToken<D>, S::Dec)
-    where
-        S: Source<Id = X> + Decrement,
-    {
-        (self.token, source.dec())
-    }
-
-    /// Set the [`Xosc`] pre-division factor
-    ///
-    /// The [`Xosc`] output frequency is divided down before it enters the
-    /// actual phase-locked loop. This function will panic if the pre-division
-    /// factor is not an *even* number in the range `[2, 4096]`.
-    ///
-    /// [`Xosc`]: super::xosc::Xosc
-    #[inline]
-    pub fn prediv(mut self, prediv: u16) -> Self {
-        if prediv % 2 != 0 || prediv < 2 || prediv > 4096 {
-            panic!("DPLL prediv must be an even integer in the range [2, 4096]")
-        }
-        self.reference.prediv = prediv;
-        self
-    }
-}
-
-impl<D: DpllId> Dpll<D, Xosc32kId> {
-    /// Create a [`Dpll`] from an [`Xosc32k`]
-    ///
-    /// Creating a [`Dpll`] does not modify any of the hardware registers. It
-    /// only creates a struct to track the DPLL configuration and [`Increment`]s
-    /// the [`Source`] [`Enabled`] counter.
-    ///
-    /// The configuration data is stored until the user calls [`enable`]. At
-    /// that point, all of the registers are written according to the
-    /// initialization procedures specified in the datasheet, and an
-    /// [`EnabledDpll`] is returned. The `Dpll` is not active or useful until
-    /// that point.
-    ///
-    /// [`Xosc32k`]: super::xosc32k::Xosc32k
-    /// [`enable`]: Dpll::enable
-    #[inline]
-    pub fn from_xosc32k<S>(token: DpllToken<D>, source: S) -> (Self, S::Inc)
-    where
-        S: Source<Id = Xosc32kId> + Increment,
-    {
-        let dpll = Dpll::new(token, settings::Xosc32k);
-        (dpll, source.inc())
-    }
-
-    /// Consume the [`Dpll`], release the [`DpllToken`], and [`Decrement`] the
-    /// [`EnabledXosc32k`] consumer count
-    ///
-    /// [`EnabledXosc32k`]: super::xosc32k::EnabledXosc32k
-    /// d`] consumer count
-    pub fn free_xosc32k<S>(self, source: S) -> (DpllToken<D>, S::Dec)
-    where
-        S: Source<Id = Xosc32kId> + Decrement,
-    {
-        (self.token, source.dec())
-    }
-}
-
-impl<D, I> Dpll<D, I>
-where
-    D: DpllId,
     I: DpllSourceId,
 {
     /// Set the [`Dpll`] loop divider, which is also the frequency
@@ -840,10 +750,10 @@ where
     /// valid `LDR` and `LDRFRAC` register fields, panicking otherwise.
     #[inline]
     pub fn loop_div(mut self, int: u16, frac: u8) -> Self {
-        if int < 1 || int > 0x2000 {
+        if int < 1 || int > 0x800 {
             panic!("Invalid integer part of the DPLL loop divider")
         }
-        if frac > 31 {
+        if frac > 15 {
             panic!("Invalid fractional part of the DPLL loop divider")
         }
         self.settings.mult = int;
@@ -924,13 +834,13 @@ where
     /// while the output frequency must be between 96 MHz and 200 MHz. If either
     /// frequency is invalid, this call will panic.
     #[inline]
-    pub fn enable(self) -> EnabledDpll<D, I> {
+    pub fn enable(self) -> EnabledDpll<I> {
         let input_freq = self.input_freq().to_Hz();
         let output_freq = self.output_freq().to_Hz();
-        if input_freq < 32_000 || input_freq > 3_200_000 {
+        if input_freq < 32_000 || input_freq > 2_000_000 {
             panic!("Invalid DPLL input frequency");
         }
-        if output_freq < 96_000_000 || output_freq > 200_000_000 {
+        if output_freq < 48_000_000 || output_freq > 96_000_000 {
             panic!("Invalid DPLL output frequency");
         }
         self.enable_unchecked()
@@ -943,7 +853,7 @@ where
     /// specified in the datasheet may not work and could cause clocking
     /// problems.
     #[inline]
-    pub fn enable_unchecked(mut self) -> EnabledDpll<D, I> {
+    pub fn enable_unchecked(mut self) -> EnabledDpll<I> {
         use settings::Reference;
         let prediv = self.reference.prediv();
         self.token.configure(I::DYN, self.settings, prediv);
@@ -965,17 +875,10 @@ where
 ///
 /// As with [`Enabled`], the default value for `N` is `U0`; if left unspecified,
 /// the counter is assumed to be zero.
-pub type EnabledDpll<D, I, N = U0> = Enabled<Dpll<D, I>, N>;
+pub type EnabledDpll<I, N = U0> = Enabled<Dpll<I>, N>;
 
-/// Type alias for the corresponding [`EnabledDpll`]
-pub type EnabledDpll0<I, N = U0> = EnabledDpll<Dpll0Id, I, N>;
-
-/// Type alias for the corresponding [`EnabledDpll`]
-pub type EnabledDpll1<I, N = U0> = EnabledDpll<Dpll1Id, I, N>;
-
-impl<D, I> EnabledDpll<D, I>
+impl<I> EnabledDpll<I>
 where
-    D: DpllId,
     I: DpllSourceId,
 {
     /// Disable the [`Dpll`]
@@ -983,15 +886,14 @@ where
     /// This method is only implemented for `N = U0`, which means the clock can
     /// only be disabled when no other clocks consume this [`Dpll`].
     #[inline]
-    pub fn disable(mut self) -> Dpll<D, I> {
+    pub fn disable(mut self) -> Dpll<I> {
         self.0.token.disable();
         self.0
     }
 }
 
-impl<D, I, N> EnabledDpll<D, I, N>
+impl<I, N> EnabledDpll<I, N>
 where
-    D: DpllId,
     I: DpllSourceId,
 {
     /// Test whether the [`Dpll`] is locked
@@ -1007,16 +909,21 @@ where
     }
 }
 
+pub enum DpllId {
+
+}
+
+impl Sealed for DpllId {}
+
 //==============================================================================
 // Source
 //==============================================================================
 
-impl<D, I, N> Source for EnabledDpll<D, I, N>
+impl<I, N> Source for EnabledDpll<I, N>
 where
-    D: DpllId,
     I: DpllSourceId,
 {
-    type Id = D;
+    type Id = DpllId;
 
     #[inline]
     fn freq(&self) -> Hertz {
