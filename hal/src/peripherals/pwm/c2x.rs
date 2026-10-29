@@ -662,19 +662,7 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
 
         tcc.ctrlbclr().write(|w| unsafe { w.bits(0xFF) });
 
-        tcc.ctrla().modify(|_, w| {
-            match params.divider {
-                1 => w.prescaler().div1(),
-                2 => w.prescaler().div2(),
-                4 => w.prescaler().div4(),
-                8 => w.prescaler().div8(),
-                16 => w.prescaler().div16(),
-                64 => w.prescaler().div64(),
-                256 => w.prescaler().div256(),
-                1024 => w.prescaler().div1024(),
-                _ => unreachable!(),
-            }
-        });
+        tcc.ctrla().modify(|_, w| w.prescaler().div1());
 
         tcc.ctrla().modify(|_, w| w.resolution().dith6());
 
@@ -684,41 +672,38 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
             .ciccen2().set_bit()
             .ciccen3().set_bit()
             .ciperen().set_bit()
+            .pol0().set_bit()
+            .pol1().set_bit()
+            .pol2().set_bit()
+            .pol3().set_bit()
         );
         while tcc.syncbusy().read().wave().bit_is_set() {}
 
-        // tcc.per().write(|w| unsafe { w.bits(((params.cycles as u32) << 6) + 0x1Fu32) });    // Add some dithering
-        tcc.per().write(|w| unsafe { w.bits((params.cycles as u32) << 6) });
+        // tcc.per().write(|w| unsafe { w.bits(((params.cycles as u32) << 6) + 0x1Fu32) });    // Add some period dithering
+        tcc.per().write(|w| unsafe { w.bits(128 << 6) });     // No period dithering
         while tcc.syncbusy().read().per().bit_is_set() {}
-        tcc.perbuf().write(|w| unsafe { w.bits((params.cycles as u32) << 6) });
+        tcc.perbuf().write(|w| unsafe { w.bits(128 << 6) });
 
-        // Dead time of 54.3 ns
-        tcc.wexctrl().modify(|_, w| unsafe { w.dths().bits(5) });
-        tcc.wexctrl().modify(|_, w| unsafe { w.dtls().bits(5) });
+        // Dead time of 43.5 ns
+        tcc.wexctrl().modify(|_, w| unsafe { w.dths().bits(4) });
+        tcc.wexctrl().modify(|_, w| unsafe { w.dtls().bits(4) });
 
         tcc.wexctrl().modify(|_, w| w.dtien0().set_bit());
         tcc.wexctrl().modify(|_, w| w.dtien1().set_bit());
         tcc.wexctrl().modify(|_, w| w.dtien2().set_bit());
 
-        // tcc.ctrlbclr().write(|w| w.dir().set_bit());
         while tcc.syncbusy().read().ctrlb().bit_is_set() {}
 
         tcc.ctrlbclr().write(|w| w.lupd().set_bit());
         while tcc.syncbusy().read().ctrlb().bit_is_set() {}
 
-        tcc.cc(0).write(|w| unsafe { w.bits(127 << 6) });
-        tcc.cc(1).write(|w| unsafe { w.bits(127 << 6) });
-        tcc.cc(2).write(|w| unsafe { w.bits(127 << 6) });
-        tcc.cc(3).write(|w| unsafe { w.bits(127 << 6) });
+        tcc.cc(0).write(|w| unsafe { w.bits(64 << 6) });
+        tcc.cc(1).write(|w| unsafe { w.bits(64 << 6) });
+        tcc.cc(2).write(|w| unsafe { w.bits(64 << 6) });
+        tcc.cc(3).write(|w| unsafe { w.bits(64 << 6) });
 
         tcc.ctrla().modify(|_, w| w.enable().set_bit());
         while tcc.syncbusy().read().enable().bit_is_set() {}
-
-        // tcc.ctrlbset().write(|w| w.lupd().set_bit());
-        // while tcc.syncbusy().read().ctrlb().bit_is_set() {}
-
-        // tcc.ctrlbclr().write(|w| w.lupd().set_bit());
-        // while tcc.syncbusy().read().ctrlb().bit_is_set() {}
 
         Self {
             pclk,
@@ -730,42 +715,14 @@ impl<I: PinId, M: PinMode, S: pclk::PclkSourceId> $TYPE<I, M, S> {
 
     #[inline]
     pub fn set_duty_3x(&mut self, channel0: Channel, channel1: Channel, channel2: Channel, channel3: Channel, duty0: u32, duty1: u32, duty2: u32, duty3: u32) {
-        // self.tcc.status().write(|w| w
-        //     .ccbufv0().set_bit()
-        //     .ccbufv1().set_bit()
-        //     .ccbufv2().set_bit()
-        //     .ccbufv3().set_bit()
-        //     .faulta().set_bit()
-        //     .faultb().set_bit()
-        //     .fault0().set_bit()
-        //     .fault1().set_bit());
-
-        // cortex_m::asm::delay(16);
-
-        // cortex_m::asm::delay(16);
         self.tcc.ctrlbset().write(|w| w.lupd().set_bit());
-        // cortex_m::asm::delay(16);
 
-        // self.tcc.ctrlbset().write(|w| w.lupd().set_bit());
-        // while self.tcc.syncbusy().read().ctrlb().bit_is_set() {}
-
-        // while self.tcc.syncbusy().read().per().bit_is_set() {}
         self.tcc.ccbuf(channel0 as usize).write(|w| unsafe { w.bits(duty0) });
-        // cortex_m::asm::delay(16);
-        // while self.tcc.syncbusy().read().cc0().bit_is_set() {}
         self.tcc.ccbuf(channel1 as usize).write(|w| unsafe { w.bits(duty1) });
-        // cortex_m::asm::delay(16);
-        // while self.tcc.syncbusy().read().cc1().bit_is_set() {}
         self.tcc.ccbuf(channel2 as usize).write(|w| unsafe { w.bits(duty2) });
-        // cortex_m::asm::delay(16);
-        // while self.tcc.syncbusy().read().cc2().bit_is_set() {}
         self.tcc.ccbuf(channel3 as usize).write(|w| unsafe { w.bits(duty3) });
-        // cortex_m::asm::delay(16);
-        // while self.tcc.syncbusy().read().cc3().bit_is_set() {}
 
         self.tcc.ctrlbclr().write(|w| w.lupd().set_bit());
-        // cortex_m::asm::delay(16);
-        // while self.tcc.syncbusy().read().ctrlb().bit_is_set() {}
     }
 }
 
